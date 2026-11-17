@@ -538,113 +538,11 @@
         </label>
       </div>
 
-      <!-- ================= FISHING GAME ================= -->
-      <section class="panel" id="game" aria-labelledby="game-title">
-        <div class="stats-head">
-          <div>
-            <h2 id="game-title" data-i18n="gameTitle">Woldfish Fishing Game</h2>
-            <p class="sub" data-i18n="gameSub">Tap the swimming fish to catch them — every catch earns WFISH.</p>
-          </div>
-          <span class="badge gold" data-i18n="gameBadge">Play &amp; Earn WFISH</span>
-        </div>
-
-        <div class="wallet-row">
-          <span class="chip" data-i18n="gamePlayingAs">Playing as</span>
-          <span class="wallet-addr" id="game-wallet">—</span>
-        </div>
-        <div id="game-manual-wrap">
-          <p class="sub" style="margin-top:12px;" data-i18n="gameManualLbl">No wallet connected? Enter your BSC wallet address to play and record your score under that wallet:</p>
-          <div class="game-row">
-            <input type="text" class="game-input mono" id="game-manual-input" data-i18n-ph="gameManualPh" placeholder="0x… your BSC wallet address" autocomplete="off" spellcheck="false" />
-            <button type="button" class="btn-action" id="btn-game-manual" data-i18n="gameUseAddr">Use This Address</button>
-          </div>
-          <p class="stats-error" id="game-manual-error" data-i18n="gameInvalidAddr">That doesn't look like a valid BSC address (0x + 40 hex characters).</p>
-        </div>
-        <p class="sub" id="game-connected-note" style="margin-top:12px;" data-i18n="gameConnectedNote" hidden>Your connected wallet is used for the game — catches are recorded under it automatically.</p>
-
-        <div class="stats-grid four">
-          <div class="stat">
-            <div class="num" id="game-energy">—</div>
-            <div class="lbl" data-i18n="gameEnergyLbl">Energy</div>
-          </div>
-          <div class="stat">
-            <div class="num" id="game-balance">—</div>
-            <div class="lbl" data-i18n="gameBalanceLbl">Game Balance (WFISH)</div>
-          </div>
-          <div class="stat">
-            <div class="num plain" id="game-today">—</div>
-            <div class="lbl" data-i18n="gameTodayLbl">Earned Today / 10,000 Cap</div>
-          </div>
-          <div class="stat">
-            <div class="num plain" id="game-catches">—</div>
-            <div class="lbl" data-i18n="gameCatchesLbl">Fish Caught</div>
-          </div>
-        </div>
-        <p class="fee-line" id="game-energy-note"></p>
-
-        <div class="pond" id="game-pond">
-          <div class="pond-lock" id="game-pond-lock" data-i18n="gameNeedWallet">Connect your wallet above, or enter your BSC address, to start fishing.</div>
-        </div>
-        <p class="mint-hint" data-i18n="gamePondHint">Tap a fish to cast at it — 1 cast costs 1 energy. Energy refills by 1 every 60 seconds (max 20).</p>
-
-        <ul class="rarity-list">
-          <li><span class="rarity-dot" style="background:#4a90d9"></span><span class="r-name" data-i18n="gameRCommon">Blue · Common</span><span class="r-reward">100 WFISH</span></li>
-          <li><span class="rarity-dot" style="background:#35c26e"></span><span class="r-name" data-i18n="gameRRare">Green · Rare</span><span class="r-reward">250 WFISH</span></li>
-          <li><span class="rarity-dot" style="background:#9b5de5"></span><span class="r-name" data-i18n="gameREpic">Purple · Epic</span><span class="r-reward">500 WFISH</span></li>
-          <li><span class="rarity-dot" style="background:#e5484d"></span><span class="r-name" data-i18n="gameRLegendary">Red · Legendary</span><span class="r-reward">1,000 WFISH</span></li>
-          <li><span class="rarity-dot" style="background:#e9b949"></span><span class="r-name" data-i18n="gameRMythic">Gold · Mythic</span><span class="r-reward">2,000 WFISH</span></li>
-        </ul>
-
-        <p class="game-note" data-i18n="gameNote">Your game balance is a per-wallet record kept in this browser. Withdrawals are automatic: pay the fee and the WFISH lands straight in your wallet from the WD contract — no manual payout queue.</p>
-
-        <!-- Withdraw -->
-        <h3 class="game-h3" data-i18n="gameWdTitle">Withdraw (WD)</h3>
-        <p class="sub" data-i18n="gameWdSub">Automatic WD — pay the fee, and the WFISH lands straight in your wallet. Withdraw in multiples of 10,000 WFISH (minimum 10,000); the fee is 0.00001 BNB per 10,000 WFISH, paid to the WD contract together with your withdrawal.</p>
-        <div class="game-row">
-          <input type="number" class="game-input" id="game-wd-amount" min="10000" step="10000" inputmode="numeric" data-i18n-ph="gameWdAmountPh" placeholder="Amount — e.g. 10000" />
-        </div>
-        <div class="quick-row">
-          <button type="button" class="btn-mini" data-wd-quick="10000">10,000</button>
-          <button type="button" class="btn-mini" id="btn-wd-max" data-i18n="gameWdMax">Max</button>
-        </div>
-        <p class="fee-line" id="game-wd-fee"></p>
-        <p class="game-note" data-i18n="gameWdNote">Max 10,000 WFISH per wallet per day (limited by the contract). The WD contract is funded with 50,000,000 WFISH — enough for 5,000 withdrawals.</p>
-        <button type="button" class="btn-action wide" id="btn-game-wd" data-i18n="gameWdBtn">Pay Fee &amp; Withdraw</button>
-        <ul class="wd-list" id="game-wd-list"></ul>
-        <p class="empty-line" id="game-wd-empty" data-i18n="gameWdEmpty">No withdrawals yet.</p>
-
-        <!-- NFT shop -->
-        <h3 class="game-h3" data-i18n="gameShopTitle">NFT Shop</h3>
-        <p class="sub" data-i18n="gameShopDesc">Buy a Woldfish NFT right here in the game — the same paid mint: 1 NFT + 2,000,000 WFISH instantly + a 1,000 WFISH/day bonus for 7 days.</p>
-        <button type="button" class="btn-mint" id="btn-game-buy" data-i18n="gameShopBtn">Buy NFT — 0.0003 BNB</button>
-
-        <div class="tx-status" id="game-tx-status" role="status" aria-live="polite">
-          <div class="tx-title" id="game-tx-title"></div>
-          <div class="tx-hash" id="game-tx-hash"></div>
-        </div>
-
-        <!-- History & leaderboard -->
-        <h3 class="game-h3" data-i18n="gameHistTitle">Recent Catches</h3>
-        <ul class="hist-list" id="game-history"></ul>
-        <p class="empty-line" id="game-history-empty" data-i18n="gameHistEmpty">No catches yet — tap a fish in the pond.</p>
-
-        <h3 class="game-h3" data-i18n="gameLbTitle">Leaderboard (this browser)</h3>
-        <ul class="lb-list" id="game-leaderboard"></ul>
-        <p class="empty-line" id="game-lb-empty" data-i18n="gameLbEmpty">No players recorded yet.</p>
-
-        <!-- Export -->
-        <h3 class="game-h3" data-i18n="gameExportTitle">Export Data</h3>
-        <p class="sub" data-i18n="gameExportSub">Download the per-wallet game balances and the completed withdrawal history for your records.</p>
-        <div class="export-row">
-          <span class="exp-lbl" data-i18n="gameExportBalances">Balances:</span>
-          <button type="button" class="btn-mini" id="btn-exp-bal-csv">CSV</button>
-          <button type="button" class="btn-mini" id="btn-exp-bal-json">JSON</button>
-        </div>
-        <div class="export-row">
-          <span class="exp-lbl" data-i18n="gameExportWd">WD history:</span>
-          <button type="button" class="btn-mini" id="btn-exp-wd-csv">CSV</button>
-          <button type="button" class="btn-mini" id="btn-exp-wd-json">JSON</button>
-        </div>
+      <!-- ================= FISHING GAME LINK ================= -->
+      <section class="panel" id="game-link" aria-labelledby="game-cta-title">
+        <h2 id="game-cta-title" data-i18n="gameCtaTitle">Woldfish Fishing Game</h2>
+        <p class="sub" data-i18n="gameCtaDesc">Tap the swimming fish to catch them — every catch earns WFISH. Withdrawals are automatic.</p>
+        <p><a class="btn-action" href="game.html" data-i18n="gameCtaBtn">Play the Game</a></p>
       </section>
 
       <!-- ================= HERO ================= -->
@@ -1374,6 +1272,9 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
             txNoResponse: "Your wallet didn't respond to the request. Open your wallet app and check for a pending approval; if there is none, the connection has dropped — disconnect the wallet here, reconnect, then try again.",
             disconnect: "Disconnect Wallet",
             gameTitle: "Woldfish Fishing Game",
+            gameCtaTitle: "Woldfish Fishing Game",
+            gameCtaDesc: "Tap the swimming fish to catch them — every catch earns WFISH. Withdrawals are automatic.",
+            gameCtaBtn: "Play the Game",
             gameSub: "Tap the swimming fish to catch them — every catch earns WFISH.",
             gameBadge: "Play & Earn WFISH",
             gamePlayingAs: "Playing as",
@@ -1542,6 +1443,9 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
             claimSuccess: "Bonus berhasil diklaim dan sudah masuk ke dompetmu.",
             claimTxFail: "Klaim gagal di jaringan. Bonusmu tidak hilang — coba klaim lagi nanti.",
             gameTitle: "Game Memancing Woldfish",
+            gameCtaTitle: "Game Memancing Woldfish",
+            gameCtaDesc: "Ketuk ikan yang berenang untuk menangkapnya — setiap tangkapan dapat WFISH. Penarikan (WD) otomatis.",
+            gameCtaBtn: "Mainkan Gamenya",
             gameSub: "Ketuk ikan yang berenang untuk menangkapnya — setiap tangkapan menghasilkan WFISH.",
             gameBadge: "Main & Dapat WFISH",
             gamePlayingAs: "Bermain sebagai",
@@ -4647,6 +4551,7 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
         }
 
         /* ---------- Game wiring ---------- */
+        if (el("game")) {
         el("btn-game-manual").addEventListener("click", function () {
           var v = (gameManualInput.value || "").trim();
           if (!/^0x[0-9a-fA-F]{40}$/.test(v)) {
@@ -4692,6 +4597,7 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
             renderGameEnergyNote(rec);
           }
         }, 1000);
+        }
 
         /* ================= Start ================= */
         renderWallet();
