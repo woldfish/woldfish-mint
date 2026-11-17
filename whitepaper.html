@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="dark" />
+    <meta name="description" content="Woldfish (WFISH) whitepaper: a community token on BNB Smart Chain with a free mint, a paid mint, an NFT collection and a fishing game with automatic withdrawals." />
+    <title>Woldfish (WFISH) — Whitepaper</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg-deep: #030d16;
+        --bg-sea: #061a29;
+        --panel: #0a2233;
+        --line: #17405c;
+        --text: #eef6f4;
+        --muted: #9db8c4;
+        --gold: #e9b949;
+        --gold-bright: #f6d67c;
+        --teal: #3ec6b8;
+        --radius: 18px;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        font-family: "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", Tahoma, sans-serif;
+        color: var(--text);
+        background: linear-gradient(180deg, var(--bg-sea) 0%, var(--bg-deep) 55%, #02070d 100%);
+        min-height: 100vh;
+        line-height: 1.6;
+      }
+      main { max-width: 760px; margin: 0 auto; padding: 32px 20px 64px; }
+      a { color: var(--gold-bright); }
+      h1 { font-size: 2rem; line-height: 1.2; margin: 8px 0 4px; }
+      h1 .gold { color: var(--gold); }
+      h2 { font-size: 1.25rem; margin: 36px 0 8px; padding-top: 20px; border-top: 1px solid var(--line); }
+      h3 { font-size: 1.05rem; margin: 20px 0 6px; }
+      p { margin: 8px 0; color: var(--text); }
+      .sub { color: var(--muted); margin-top: 0; }
+      .panel {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        padding: 18px 20px;
+        margin: 16px 0;
+      }
+      table { width: 100%; border-collapse: collapse; font-size: 0.92rem; }
+      th, td { text-align: left; padding: 8px 6px; border-bottom: 1px solid var(--line); vertical-align: top; }
+      th { color: var(--muted); font-weight: 600; width: 34%; }
+      td { word-break: break-all; }
+      code { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 0.86em; word-break: break-all; }
+      ul { margin: 8px 0; padding-left: 22px; }
+      li { margin: 5px 0; }
+      .back { display: inline-block; margin-bottom: 12px; font-size: 0.95rem; }
+      .warn { color: var(--muted); font-size: 0.92rem; }
+      footer { margin-top: 40px; padding-top: 18px; border-top: 1px solid var(--line); color: var(--muted); font-size: 0.92rem; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <a class="back" href="index.html">&larr; Back to the Mint Site</a>
+      <h1>Woldfish <span class="gold">(WFISH)</span> — Whitepaper</h1>
+      <p class="sub">A community token on BNB Smart Chain. Launched 15 November 2026. Version 1.0 — 17 November 2026.</p>
+
+      <h2>1. What is Woldfish</h2>
+      <p>Woldfish (WFISH) is a community token on BNB Smart Chain with a fixed supply of 1,000,000,000 tokens. It is distributed through a free mint and a paid mint, it powers the Woldfish Fishing Game, and it already trades on PancakeSwap. There was no presale and no private sale: every token in circulation comes from the public mints, the game, or the liquidity pool.</p>
+      <p>The project is built and run by its founder, Dimas Mohamad Julius, as a community project. The official channels are this website (<a href="https://woldfish.duckdns.org/">woldfish.duckdns.org</a>), the game (<a href="https://woldfish.duckdns.org/game.html">woldfish.duckdns.org/game.html</a>), the public code on GitHub (<a href="https://github.com/woldfish">github.com/woldfish</a>), and email <a href="mailto:woldfishcoin26@gmail.com">woldfishcoin26@gmail.com</a>.</p>
+
+      <h2>2. Token facts</h2>
+      <div class="panel">
+        <table>
+          <tr><th>Chain</th><td>BNB Smart Chain</td></tr>
+          <tr><th>Token contract</th><td><code>0x05492d04c520677cc37fff0f38e3061ee25ff301</code> — <a href="https://bscscan.com/token/0x05492d04c520677cc37fff0f38e3061ee25ff301">BscScan</a></td></tr>
+          <tr><th>Symbol</th><td>WFISH</td></tr>
+          <tr><th>Decimals</th><td>18</td></tr>
+          <tr><th>Total supply</th><td>1,000,000,000 WFISH (fixed)</td></tr>
+          <tr><th>Trading</th><td>PancakeSwap pair WFISH/BNB — <a href="https://bscscan.com/address/0x38C36a2Ea9B80c984f8ec51Bc71a1019E53C92b5">0x38C36a2Ea9B80c984f8ec51Bc71a1019E53C92b5</a></td></tr>
+        </table>
+      </div>
+
+      <h2>3. How to get WFISH</h2>
+      <h3>Free mint — 10,000 WFISH per wallet</h3>
+      <p>Any wallet can mint 10,000 WFISH once, for free — only the BSC network gas fee applies. The free mint is capped at 1,000 wallets and enforced by the smart contract. There is no allowlist and no payment to the project.</p>
+      <h3>Paid mint — 0.0003 BNB per mint</h3>
+      <p>Each paid mint (repeatable while the quota lasts) gives:</p>
+      <ul>
+        <li><strong>2,000,000 WFISH</strong> instantly (200&times; the free mint);</li>
+        <li><strong>1 Woldfish NFT</strong> (see section 5);</li>
+        <li><strong>1,000 WFISH bonus per day for 7 days</strong> (7,000 WFISH in total), claimable with the Claim Daily Bonus button on the mint site.</li>
+      </ul>
+      <h3>Trading</h3>
+      <p>WFISH trades on PancakeSwap through its official WFISH/BNB pair. The price follows the pool and can go up or down at any time. A free mint is not a guarantee of profit.</p>
+
+      <h2>4. The Fishing Game</h2>
+      <p>The Woldfish Fishing Game (<a href="https://woldfish.duckdns.org/game.html">game.html</a>) is a free browser game. Players tap swimming fish to catch them; each catch earns WFISH, with rarer fish worth more — the same rarities as the NFT collection:</p>
+      <ul>
+        <li>Blue / Common — 100 WFISH per catch</li>
+        <li>Green / Rare — 250 WFISH per catch</li>
+        <li>Purple / Epic — 500 WFISH per catch</li>
+        <li>Red / Legendary — 1,000 WFISH per catch</li>
+        <li>Yellow / Mythic — 2,000 WFISH per catch</li>
+      </ul>
+      <p>Each cast costs 1 energy (20 energy, regenerating over time). Earnings are capped at 10,000 WFISH per wallet per day. Game scores are stored only in the player&rsquo;s own browser; withdrawals are on-chain and automatic through the Game Withdraw contract: <code>withdraw(amount)</code> pays out in multiples of 10,000 WFISH, with a fee of exactly 0.00001 BNB per 10,000 WFISH and a daily cap of 10,000 WFISH per wallet. There is no manual payout queue and no one to ask for a withdrawal.</p>
+
+      <h2>5. Woldfish NFTs</h2>
+      <p>Every paid mint also sends 1 Woldfish NFT. The collection is capped at 1,000 NFTs, one per paid mint, with five rarities: Blue / Common (500), Green / Rare (250), Purple / Epic (150), Red / Legendary (70), Yellow / Mythic (30, the rarest). NFT metadata is stored on IPFS. Paid mints can also be made with WFISH in the game&rsquo;s shop (a planned option).</p>
+
+      <h2>6. Smart contracts</h2>
+      <p>All core contracts are verified on Sourcify (Perfect Match). Verify them yourself on BscScan:</p>
+      <div class="panel">
+        <table>
+          <tr><th>WFISH token</th><td><code>0x05492d04c520677cc37fff0f38e3061ee25ff301</code></td></tr>
+          <tr><th>Free mint</th><td><code>0x0648c13be5c61424db9375d15470646b8871854f</code></td></tr>
+          <tr><th>Paid mint (v2)</th><td><code>0x2a81126478e01dd34bac24812acb659c5e4076c4</code></td></tr>
+          <tr><th>Woldfish NFT</th><td><code>0x29c52529a7956b9ca939f085df63d15cbc4395f0</code></td></tr>
+          <tr><th>Game Withdraw</th><td><code>0xac6e14b818eec3a6f265441e196492891949dcc8</code></td></tr>
+          <tr><th>PancakeSwap pair</th><td><code>0x38C36a2Ea9B80c984f8ec51Bc71a1019E53C92b5</code></td></tr>
+        </table>
+      </div>
+
+      <h2>7. Supply and distribution</h2>
+      <p>The total supply is fixed at 1,000,000,000 WFISH and is fully accounted for on-chain — every holding is visible on BscScan. The supply is distributed through the public mints described above (free mint: at most 10,000,000 WFISH across 1,000 wallets; paid mint: 2,000,000 WFISH per mint plus the 7-day bonus), the game&rsquo;s withdrawal fund, and the PancakeSwap liquidity pool. There are no locked team allocations and no vesting schedules to disclose: the founder&rsquo;s holdings are the same public wallets anyone can inspect on BscScan.</p>
+
+      <h2>8. Status and roadmap</h2>
+      <ul>
+        <li><strong>Live now (15–17 Nov 2026):</strong> free mint and paid mint open; fishing game live; automatic withdrawals proven on-chain; token trading on PancakeSwap.</li>
+        <li><strong>In progress:</strong> paid mint payable with WFISH (mintWithWFISH); more additions to the fishing game.</li>
+        <li><strong>Planned:</strong> more game features and community growth around the mint and the game.</li>
+      </ul>
+
+      <h2>9. Risks and safety</h2>
+      <ul>
+        <li>WFISH is a community meme + NFT + gaming token. Its price follows the PancakeSwap pool and can fall as well as rise. Do your own research; never spend money you cannot afford to lose.</li>
+        <li>The mint site never asks for your seed phrase, private key, or password. Anyone asking for them in Woldfish&rsquo;s name is a scammer.</li>
+        <li>Always double-check contract addresses on BscScan before transacting, and only use the official site: <a href="https://woldfish.duckdns.org/">woldfish.duckdns.org</a>.</li>
+      </ul>
+
+      <footer>
+        <p>Woldfish (WFISH) — Whitepaper v1.0, 17 November 2026. Contact: <a href="mailto:woldfishcoin26@gmail.com">woldfishcoin26@gmail.com</a> · Code: <a href="https://github.com/woldfish">github.com/woldfish</a> · Mint site: <a href="https://woldfish.duckdns.org/">woldfish.duckdns.org</a></p>
+        <p class="warn">This document describes the project as it exists today. Features marked planned may change. Nothing here is financial advice.</p>
+      </footer>
+    </main>
+  </body>
+</html>
