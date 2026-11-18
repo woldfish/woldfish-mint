@@ -573,7 +573,7 @@
         <div class="stats-head">
           <div>
             <h2 id="paid-title" data-i18n="paidTitle">Paid Mint</h2>
-            <p class="sub" data-i18n="paidSub">Price 0.0003 BNB per mint — repeatable while quota lasts.</p>
+            <p class="sub" data-i18n="paidSub">Price 0.0002 BNB per mint — repeatable while quota lasts.</p>
           </div>
           <span class="badge gold" data-i18n="paidBadgeRepeat">Repeatable</span>
         </div>
@@ -613,7 +613,7 @@
           </div>
         </div>
 
-        <button type="button" class="btn-mint" id="btn-paid-mint">Paid Mint 0.0003 BNB</button>
+        <button type="button" class="btn-mint" id="btn-paid-mint">Paid Mint 0.0002 BNB</button>
 
         <button type="button" class="btn-switch" id="btn-switch-paid" data-i18n="btnSwitch">Switch to BNB Smart Chain</button>
 
@@ -862,17 +862,17 @@
             <div class="addr-top">
               <span class="addr-name" data-i18n="addrPaid">Paid Mint Contract</span>
               <span class="addr-actions">
-                <button type="button" class="btn-mini" data-copy="0x2a81126478e01dd34bac24812acb659c5e4076c4">
+                <button type="button" class="btn-mini" data-copy="0x732C78243e60364Cf06AaA39AaaCec9f92B9Dc97">
                   <svg class="sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
                   <span class="copy-label" data-i18n="copy">Copy</span>
                 </button>
-                <a class="btn-mini" href="https://bscscan.com/address/0x2a81126478e01dd34bac24812acb659c5e4076c4" target="_blank" rel="noopener">
+                <a class="btn-mini" href="https://bscscan.com/address/0x732C78243e60364Cf06AaA39AaaCec9f92B9Dc97" target="_blank" rel="noopener">
                   BscScan
                   <svg class="sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7"/><path d="M8 7h9v9"/></svg>
                 </a>
               </span>
             </div>
-            <div class="addr-value">0x2a81126478e01dd34bac24812acb659c5e4076c4</div>
+            <div class="addr-value">0x732C78243e60364Cf06AaA39AaaCec9f92B9Dc97</div>
           </div>
 
           <div class="addr-item">
@@ -1134,10 +1134,10 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
         var rpcGoodIndex = 0; // index of the last endpoint that answered
         var CHAIN_ID_HEX = "0x38"; // 56 = BNB Smart Chain
         var MINT_CONTRACT = "0x0648c13be5c61424db9375d15470646b8871854f";
-        var PAID_CONTRACT = "0x2a81126478e01dd34bac24812acb659c5e4076c4";
+        var PAID_CONTRACT = "0x732C78243e60364Cf06AaA39AaaCec9f92B9Dc97";
         var WD_CONTRACT = "0xac6e14b818eec3a6f265441e196492891949dcc8";
-        var PAID_VALUE_HEX = "0x" + BigInt("300000000000000").toString(16); // 0.0003 BNB
-        var PAID_WEI = 300000000000000n; // 0.0003 BNB in wei
+        var PAID_VALUE_HEX = "0x" + BigInt("200000000000000").toString(16); // 0.0002 BNB
+        var PAID_WEI = 200000000000000n; // 0.0002 BNB in wei
         var GAS_MARGIN_WEI = 30000000000000n; // 0.00003 BNB headroom for gas on top of the price
         var TOKEN_CONTRACT = "0x05492d04c520677cc37fff0f38e3061ee25ff301";
         var NFT_CONTRACT = "0x29c52529a7956b9ca939f085df63d15cbc4395f0";
@@ -1284,7 +1284,7 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
             balanceUpdatedOk: "Last updated {time} · auto-refreshes",
             balanceUpdatedFail: "Failed to load balance — try refreshing.",
             paidTitle: "Paid Mint",
-            paidSub: "Price 0.0003 BNB per mint — repeatable while quota lasts.",
+            paidSub: "Price 0.0002 BNB per mint — repeatable while quota lasts.",
             paidBadgeRepeat: "Repeatable",
             paidRule1: "<strong>2,000,000 WFISH instantly</strong> Tokens land in your wallet as soon as the transaction is confirmed — 200× the free mint.",
             paidRule2: "<strong>1 Woldfish NFT</strong> Every paid mint also sends 1 Woldfish NFT to your wallet.",
@@ -1292,7 +1292,7 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
             paidRemainingLbl: "Paid Mints Remaining",
             paidClaimableLbl: "Claimable Bonus (WFISH)",
             btnClaim: "Claim Daily Bonus",
-            paidBtnDefault: "Paid Mint 0.0003 BNB",
+            paidBtnDefault: "Paid Mint 0.0002 BNB",
             hintNoProviderPaid: "Tap the button above to connect a wallet with WalletConnect (QR code / wallet app) and mint.",
             hintNoAccountPaid: "Connect your wallet first — the Connect Wallet button is in the Free Mint section below.",
             paidSoldOut: "Paid Mint Quota Sold Out",
@@ -1330,7 +1330,7 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
             mintTxFail: "Transaction failed on the network. No WFISH was sent — please check your wallet status again.",
             txWrongNetwork: "Your wallet is still not on BNB Smart Chain. This page already asked your wallet to switch — if no prompt appeared, open your wallet app, switch its network to BNB Smart Chain yourself, then try again.",
             txSwitching: "Asking your wallet to switch to BNB Smart Chain — approve it in your wallet app…",
-            txInsufficientBnb: "Not enough BNB on BNB Smart Chain. A paid mint needs 0.0003 BNB plus a little more for gas — top up your wallet's BNB (BSC) balance, then try again.",
+            txInsufficientBnb: "Not enough BNB on BNB Smart Chain. A paid mint needs 0.0002 BNB plus a little more for gas — top up your wallet's BNB (BSC) balance, then try again.",
             txCancelled: "Transaction cancelled in your wallet. Nothing was sent.",
             mintFailedPrefix: "Mint failed: ",
             txFailedPrefix: "Transaction failed: ",
@@ -1406,7 +1406,7 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
             gameWdProcessing: "Processing…",
             gameShopTitle: "NFT Shop",
             gameShopDesc: "Buy a Woldfish NFT right here in the game — the same paid mint: 1 NFT + 2,000,000 WFISH instantly + a 1,000 WFISH/day bonus for 7 days.",
-            gameShopBtn: "Buy NFT — 0.0003 BNB",
+            gameShopBtn: "Buy NFT — 0.0002 BNB",
             gameHistTitle: "Recent Catches",
             gameHistEmpty: "No catches yet — tap a fish in the pond.",
             gameLbTitle: "Leaderboard (this browser)",
@@ -1495,7 +1495,7 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
             balanceUpdatedOk: "Terakhir diperbarui {time} · diperbarui otomatis",
             balanceUpdatedFail: "Gagal memuat saldo — coba segarkan.",
             paidTitle: "Mint Berbayar",
-            paidSub: "Harga 0,0003 BNB per mint — bisa diulang selama kuota masih ada.",
+            paidSub: "Harga 0,0002 BNB per mint — bisa diulang selama kuota masih ada.",
             paidBadgeRepeat: "Bisa Diulang",
             paidRule1: "<strong>2.000.000 WFISH langsung</strong> Token langsung masuk ke dompetmu begitu transaksi terkonfirmasi — 200× lipat dari mint gratis.",
             paidRule2: "<strong>1 NFT Woldfish</strong> Setiap mint berbayar juga mengirim 1 NFT Woldfish ke dompetmu.",
@@ -1503,7 +1503,7 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
             paidRemainingLbl: "Sisa Mint Berbayar",
             paidClaimableLbl: "Bonus Bisa Diklaim (WFISH)",
             btnClaim: "Klaim Bonus Harian",
-            paidBtnDefault: "Mint Berbayar 0,0003 BNB",
+            paidBtnDefault: "Mint Berbayar 0,0002 BNB",
             hintNoProviderPaid: "Ketuk tombol di atas untuk menyambungkan dompet lewat WalletConnect (kode QR / aplikasi dompet) lalu mint.",
             hintNoAccountPaid: "Sambungkan dompetmu dulu — tombol Sambung Dompet ada di bagian Mint Gratis di bawah.",
             paidSoldOut: "Kuota Mint Berbayar Habis",
@@ -1541,7 +1541,7 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
             mintTxFail: "Transaksi gagal di jaringan. Tidak ada WFISH yang terkirim — coba periksa lagi status dompetmu.",
             txWrongNetwork: "Dompetmu masih belum di BNB Smart Chain. Halaman ini sudah meminta dompetmu pindah jaringan — kalau tidak ada permintaan yang muncul, buka aplikasi dompetmu, pindah jaringannya ke BNB Smart Chain sendiri, lalu coba lagi.",
             txSwitching: "Meminta dompetmu pindah ke BNB Smart Chain — setujui di aplikasi dompetmu…",
-            txInsufficientBnb: "BNB di BNB Smart Chain tidak cukup. Mint berbayar butuh 0,0003 BNB ditambah sedikit untuk gas — isi dulu saldo BNB (BSC) dompetmu, lalu coba lagi.",
+            txInsufficientBnb: "BNB di BNB Smart Chain tidak cukup. Mint berbayar butuh 0,0002 BNB ditambah sedikit untuk gas — isi dulu saldo BNB (BSC) dompetmu, lalu coba lagi.",
             txCancelled: "Transaksi dibatalkan di dompet. Tidak ada yang terkirim.",
             mintFailedPrefix: "Mint gagal: ",
             txFailedPrefix: "Transaksi gagal: ",
@@ -1603,7 +1603,7 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
             gameWdProcessing: "Sedang Memproses…",
             gameShopTitle: "Toko NFT",
             gameShopDesc: "Beli NFT Woldfish langsung di dalam game — sama seperti mint berbayar: 1 NFT + 2.000.000 WFISH langsung + bonus 1.000 WFISH/hari selama 7 hari.",
-            gameShopBtn: "Beli NFT — 0,0003 BNB",
+            gameShopBtn: "Beli NFT — 0,0002 BNB",
             gameHistTitle: "Tangkapan Terakhir",
             gameHistEmpty: "Belum ada tangkapan — ketuk ikan di kolam.",
             gameLbTitle: "Leaderboard (browser ini)",
@@ -1692,7 +1692,7 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
             balanceUpdatedOk: "最后更新 {time} · 自动刷新",
             balanceUpdatedFail: "余额加载失败 — 请刷新重试。",
             paidTitle: "付费铸造",
-            paidSub: "每次铸造价格 0.0003 BNB — 名额用完前可重复铸造。",
+            paidSub: "每次铸造价格 0.0002 BNB — 名额用完前可重复铸造。",
             paidBadgeRepeat: "可重复",
             paidRule1: "<strong>立即获得 2,000,000 WFISH</strong> 交易确认后代币立即进入你的钱包 — 是免费铸造的 200 倍。",
             paidRule2: "<strong>1 个 Woldfish NFT</strong> 每次付费铸造还会向你的钱包发送 1 个 Woldfish NFT。",
@@ -1700,7 +1700,7 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
             paidRemainingLbl: "付费铸造剩余名额",
             paidClaimableLbl: "可领取奖励 (WFISH)",
             btnClaim: "领取每日奖励",
-            paidBtnDefault: "付费铸造 0.0003 BNB",
+            paidBtnDefault: "付费铸造 0.0002 BNB",
             hintNoProviderPaid: "请从钱包浏览器（Binance Wallet / MetaMask）打开本页面进行付费铸造。",
             hintNoAccountPaid: "请先连接钱包 — 连接钱包按钮在下方的免费铸造部分。",
             paidSoldOut: "付费铸造名额已满",
@@ -1802,7 +1802,7 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
             balanceUpdatedOk: "अंतिम अपडेट {time} · स्वतः रीफ़्रेश",
             balanceUpdatedFail: "बैलेंस लोड विफल — रीफ़्रेश करके देखें।",
             paidTitle: "सशुल्क मिंट",
-            paidSub: "प्रति मिंट कीमत 0.0003 BNB — कोटा रहने तक दोहराया जा सकता है।",
+            paidSub: "प्रति मिंट कीमत 0.0002 BNB — कोटा रहने तक दोहराया जा सकता है।",
             paidBadgeRepeat: "दोहराने योग्य",
             paidRule1: "<strong>तुरंत 2,000,000 WFISH</strong> लेनदेन की पुष्टि होते ही टोकन आपके वॉलेट में आ जाते हैं — मुफ़्त मिंट का 200 गुना।",
             paidRule2: "<strong>1 Woldfish NFT</strong> हर सशुल्क मिंट आपके वॉलेट में 1 Woldfish NFT भी भेजता है।",
@@ -1810,7 +1810,7 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
             paidRemainingLbl: "शेष सशुल्क मिंट",
             paidClaimableLbl: "दावा योग्य बोनस (WFISH)",
             btnClaim: "दैनिक बोनस का दावा करें",
-            paidBtnDefault: "सशुल्क मिंट 0.0003 BNB",
+            paidBtnDefault: "सशुल्क मिंट 0.0002 BNB",
             hintNoProviderPaid: "सशुल्क मिंट के लिए इस पेज को वॉलेट ब्राउज़र (Binance Wallet / MetaMask) से खोलें।",
             hintNoAccountPaid: "पहले अपना वॉलेट कनेक्ट करें — वॉलेट कनेक्ट बटन नीचे मुफ़्त मिंट अनुभाग में है।",
             paidSoldOut: "सशुल्क मिंट कोटा समाप्त",
@@ -1912,7 +1912,7 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
             balanceUpdatedOk: "সর্বশেষ আপডেট {time} · স্বয়ংক্রিয় রিফ্রেশ",
             balanceUpdatedFail: "ব্যালেন্স লোড ব্যর্থ — রিফ্রেশ করে দেখুন।",
             paidTitle: "পেইড মিন্ট",
-            paidSub: "প্রতি মিন্টের মূল্য 0.0003 BNB — কোটা থাকা পর্যন্ত পুনরাবৃত্তি করা যায়।",
+            paidSub: "প্রতি মিন্টের মূল্য 0.0002 BNB — কোটা থাকা পর্যন্ত পুনরাবৃত্তি করা যায়।",
             paidBadgeRepeat: "পুনরাবৃত্তিযোগ্য",
             paidRule1: "<strong>সাথে সাথে 2,000,000 WFISH</strong> লেনদেন নিশ্চিত হলেই টোকেন আপনার ওয়ালেটে পৌঁছে যায় — ফ্রি মিন্টের 200 গুণ।",
             paidRule2: "<strong>1টি Woldfish NFT</strong> প্রতিটি পেইড মিন্ট আপনার ওয়ালেটে 1টি Woldfish NFT-ও পাঠায়।",
@@ -1920,7 +1920,7 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
             paidRemainingLbl: "অবশিষ্ট পেইড মিন্ট",
             paidClaimableLbl: "দাবিযোগ্য বোনাস (WFISH)",
             btnClaim: "দৈনিক বোনাস দাবি করুন",
-            paidBtnDefault: "পেইড মিন্ট 0.0003 BNB",
+            paidBtnDefault: "পেইড মিন্ট 0.0002 BNB",
             hintNoProviderPaid: "পেইড মিন্টের জন্য এই পেজটি ওয়ালেট ব্রাউজার (Binance Wallet / MetaMask) থেকে খুলুন।",
             hintNoAccountPaid: "প্রথমে আপনার ওয়ালেট সংযুক্ত করুন — ওয়ালেট সংযুক্ত বোতামটি নিচে ফ্রি মিন্ট অংশে আছে।",
             paidSoldOut: "পেইড মিন্ট কোটা শেষ",
@@ -2022,7 +2022,7 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
             balanceUpdatedOk: "آخری اپڈیٹ {time} · خودکار ریفریش",
             balanceUpdatedFail: "بیلنس لوڈ ناکام — ریفریش کر کے دیکھیں۔",
             paidTitle: "ادا شدہ منٹ",
-            paidSub: "قیمت 0.0003 BNB فی منٹ — کوٹہ رہنے تک دہرایا جا سکتا ہے۔",
+            paidSub: "قیمت 0.0002 BNB فی منٹ — کوٹہ رہنے تک دہرایا جا سکتا ہے۔",
             paidBadgeRepeat: "دہرایا جا سکتا ہے",
             paidRule1: "<strong>فوراً 2,000,000 WFISH</strong> لین دین کی تصدیق ہوتے ہی ٹوکن آپ کے والیٹ میں آ جاتے ہیں — مفت منٹ سے 200 گنا۔",
             paidRule2: "<strong>1 Woldfish NFT</strong> ہر ادا شدہ منٹ آپ کے والیٹ میں 1 Woldfish NFT بھی بھیجتا ہے۔",
@@ -2030,7 +2030,7 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
             paidRemainingLbl: "باقی ادا شدہ منٹ",
             paidClaimableLbl: "قابلِ دعویٰ بونس (WFISH)",
             btnClaim: "روزانہ بونس کا دعویٰ کریں",
-            paidBtnDefault: "ادا شدہ منٹ 0.0003 BNB",
+            paidBtnDefault: "ادا شدہ منٹ 0.0002 BNB",
             hintNoProviderPaid: "ادا شدہ منٹ کے لیے یہ صفحہ والیٹ براؤزر (Binance Wallet / MetaMask) سے کھولیں۔",
             hintNoAccountPaid: "پہلے اپنا والیٹ منسلک کریں — والیٹ منسلک بٹن نیچے مفت منٹ والے حصے میں ہے۔",
             paidSoldOut: "ادا شدہ منٹ کوٹہ ختم",
@@ -2132,7 +2132,7 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
             balanceUpdatedOk: "آخر تحديث {time} · تحديث تلقائي",
             balanceUpdatedFail: "فشل تحميل الرصيد — حاول التحديث.",
             paidTitle: "الصنع المدفوع",
-            paidSub: "السعر 0.0003 BNB لكل عملية صنع — قابل للتكرار ما دامت الحصة متاحة.",
+            paidSub: "السعر 0.0002 BNB لكل عملية صنع — قابل للتكرار ما دامت الحصة متاحة.",
             paidBadgeRepeat: "قابل للتكرار",
             paidRule1: "<strong>2,000,000 WFISH فورًا</strong> تصل الرموز إلى محفظتك بمجرد تأكيد المعاملة — 200 ضعف الصنع المجاني.",
             paidRule2: "<strong>1 NFT من Woldfish</strong> كل عملية صنع مدفوعة ترسل أيضًا 1 NFT من Woldfish إلى محفظتك.",
@@ -2140,7 +2140,7 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
             paidRemainingLbl: "عمليات الصنع المدفوعة المتبقية",
             paidClaimableLbl: "المكافأة القابلة للمطالبة (WFISH)",
             btnClaim: "مطالبة المكافأة اليومية",
-            paidBtnDefault: "صنع مدفوع 0.0003 BNB",
+            paidBtnDefault: "صنع مدفوع 0.0002 BNB",
             hintNoProviderPaid: "افتح هذه الصفحة من متصفح محفظة (Binance Wallet / MetaMask) للصنع المدفوع.",
             hintNoAccountPaid: "وصّل محفظتك أولًا — زر توصيل المحفظة موجود في قسم الصنع المجاني أدناه.",
             paidSoldOut: "نفدت حصة الصنع المدفوع",
@@ -2242,7 +2242,7 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
             balanceUpdatedOk: "Обновлено {time} · обновляется автоматически",
             balanceUpdatedFail: "Не удалось загрузить баланс — попробуйте обновить.",
             paidTitle: "Платный минт",
-            paidSub: "Цена 0,0003 BNB за минт — можно повторять, пока есть квота.",
+            paidSub: "Цена 0,0002 BNB за минт — можно повторять, пока есть квота.",
             paidBadgeRepeat: "Можно повторять",
             paidRule1: "<strong>2 000 000 WFISH сразу</strong> Токены поступают в ваш кошелёк, как только транзакция подтверждена — в 200 раз больше бесплатного минта.",
             paidRule2: "<strong>1 NFT Woldfish</strong> Каждый платный минт также отправляет 1 NFT Woldfish в ваш кошелёк.",
@@ -2250,7 +2250,7 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
             paidRemainingLbl: "Осталось платных минтов",
             paidClaimableLbl: "Доступный бонус (WFISH)",
             btnClaim: "Забрать ежедневный бонус",
-            paidBtnDefault: "Платный минт 0,0003 BNB",
+            paidBtnDefault: "Платный минт 0,0002 BNB",
             hintNoProviderPaid: "Откройте эту страницу из браузера кошелька (Binance Wallet / MetaMask) для платного минта.",
             hintNoAccountPaid: "Сначала подключите кошелёк — кнопка подключения находится в разделе бесплатного минта ниже.",
             paidSoldOut: "Квота платного минта исчерпана",
@@ -2352,7 +2352,7 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
             balanceUpdatedOk: "עודכן לאחרונה {time} · מתרענן אוטומטית",
             balanceUpdatedFail: "טעינת היתרה נכשלה — נסו לרענן.",
             paidTitle: "הטבעה בתשלום",
-            paidSub: "מחיר 0.0003 BNB להטבעה — ניתן לחזור כל עוד נותרה מכסה.",
+            paidSub: "מחיר 0.0002 BNB להטבעה — ניתן לחזור כל עוד נותרה מכסה.",
             paidBadgeRepeat: "ניתן לחזרה",
             paidRule1: "<strong>2,000,000 WFISH מיד</strong> הטוקנים מגיעים לארנק ברגע שהעסקה מאושרת — פי 200 מההטבעה החינמית.",
             paidRule2: "<strong>1 NFT של Woldfish</strong> כל הטבעה בתשלום שולחת גם 1 NFT של Woldfish לארנק שלכם.",
@@ -2360,7 +2360,7 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
             paidRemainingLbl: "הטבעות בתשלום שנותרו",
             paidClaimableLbl: "בונוס ניתן לתביעה (WFISH)",
             btnClaim: "תבעו בונוס יומי",
-            paidBtnDefault: "הטבעה בתשלום 0.0003 BNB",
+            paidBtnDefault: "הטבעה בתשלום 0.0002 BNB",
             hintNoProviderPaid: "פתחו את הדף מדפדפן ארנק (Binance Wallet / MetaMask) להטבעה בתשלום.",
             hintNoAccountPaid: "חברו תחילה את הארנק — כפתור חיבור הארנק נמצא בחלק ההטבעה החינמית למטה.",
             paidSoldOut: "מכסת ההטבעה בתשלום אזלה",
@@ -2462,7 +2462,7 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
             balanceUpdatedOk: "最終更新 {time} · 自動更新",
             balanceUpdatedFail: "残高の読み込み失敗 — 更新してみてください。",
             paidTitle: "有料ミント",
-            paidSub: "価格は1回0.0003 BNB — 枠がある限り繰り返し可能です。",
+            paidSub: "価格は1回0.0002 BNB — 枠がある限り繰り返し可能です。",
             paidBadgeRepeat: "繰り返し可能",
             paidRule1: "<strong>2,000,000 WFISHが即時付与</strong> トランザクションが確認され次第、トークンがウォレットに入ります — 無料ミントの200倍です。",
             paidRule2: "<strong>Woldfish NFT 1点</strong> 有料ミントごとに、Woldfish NFT 1点もウォレットに送られます。",
@@ -2470,7 +2470,7 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
             paidRemainingLbl: "残り有料ミント数",
             paidClaimableLbl: "請求可能なボーナス (WFISH)",
             btnClaim: "デイリーボーナスを受け取る",
-            paidBtnDefault: "有料ミント 0.0003 BNB",
+            paidBtnDefault: "有料ミント 0.0002 BNB",
             hintNoProviderPaid: "有料ミントするには、ウォレットブラウザ（Binance Wallet / MetaMask）からこのページを開いてください。",
             hintNoAccountPaid: "まずウォレットを接続してください — 接続ボタンは下の無料ミント欄にあります。",
             paidSoldOut: "有料ミント枠は終了しました",
@@ -2572,7 +2572,7 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
             balanceUpdatedOk: "마지막 업데이트 {time} · 자동 새로고침",
             balanceUpdatedFail: "잔액 불러오기 실패 — 새로고침해 보세요.",
             paidTitle: "유료 민팅",
-            paidSub: "민팅 1회당 0.0003 BNB — 한도가 남아 있는 동안 반복 가능합니다.",
+            paidSub: "민팅 1회당 0.0002 BNB — 한도가 남아 있는 동안 반복 가능합니다.",
             paidBadgeRepeat: "반복 가능",
             paidRule1: "<strong>2,000,000 WFISH 즉시 지급</strong> 트랜잭션이 확인되는 즉시 토큰이 지갑에 들어갑니다 — 무료 민팅의 200배입니다.",
             paidRule2: "<strong>Woldfish NFT 1개</strong> 유료 민팅할 때마다 Woldfish NFT 1개도 지갑으로 전송됩니다.",
@@ -2580,7 +2580,7 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
             paidRemainingLbl: "남은 유료 민팅 수",
             paidClaimableLbl: "청구 가능한 보너스 (WFISH)",
             btnClaim: "일일 보너스 청구",
-            paidBtnDefault: "유료 민팅 0.0003 BNB",
+            paidBtnDefault: "유료 민팅 0.0002 BNB",
             hintNoProviderPaid: "유료 민팅을 하려면 지갑 브라우저(Binance Wallet / MetaMask)에서 이 페이지를 여세요.",
             hintNoAccountPaid: "먼저 지갑을 연결하세요 — 지갑 연결 버튼은 아래의 무료 민팅 섹션에 있습니다.",
             paidSoldOut: "유료 민팅 한도 소진",
@@ -4100,7 +4100,7 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
             if (!onBsc) throw new Error("wrong-network");
             // Pre-flight the BNB balance on BSC (read via public RPC,
             // independent of the wallet's current network): a first-time
-            // visitor whose wallet holds less than the 0.0003 BNB price
+            // visitor whose wallet holds less than the 0.0002 BNB price
             // plus gas otherwise gets only a vague rejection from deep
             // inside the wallet app and no idea what to fix.
             return refreshStats().then(function () {
