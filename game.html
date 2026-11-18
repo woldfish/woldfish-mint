@@ -356,7 +356,7 @@
       }
       .gfish {
         position: absolute; left: 2px; z-index: 2;
-        border: none; background: transparent; padding: 6px; margin: 0;
+        border: none; background: transparent; padding: 16px; margin: 0;
         min-height: 0; cursor: pointer;
         animation-name: pond-swim; animation-timing-function: linear;
         animation-iteration-count: infinite; animation-direction: alternate;
@@ -393,6 +393,7 @@
       .rarity-dot { width: 12px; height: 12px; border-radius: 50%; flex: none; }
       .rarity-list .r-name { color: var(--text); font-weight: 700; min-width: 128px; }
       .rarity-list .r-reward { color: var(--gold-bright); font-weight: 700; font-variant-numeric: tabular-nums; }
+      .rarity-list .r-chance { color: var(--muted); font-weight: 600; font-variant-numeric: tabular-nums; margin-left: 6px; }
       .game-h3 { margin: 24px 0 4px; font-size: 1rem; font-weight: 700; }
       .game-input {
         width: 100%; background: rgba(3, 13, 22, 0.6); border: 1px solid var(--line);
@@ -491,6 +492,10 @@
       }
       .btn-mini:hover { color: var(--text); border-color: var(--teal-dim); }
       .btn-mini.copied { color: var(--ok); border-color: rgba(95, 214, 138, 0.5); }
+      .btn-mini:disabled { opacity: 0.45; cursor: not-allowed; }
+      .my-stats { display: grid; grid-template-columns: 1fr auto; gap: 4px 12px; margin: 0; font-size: 0.92rem; }
+      .my-stats dt { color: var(--muted); font-weight: 600; }
+      .my-stats dd { margin: 0; font-weight: 700; text-align: right; font-variant-numeric: tabular-nums; }
       .addr-value { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 0.82rem; color: var(--muted); word-break: break-all; line-height: 1.5; }
 
       /* ---------- RTL: keep addresses & hashes LTR ---------- */
@@ -581,6 +586,7 @@
           <div class="game-row">
             <input type="text" class="game-input mono" id="game-manual-input" data-i18n-ph="gameManualPh" placeholder="0x… your BSC wallet address" autocomplete="off" spellcheck="false" />
             <button type="button" class="btn-action" id="btn-game-manual" data-i18n="gameUseAddr">Use This Address</button>
+            <button type="button" class="btn-mini" id="btn-game-manual-clear" data-i18n="gameClearAddr">Clear address</button>
           </div>
           <p class="stats-error" id="game-manual-error" data-i18n="gameInvalidAddr">That doesn't look like a valid BSC address (0x + 40 hex characters).</p>
         </div>
@@ -597,7 +603,7 @@
           </div>
           <div class="stat">
             <div class="num plain" id="game-today">—</div>
-            <div class="lbl" data-i18n="gameTodayLbl">Earned Today / 10,000 Cap</div>
+            <div class="lbl" data-i18n="gameTodayLbl">Earned Today (UTC) / 10,000 Cap</div>
           </div>
           <div class="stat">
             <div class="num plain" id="game-catches">—</div>
@@ -610,9 +616,12 @@
           <div class="pond-lock" id="game-pond-lock" data-i18n="gameNeedWallet">Connect your wallet above, or enter your BSC address, to start fishing.</div>
         </div>
         <p class="mint-hint" data-i18n="gamePondHint">Tap a fish to cast at it — 1 cast costs 1 energy. Energy refills by 1 every 60 seconds (max 20).</p>
+        <p class="fee-line" id="game-pond-status" hidden></p>
+        <p class="fee-line" id="game-golden" hidden></p>
+        <div class="quick-row"><button type="button" class="btn-mini" id="btn-game-sound">Sound: on</button></div>
 
         <ul class="rarity-list">
-          <li><span class="rarity-dot" style="background:#4a90d9"></span><span class="r-name" data-i18n="gameRCommon">Blue · Common</span><span class="r-reward">100 WFISH</span></li>
+          <li><span class="rarity-dot" style="background:#4a90d9"></span><span class="r-name" data-i18n="gameRCommon">Blue · Common</span><span class="r-chance" data-rarity="common"></span><span class="r-reward">100 WFISH</span></li>
           <li><span class="rarity-dot" style="background:#35c26e"></span><span class="r-name" data-i18n="gameRRare">Green · Rare</span><span class="r-reward">250 WFISH</span></li>
           <li><span class="rarity-dot" style="background:#9b5de5"></span><span class="r-name" data-i18n="gameREpic">Purple · Epic</span><span class="r-reward">500 WFISH</span></li>
           <li><span class="rarity-dot" style="background:#e5484d"></span><span class="r-name" data-i18n="gameRLegendary">Red · Legendary</span><span class="r-reward">1,000 WFISH</span></li>
@@ -627,6 +636,12 @@
         <ul class="mission-list" id="game-missions"></ul>
         <p class="empty-line" id="game-missions-note" data-i18n="gameMissionsNeedWallet" hidden>Connect your wallet above, or enter your BSC address, to claim mission rewards.</p>
 
+        <!-- Daily gameplay missions (B5) — separate from the social Missions above -->
+        <h3 class="game-h3" data-i18n="gameDQuestTitle">Daily Missions</h3>
+        <p class="sub" data-i18n="gameDQuestSub">Catch fish to complete them — each reward is 500 WFISH and counts toward today's 10,000 cap. Resets daily (UTC).</p>
+        <ul class="mission-list" id="game-dquests"></ul>
+        <p class="empty-line" id="game-dquests-note" data-i18n="gameDQuestNeedWallet" hidden>Connect your wallet above, or enter your BSC address, to do daily missions.</p>
+
         <!-- Withdraw -->
         <h3 class="game-h3" data-i18n="gameWdTitle">Withdraw (WD)</h3>
         <p class="sub" data-i18n="gameWdSub">Automatic WD — pay the fee, and the WFISH lands straight in your wallet. Withdraw in multiples of 10,000 WFISH (minimum 10,000); the fee is 0.00001 BNB per 10,000 WFISH, paid to the WD contract together with your withdrawal.</p>
@@ -638,8 +653,10 @@
           <button type="button" class="btn-mini" id="btn-wd-max" data-i18n="gameWdMax">Max</button>
         </div>
         <p class="fee-line" id="game-wd-fee"></p>
-        <p class="game-note" data-i18n="gameWdNote">Max 10,000 WFISH per wallet per day (limited by the contract). The WD contract is funded with 50,000,000 WFISH — enough for 5,000 withdrawals.</p>
+        <p class="game-note" data-i18n="gameWdNote">Max 10,000 WFISH per wallet per UTC day (resets 07:00 WIB). The WD contract can only pay what it holds — remaining funds are shown live below.</p>
+        <p class="fee-line" id="game-wd-fund"></p>
         <button type="button" class="btn-action wide" id="btn-game-wd" data-i18n="gameWdBtn">Pay Fee &amp; Withdraw</button>
+        <p class="fee-line" id="game-wd-status" hidden></p>
         <ul class="wd-list" id="game-wd-list"></ul>
         <p class="empty-line" id="game-wd-empty" data-i18n="gameWdEmpty">No withdrawals yet.</p>
 
@@ -658,11 +675,16 @@
         <!-- History & leaderboard -->
         <h3 class="game-h3" data-i18n="gameHistTitle">Recent Catches</h3>
         <ul class="hist-list" id="game-history"></ul>
+        <button type="button" class="btn-mini" id="btn-game-hist-more" data-i18n="gameHistMore" hidden>Show all</button>
         <p class="empty-line" id="game-history-empty" data-i18n="gameHistEmpty">No catches yet — tap a fish in the pond.</p>
 
         <h3 class="game-h3" data-i18n="gameLbTitle">Leaderboard (this browser)</h3>
         <ul class="lb-list" id="game-leaderboard"></ul>
         <p class="empty-line" id="game-lb-empty" data-i18n="gameLbEmpty">No players recorded yet.</p>
+
+        <!-- My stats (B6) -->
+        <h3 class="game-h3" data-i18n="gameMyStatsTitle">My Stats</h3>
+        <dl class="my-stats" id="game-mystats"></dl>
 
         <!-- Export -->
         <h3 class="game-h3" data-i18n="gameExportTitle">Export Data</h3>
@@ -1263,6 +1285,38 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
         var SEL_WD = {
           withdraw: "0x2e1a7d4d" // withdraw(uint256) — amount in WFISH wei (10,000 WFISH = 10000 × 10^18); the fee rides as the tx value
         };
+        // Read-only selectors on the WD contract (A1/A2/A4/A5): the
+        // contract is the source of truth for "how much did this wallet
+        // already withdraw today (UTC)" and "how much WFISH is left in
+        // the vault". claimedDay/claimedToday are public mappings.
+        var SEL_WD_READ = {
+          claimedDay: "0x425b02c9",   // claimedDay(address) -> UTC day number
+          claimedToday: "0x5744015d", // claimedToday(address) -> WFISH wei claimed that day
+          balanceOf: "0x70a08231"     // balanceOf(address) -> WFISH wei (vault funds)
+        };
+        // Last on-chain WD state for the game wallet. Null fields mean
+        // "not read yet / read failed" — callers then fall back to the
+        // local wdQueue, which only knows this browser's withdrawals.
+        var wdChain = { day: null, claimed: null, fund: null, ts: 0 };
+        function refreshWdChain(addr, force) {
+          if (!addr) return Promise.resolve(wdChain);
+          if (!force && wdChain.ts && (Date.now() - wdChain.ts < 30000) && wdChain.day !== null) return Promise.resolve(wdChain);
+          var enc = encodeAddress(addr);
+          return Promise.all([
+            ethCall(SEL_WD_READ.claimedDay + enc, WD_CONTRACT).then(decodeUint).catch(function () { return null; }),
+            ethCall(SEL_WD_READ.claimedToday + enc, WD_CONTRACT).then(function (hex) { return BigInt(hex); }).catch(function () { return null; }),
+            ethCall(SEL_WD_READ.balanceOf + encodeAddress(WD_CONTRACT), TOKEN_CONTRACT).then(function (hex) { return BigInt(hex); }).catch(function () { return null; })
+          ]).then(function (r) {
+            wdChain = {
+              day: r[0],
+              claimed: (r[1] === null) ? null : Number(r[1] / 1000000000000000000n),
+              fund: (r[2] === null) ? null : Number(r[2] / 1000000000000000000n),
+              ts: Date.now()
+            };
+            renderGameWdFund();
+            return wdChain;
+          });
+        }
 
         /* ================= Languages ================= */
         var LANG_META = {
@@ -1425,7 +1479,7 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
             gameConnectedNote: "Your connected wallet is used for the game — catches are recorded under it automatically.",
             gameEnergyLbl: "Energy",
             gameBalanceLbl: "Game Balance (WFISH)",
-            gameTodayLbl: "Earned Today / 10,000 Cap",
+            gameTodayLbl: "Earned Today (UTC) / 10,000 Cap",
             gameCatchesLbl: "Fish Caught",
             gameEnergyFull: "Energy is full. Each cast costs 1 energy; it refills by 1 every 60 seconds.",
             gameEnergyNext: "Next energy point in {sec}s · refills 1 per 60 seconds (max 20).",
@@ -1459,7 +1513,7 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
             gameWdMax: "Max",
             gameWdFee: "Fee: {fee} BNB for {amount} WFISH (0.00001 BNB per 10,000 WFISH), paid to the WD contract — the WFISH is sent to your wallet in the same transaction.",
             gameWdFeeEmpty: "Enter an amount to see the fee: 0.00001 BNB per 10,000 WFISH.",
-            gameWdNote: "Max 10,000 WFISH per wallet per day (limited by the contract). The WD contract is funded with 50,000,000 WFISH — enough for 5,000 withdrawals.",
+            gameWdNote: "Max 10,000 WFISH per wallet per UTC day (resets 07:00 WIB). The WD contract can only pay what it holds — remaining funds are shown live below.",
             gameWdBtn: "Pay Fee & Withdraw",
             gameWdEmpty: "No withdrawals yet.",
             gameWdInvalid: "Enter a valid amount: a multiple of 10,000 WFISH, minimum 10,000.",
@@ -1488,7 +1542,63 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
             gameExportTitle: "Export Data",
             gameExportSub: "Download the per-wallet game balances and the completed withdrawal history for your records.",
             gameExportBalances: "Balances:",
-            gameExportWd: "WD history:"
+            gameExportWd: "WD history:",
+            gameClearAddr: "Clear address",
+            gameShopLoading: "Loading…",
+            gameWdFund: "WD funds remaining: {fund} WFISH",
+            gameWdFundLoading: "Checking WD funds…",
+            gameWdCapUsed: "You already withdrew {used} WFISH today (UTC day) — only {left} WFISH of today's 10,000 quota remains.",
+            gameWdFundLow: "The WD contract holds only {fund} WFISH right now — withdraw a smaller amount or try again later.",
+            gameWdNeedBnb: "Not enough BNB — this withdrawal needs {fee} BNB fee plus a little gas. Top up your wallet's BNB (BSC) balance, then try again.",
+            gameChance: "catch chance",
+            gameMissedEnergy: "1 energy used.",
+            gameClampWarn: "Capped by daily limit: +{amount} WFISH",
+            gameCapLow: "only {left} WFISH left of today's cap",
+            gameEnergyEmpty: "No energy — next point in {sec}s",
+            gameCombo: "Combo x{n} — keep it up!",
+            gameSoundOn: "Sound: on",
+            gameSoundOff: "Sound: off",
+            gameHistMore: "Show all",
+            gameHistLess: "Show less",
+            gameWdConfirm: "Withdraw {amount} WFISH?\nFee: {fee} BNB + network gas. The fee is paid with this transaction and is not refunded if it fails.",
+            gameFishFled: "It swam away…",
+            gameComboBoost: "Combo x{n} — next catch +10% chance!",
+            gameDQuestTitle: "Daily Missions",
+            gameDQuestSub: "Catch fish to complete them — each reward is 500 WFISH and counts toward today's 10,000 cap. Resets daily (UTC).",
+            gameDQuestNeedWallet: "Connect your wallet above, or enter your BSC address, to do daily missions.",
+            gameDQuestCatch5Title: "Catch 5 fish",
+            gameDQuestCatch5Desc: "Catch any 5 fish today.",
+            gameDQuestEpic1Title: "Catch 1 Epic fish",
+            gameDQuestEpic1Desc: "Catch a purple Epic fish today.",
+            gameDQuestClaim: "Claim +500 WFISH",
+            gameDQuestProgress: "In progress…",
+            gameDQuestClaimed: "Claimed ✓",
+            gameDQuestCap: "Today's cap is already full — come back tomorrow.",
+            gameMyStatsTitle: "My Stats",
+            gameStatsLevel: "Level",
+            gameStatsStreak: "Day streak",
+            gameStatsDays: "days",
+            gameStatsEnergyBonus: "max energy",
+            gameStatsCatches: "Total catches",
+            gameStatsMisses: "Misses",
+            gameStatsRatio: "Catch rate",
+            gameStatsBest: "Best catch",
+            gameStatsEnergy: "Energy used",
+            gameStatsByRarity: "Caught by rarity",
+            gameLevel0: "Beginner",
+            gameLevel1: "Angler",
+            gameLevel2: "Fish Hunter",
+            gameLevel3: "Pond Master",
+            gameLevel4: "Fishing Legend",
+            gameLevel5: "Woldfish Deity",
+            gameGoldenActive: "Golden Hour! Mythic fish spawn twice as often until 20:00 WIB.",
+            gameShopBtnWfish: "Buy 1 NFT with 100,000 WFISH + 0.00003 BNB",
+            wfishApprove: "Approving 100,000 WFISH for the mint contract…",
+            wfishMinting: "Minting your NFT with WFISH…",
+            wfishSuccess: "Success! 1 Woldfish NFT has been sent to your wallet.",
+            wfishTxFail: "Transaction failed on the network. No WFISH was spent and no NFT was sent.",
+            txInsufficientWfish: "Not enough WFISH. This mint needs 100,000 WFISH plus a little BNB for gas — top up your WFISH balance, then try again.",
+            txInsufficientBnbWfish: "Not enough BNB. This mint needs 0.00003 BNB for gas plus 100,000 WFISH — top up your wallet's BNB (BSC) balance, then try again."
           },
           id: {
             metaDesc: "Mint 10.000 WFISH gratis di BNB Smart Chain — hanya bayar gas, sekali per dompet.",
@@ -1614,7 +1724,7 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
             gameConnectedNote: "Dompet yang terhubung dipakai untuk game — tangkapan tercatat otomatis atas dompet itu.",
             gameEnergyLbl: "Energi",
             gameBalanceLbl: "Saldo Game (WFISH)",
-            gameTodayLbl: "Hasil Hari Ini / Batas 10.000",
+            gameTodayLbl: "Hasil Hari Ini (UTC) / Batas 10.000",
             gameCatchesLbl: "Ikan Tertangkap",
             gameEnergyFull: "Energi penuh. Setiap lemparan memakai 1 energi; pulih 1 setiap 60 detik.",
             gameEnergyNext: "Energi berikutnya dalam {sec} detik · pulih 1 per 60 detik (maks 20).",
@@ -1648,7 +1758,7 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
             gameWdMax: "Maks",
             gameWdFee: "Biaya: {fee} BNB untuk {amount} WFISH (0,00001 BNB per 10.000 WFISH), dibayar ke kontrak WD — WFISH dikirim ke dompetmu dalam transaksi yang sama.",
             gameWdFeeEmpty: "Masukkan jumlah untuk melihat biayanya: 0,00001 BNB per 10.000 WFISH.",
-            gameWdNote: "Maksimal 10.000 WFISH per dompet per hari (dibatasi kontrak). Kontrak WD berisi dana 50.000.000 WFISH — cukup untuk 5.000 penarikan.",
+            gameWdNote: "Maksimal 10.000 WFISH per dompet per hari UTC (reset 07:00 WIB). Kontrak WD hanya bisa membayar sebesar dananya — sisa dana ditampilkan live di bawah.",
             gameWdBtn: "Bayar Biaya & WD",
             gameWdEmpty: "Belum ada WD.",
             gameWdInvalid: "Masukkan jumlah yang valid: kelipatan 10.000 WFISH, minimal 10.000.",
@@ -1677,7 +1787,63 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
             gameExportTitle: "Ekspor Data",
             gameExportSub: "Unduh saldo game per dompet dan riwayat WD yang berhasil untuk catatanmu.",
             gameExportBalances: "Saldo:",
-            gameExportWd: "Riwayat WD:"
+            gameExportWd: "Riwayat WD:",
+            gameClearAddr: "Hapus alamat",
+            gameShopLoading: "Memuat…",
+            gameWdFund: "Dana WD tersisa: {fund} WFISH",
+            gameWdFundLoading: "Memeriksa dana WD…",
+            gameWdCapUsed: "Kamu sudah menarik {used} WFISH hari ini (hari UTC) — sisa kuota hari ini tinggal {left} WFISH dari 10.000.",
+            gameWdFundLow: "Kontrak WD saat ini hanya berisi {fund} WFISH — tarik jumlah yang lebih kecil atau coba lagi nanti.",
+            gameWdNeedBnb: "BNB tidak cukup — penarikan ini butuh biaya {fee} BNB ditambah sedikit gas. Isi saldo BNB (BSC) dompetmu dulu, lalu coba lagi.",
+            gameChance: "peluang tangkap",
+            gameMissedEnergy: "1 energi terpakai.",
+            gameClampWarn: "Dibatasi batas harian: +{amount} WFISH",
+            gameCapLow: "sisa kuota hari ini tinggal {left} WFISH",
+            gameEnergyEmpty: "Energi habis — poin berikutnya {sec} dtk lagi",
+            gameCombo: "Kombo x{n} — lanjutkan!",
+            gameSoundOn: "Suara: nyala",
+            gameSoundOff: "Suara: mati",
+            gameHistMore: "Lihat semua",
+            gameHistLess: "Tampilkan lebih sedikit",
+            gameWdConfirm: "Tarik {amount} WFISH?\nBiaya: {fee} BNB + gas jaringan. Biaya dibayar bersama transaksi ini dan tidak kembali bila gagal.",
+            gameFishFled: "Ikannya kabur…",
+            gameComboBoost: "Kombo x{n} — tangkapan berikutnya +10% peluang!",
+            gameDQuestTitle: "Misi Harian",
+            gameDQuestSub: "Tangkap ikan untuk menyelesaikannya — tiap hadiah 500 WFISH dan dihitung ke batas harian 10.000. Reset setiap hari (UTC).",
+            gameDQuestNeedWallet: "Hubungkan dompetmu di atas, atau masukkan alamat BSC, untuk mengerjakan misi harian.",
+            gameDQuestCatch5Title: "Tangkap 5 ikan",
+            gameDQuestCatch5Desc: "Tangkap 5 ikan apa saja hari ini.",
+            gameDQuestEpic1Title: "Tangkap 1 ikan Epic",
+            gameDQuestEpic1Desc: "Tangkap 1 ikan Epic (ungu) hari ini.",
+            gameDQuestClaim: "Klaim +500 WFISH",
+            gameDQuestProgress: "Berlangsung…",
+            gameDQuestClaimed: "Sudah diklaim ✓",
+            gameDQuestCap: "Batas hari ini sudah penuh — kembali besok.",
+            gameMyStatsTitle: "Statistik Saya",
+            gameStatsLevel: "Level",
+            gameStatsStreak: "Streak harian",
+            gameStatsDays: "hari",
+            gameStatsEnergyBonus: "energi maks",
+            gameStatsCatches: "Total tangkapan",
+            gameStatsMisses: "Lepas",
+            gameStatsRatio: "Rasio berhasil",
+            gameStatsBest: "Tangkapan terbaik",
+            gameStatsEnergy: "Energi dipakai",
+            gameStatsByRarity: "Tangkapan per rarity",
+            gameLevel0: "Pemula",
+            gameLevel1: "Pemancing",
+            gameLevel2: "Pemburu Ikan",
+            gameLevel3: "Master Kolam",
+            gameLevel4: "Legenda Memancing",
+            gameLevel5: "Dewa Woldfish",
+            gameGoldenActive: "Golden Hour! Ikan Mythic muncul 2x lebih sering sampai 20:00 WIB.",
+            gameShopBtnWfish: "Beli 1 NFT dengan 100.000 WFISH + 0,00003 BNB",
+            wfishApprove: "Menyetujui 100.000 WFISH untuk kontrak mint…",
+            wfishMinting: "Mencetak NFT kamu dengan WFISH…",
+            wfishSuccess: "Berhasil! 1 NFT Woldfish sudah dikirim ke dompetmu.",
+            wfishTxFail: "Transaksi gagal di jaringan. Tidak ada WFISH yang terpakai dan tidak ada NFT yang terkirim.",
+            txInsufficientWfish: "WFISH tidak cukup. Mint ini butuh 100.000 WFISH ditambah sedikit BNB untuk gas — tambah saldo WFISH kamu, lalu coba lagi.",
+            txInsufficientBnbWfish: "BNB tidak cukup. Mint ini butuh 0,00003 BNB untuk gas ditambah 100.000 WFISH — isi saldo BNB (BSC) dompetmu, lalu coba lagi."
           },
           zh: {
             metaDesc: "在 BNB Smart Chain 上免费铸造 10,000 WFISH — 只需支付 gas，每个钱包限一次。",
@@ -1787,7 +1953,75 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
             claimSent: "领取已发送 — 等待网络确认…",
             claimStillPending: "领取仍在等待确认。请通过下方链接查看状态。",
             claimSuccess: "奖励领取成功，已发送到你的钱包。",
-            claimTxFail: "领取在网络上失败。你的奖励不会丢失 — 请稍后重试。"
+            claimTxFail: "领取在网络上失败。你的奖励不会丢失 — 请稍后重试。",
+            gameBadge: "边玩边赚 WFISH",
+            gameBalanceLbl: "游戏余额 (WFISH)",
+            gameCapReached: "已达每日上限 — 每个钱包每天 10,000 WFISH，明天再来！",
+            gameCatchesLbl: "已钓到的鱼",
+            gameConnectedNote: "游戏使用你已连接的钱包 — 钓到的鱼会自动记录在该钱包下。",
+            gameEnergyFull: "能量已满。每次抛竿消耗 1 点能量，每 60 秒恢复 1 点。",
+            gameEnergyLbl: "能量",
+            gameEnergyNext: "下一点能量在 {sec} 秒后 · 每 60 秒恢复 1 点（上限 20）。",
+            gameExportBalances: "余额：",
+            gameExportSub: "下载每个钱包的游戏余额和已完成的提现记录，以备存档。",
+            gameExportTitle: "导出数据",
+            gameExportWd: "提现记录：",
+            gameHistEmpty: "还没有钓到鱼 — 点击池塘里的鱼。",
+            gameHistTitle: "最近钓获",
+            gameInvalidAddr: "这看起来不是有效的 BSC 地址（0x + 40 个十六进制字符）。",
+            gameLbEmpty: "还没有玩家记录。",
+            gameLbTitle: "排行榜（本浏览器）",
+            gameManualLbl: "没有连接钱包？输入你的 BSC 钱包地址来游玩，分数会记录在该钱包下：",
+            gameManualPh: "0x… 你的 BSC 钱包地址",
+            gameMissed: "它跑掉了！",
+            gameMissionCap: "已达每日上限 — 明天再领取此任务奖励。",
+            gameMissionDone: "已完成 ✓ — 奖励已领取",
+            gameMissionTgBtn: "加入 Telegram",
+            gameMissionTgClaim: "我已加入 — 领取 1,000 WFISH",
+            gameMissionTgDesc: "加入 Telegram 上的 Woldfish 频道",
+            gameMissionTgTitle: "加入我们的 Telegram",
+            gameMissionXBtn: "在 X 上关注",
+            gameMissionXClaim: "我已关注 — 领取 1,000 WFISH",
+            gameMissionXDesc: "在 X 上关注 @woldfishcoins",
+            gameMissionXTitle: "在 X 上关注我们",
+            gameMissionsNeedWallet: "请在上方连接钱包，或输入你的 BSC 地址，以领取任务奖励。",
+            gameMissionsSub: "每个钱包完成一次这些社交任务，即可在游戏余额中获得 WFISH — 可在下方用 WD 提现。基于信任领取：本页面无法核查你的 X 或 Telegram 账号。",
+            gameMissionsTitle: "任务",
+            gameNeedWallet: "请在上方连接钱包，或输入你的 BSC 地址，开始钓鱼。",
+            gameNoEnergy: "能量耗尽 — 等待恢复（每 60 秒恢复 1 点）。",
+            gameNoWalletYet: "还没有钱包",
+            gameNote: "你的游戏余额是保存在本浏览器的每个钱包记录。提现是自动的：支付费用后，WFISH 会直接从 WD 合约进入你的钱包 — 无需人工发放。",
+            gamePlayingAs: "当前身份",
+            gamePondHint: "点击一条鱼向它抛竿 — 每次抛竿消耗 1 点能量，能量每 60 秒恢复 1 点（上限 20）。",
+            gameRCommon: "蓝色 · 普通",
+            gameREpic: "紫色 · 史诗",
+            gameRLegendary: "红色 · 传说",
+            gameRMythic: "金色 · 神话",
+            gameRRare: "绿色 · 稀有",
+            gameShopBtn: "购买 NFT — 0.0002 BNB",
+            gameShopDesc: "直接在游戏中购买 Woldfish NFT — 与付费铸造相同：1 个 NFT + 立即获得 2,000,000 WFISH + 连续 7 天每天 1,000 WFISH 奖励。",
+            gameShopTitle: "NFT 商店",
+            gameSub: "点击游动的鱼来钓它们 — 每次钓到都能获得 WFISH。",
+            gameTitle: "Woldfish 钓鱼游戏",
+            gameTodayLbl: "今日已获得（UTC）/ 上限 10,000",
+            gameUseAddr: "使用此地址",
+            gameWdAmountPh: "金额 — 例如 10000",
+            gameWdBtn: "支付费用并提现",
+            gameWdDailyMax: "WD 合约规定每个钱包每天最多 10,000 WFISH，今天提现 10,000，剩余的明天再提。",
+            gameWdEmpty: "还没有提现。",
+            gameWdFail: "提现失败。没有 WFISH 发出，你的游戏余额不变。请注意合约限制：每个钱包每天最多 10,000 WFISH。",
+            gameWdFee: "费用：{fee} BNB / {amount} WFISH（每 10,000 WFISH 收 0.00001 BNB），支付给 WD 合约 — WFISH 会在同一笔交易中发送到你的钱包。",
+            gameWdFeeEmpty: "输入金额查看费用：每 10,000 WFISH 收 0.00001 BNB。",
+            gameWdInsufficient: "你的游戏余额不足以提现该金额。",
+            gameWdInvalid: "请输入有效金额：10,000 WFISH 的倍数，最低 10,000。",
+            gameWdMax: "最大",
+            gameWdMismatch: "已连接的钱包与持有该余额的游戏钱包不同。请连接游戏钱包以支付费用并完成提现。",
+            gameWdNeedConnect: "请先连接游戏钱包，以便从中支付费用 — 然后再次点击 WD 按钮。",
+            gameWdNote: "每个钱包每个 UTC 日最多 10,000 WFISH（07:00 WIB 重置）。WD 合约只能支付它持有的金额 — 剩余资金如下实时显示。",
+            gameWdProcessing: "处理中…",
+            gameWdSub: "自动提现 — 支付费用，WFISH 直接进入你的钱包。以 10,000 WFISH 的倍数提现（最低 10,000）；费用为每 10,000 WFISH 0.00001 BNB，与提现一起支付给 WD 合约。",
+            gameWdSuccess: "提现成功！WFISH 已直接进入你的钱包，游戏余额已扣除提现金额。",
+            gameWdTitle: "提现 (WD)"
           },
           hi: {
             metaDesc: "BNB Smart Chain पर 10,000 WFISH मुफ़्त मिंट करें — बस गैस का भुगतान करें, प्रति वॉलेट एक बार।",
@@ -1897,7 +2131,75 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
             claimSent: "दावा भेजा गया — नेटवर्क पुष्टि की प्रतीक्षा…",
             claimStillPending: "दावा अभी भी पुष्टि की प्रतीक्षा में है। नीचे दिए लिंक से इसकी स्थिति देखें।",
             claimSuccess: "बोनस सफलतापूर्वक दावा किया गया और आपके वॉलेट में भेज दिया गया।",
-            claimTxFail: "दावा नेटवर्क पर विफल हुआ। आपका बोनस खोया नहीं है — बाद में दोबारा दावा करके देखें।"
+            claimTxFail: "दावा नेटवर्क पर विफल हुआ। आपका बोनस खोया नहीं है — बाद में दोबारा दावा करके देखें।",
+            gameBadge: "खेलें और WFISH कमाएँ",
+            gameBalanceLbl: "गेम बैलेंस (WFISH)",
+            gameCapReached: "दैनिक सीमा पूरी — प्रति वॉलेट प्रतिदिन 10,000 WFISH। कल फिर आएँ!",
+            gameCatchesLbl: "पकड़ी गई मछलियाँ",
+            gameConnectedNote: "आपका कनेक्टेड वॉलेट गेम के लिए इस्तेमाल होता है — पकड़ी गई मछलियाँ उसी के नीचे दर्ज होती हैं।",
+            gameEnergyFull: "एनर्जी पूरी है। हर कास्ट में 1 एनर्जी लगती है; हर 60 सेकंड में 1 भरती है।",
+            gameEnergyLbl: "एनर्जी",
+            gameEnergyNext: "अगली एनर्जी {sec} सेकंड में · हर 60 सेकंड में 1 भरती है (अधिकतम 20)।",
+            gameExportBalances: "बैलेंस:",
+            gameExportSub: "प्रति-वॉलेट गेम बैलेंस और पूरे हुए निकासी इतिहास को अपने रिकॉर्ड के लिए डाउनलोड करें।",
+            gameExportTitle: "डेटा निर्यात करें",
+            gameExportWd: "WD इतिहास:",
+            gameHistEmpty: "अभी कोई पकड़ नहीं — तालाब में मछली पर टैप करें।",
+            gameHistTitle: "हाल की पकड़",
+            gameInvalidAddr: "यह मान्य BSC पता नहीं लगता (0x + 40 हेक्स अक्षर)।",
+            gameLbEmpty: "अभी कोई खिलाड़ी दर्ज नहीं है।",
+            gameLbTitle: "लीडरबोर्ड (इस ब्राउज़र में)",
+            gameManualLbl: "कोई वॉलेट कनेक्ट नहीं है? खेलने और अपना स्कोर उस वॉलेट के नीचे दर्ज करने के लिए अपना BSC वॉलेट पता डालें:",
+            gameManualPh: "0x… आपका BSC वॉलेट पता",
+            gameMissed: "वह भाग गई!",
+            gameMissionCap: "दैनिक सीमा पूरी — यह मिशन इनाम कल लें।",
+            gameMissionDone: "पूर्ण ✓ — इनाम मिल गया",
+            gameMissionTgBtn: "Telegram जॉइन करें",
+            gameMissionTgClaim: "मैं जॉइन कर चुका — 1,000 WFISH लें",
+            gameMissionTgDesc: "Telegram पर Woldfish चैनल जॉइन करें",
+            gameMissionTgTitle: "हमारा Telegram जॉइन करें",
+            gameMissionXBtn: "X पर फॉलो करें",
+            gameMissionXClaim: "मैंने फॉलो किया — 1,000 WFISH लें",
+            gameMissionXDesc: "X पर @woldfishcoins को फॉलो करें",
+            gameMissionXTitle: "X पर हमें फॉलो करें",
+            gameMissionsNeedWallet: "मिशन इनाम लेने के लिए ऊपर अपना वॉलेट कनेक्ट करें, या अपना BSC पता डालें।",
+            gameMissionsSub: "ये सोशल मिशन प्रति वॉलेट एक बार पूरे करें और अपने गेम बैलेंस में WFISH कमाएँ — नीचे WD से निकालें। भरोसे पर दावा: यह पेज आपका X या Telegram खाता नहीं जाँच सकता।",
+            gameMissionsTitle: "मिशन",
+            gameNeedWallet: "मछली पकड़ना शुरू करने के लिए ऊपर अपना वॉलेट कनेक्ट करें, या अपना BSC पता डालें।",
+            gameNoEnergy: "एनर्जी खत्म — भरने का इंतज़ार करें (हर 60 सेकंड में 1)।",
+            gameNoWalletYet: "अभी कोई वॉलेट नहीं",
+            gameNote: "आपका गेम बैलेंस इस ब्राउज़र में रखा गया प्रति-वॉलेट रिकॉर्ड है। निकासी स्वचालित है: शुल्क दें और WFISH सीधे WD कॉन्ट्रैक्ट से आपके वॉलेट में आ जाता है — कोई मैनुअल भुगतान कतार नहीं।",
+            gamePlayingAs: "इस रूप में खेल रहे हैं",
+            gamePondHint: "मछली पर टैप करके कास्ट करें — हर कास्ट में 1 एनर्जी लगती है। एनर्जी हर 60 सेकंड में 1 भरती है (अधिकतम 20)।",
+            gameRCommon: "नीली · सामान्य",
+            gameREpic: "बैंगनी · महाकाव्य",
+            gameRLegendary: "लाल · पौराणिक",
+            gameRMythic: "सुनहरी · मिथकीय",
+            gameRRare: "हरी · दुर्लभ",
+            gameShopBtn: "NFT खरीदें — 0.0002 BNB",
+            gameShopDesc: "गेम में ही Woldfish NFT खरीदें — वही पेड मिंट: 1 NFT + तुरंत 2,000,000 WFISH + 7 दिनों तक 1,000 WFISH/दिन बोनस।",
+            gameShopTitle: "NFT दुकान",
+            gameSub: "तैरती मछलियों पर टैप करके उन्हें पकड़ें — हर पकड़ पर WFISH मिलता है।",
+            gameTitle: "Woldfish मछली पकड़ने का खेल",
+            gameTodayLbl: "आज कमाया (UTC) / 10,000 सीमा",
+            gameUseAddr: "इस पते का उपयोग करें",
+            gameWdAmountPh: "राशि — जैसे 10000",
+            gameWdBtn: "शुल्क दें और निकालें",
+            gameWdDailyMax: "WD कॉन्ट्रैक्ट प्रति वॉलेट प्रतिदिन अधिकतम 10,000 WFISH की अनुमति देता है। आज 10,000 निकालें और बाकी कल।",
+            gameWdEmpty: "अभी कोई निकासी नहीं।",
+            gameWdFail: "नेटवर्क पर निकासी विफल। कोई WFISH नहीं भेजा गया और आपका गेम बैलेंस वैसा ही है। कॉन्ट्रैक्ट सीमा ध्यान दें: प्रति वॉलेट प्रतिदिन अधिकतम 10,000 WFISH।",
+            gameWdFee: "शुल्क: {amount} WFISH के लिए {fee} BNB (प्रति 10,000 WFISH 0.00001 BNB), WD कॉन्ट्रैक्ट को भुगतान — WFISH उसी लेन-देन में आपके वॉलेट में भेजा जाता है।",
+            gameWdFeeEmpty: "शुल्क देखने के लिए राशि डालें: प्रति 10,000 WFISH 0.00001 BNB।",
+            gameWdInsufficient: "आपका गेम बैलेंस उस निकासी राशि के लिए पर्याप्त नहीं है।",
+            gameWdInvalid: "मान्य राशि डालें: 10,000 WFISH का गुणक, न्यूनतम 10,000।",
+            gameWdMax: "अधिकतम",
+            gameWdMismatch: "कनेक्टेड वॉलेट उस गेम वॉलेट से अलग है जिसके पास यह बैलेंस है। शुल्क देने और यह निकासी करने के लिए गेम वॉलेट कनेक्ट करें।",
+            gameWdNeedConnect: "पहले गेम वॉलेट कनेक्ट करें ताकि शुल्क उसी से दिया जा सके — फिर WD बटन फिर से दबाएँ।",
+            gameWdNote: "प्रति वॉलेट प्रति UTC दिन अधिकतम 10,000 WFISH (07:00 WIB पर रीसेट)। WD कॉन्ट्रैक्ट उतना ही दे सकता है जितना उसके पास है — बची हुई राशि नीचे लाइव दिखाई जाती है।",
+            gameWdProcessing: "प्रोसेस हो रहा है…",
+            gameWdSub: "स्वचालित WD — शुल्क दें, और WFISH सीधे आपके वॉलेट में आ जाता है। 10,000 WFISH के गुणक में निकालें (न्यूनतम 10,000); शुल्क प्रति 10,000 WFISH 0.00001 BNB है, जो निकासी के साथ WD कॉन्ट्रैक्ट को दिया जाता है।",
+            gameWdSuccess: "WD सफल! WFISH सीधे आपके वॉलेट में आ गया है, और आपका गेम बैलेंस निकाली गई राशि से कम हो गया है।",
+            gameWdTitle: "निकासी (WD)"
           },
           bn: {
             metaDesc: "BNB Smart Chain-এ বিনামূল্যে 10,000 WFISH মিন্ট করুন — শুধু গ্যাস দিন, প্রতি ওয়ালেটে একবার।",
@@ -2007,7 +2309,75 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
             claimSent: "দাবি পাঠানো হয়েছে — নেটওয়ার্ক নিশ্চিতকরণের অপেক্ষায়…",
             claimStillPending: "দাবি এখনো নিশ্চিতকরণের অপেক্ষায় আছে। নিচের লিংক দিয়ে এর অবস্থা দেখুন।",
             claimSuccess: "বোনাস সফলভাবে দাবি করা হয়েছে এবং আপনার ওয়ালেটে পাঠানো হয়েছে।",
-            claimTxFail: "দাবি নেটওয়ার্কে ব্যর্থ হয়েছে। আপনার বোনাস হারিয়ে যায়নি — পরে আবার দাবি করে দেখুন।"
+            claimTxFail: "দাবি নেটওয়ার্কে ব্যর্থ হয়েছে। আপনার বোনাস হারিয়ে যায়নি — পরে আবার দাবি করে দেখুন।",
+            gameBadge: "খেলুন ও WFISH আয় করুন",
+            gameBalanceLbl: "গেম ব্যালেন্স (WFISH)",
+            gameCapReached: "দৈনিক সীমা পূর্ণ — প্রতি ওয়ালেটে প্রতিদিন 10,000 WFISH। আগামীকাল আবার আসুন!",
+            gameCatchesLbl: "ধরা মাছ",
+            gameConnectedNote: "আপনার সংযুক্ত ওয়ালেট গেমের জন্য ব্যবহৃত হয় — ধরা মাছ স্বয়ংক্রিয়ভাবে এর অধীনে রেকর্ড হয়।",
+            gameEnergyFull: "এনার্জি পূর্ণ। প্রতিটি কাস্টে 1 এনার্জি লাগে; প্রতি 60 সেকেন্ডে 1 করে ভরে।",
+            gameEnergyLbl: "এনার্জি",
+            gameEnergyNext: "পরের এনার্জি {sec} সেকেন্ডে · প্রতি 60 সেকেন্ডে 1 ভরে (সর্বোচ্চ 20)।",
+            gameExportBalances: "ব্যালেন্স:",
+            gameExportSub: "আপনার রেকর্ডের জন্য প্রতি-ওয়ালেট গেম ব্যালেন্স ও সম্পন্ন উত্তোলনের ইতিহাস ডাউনলোড করুন।",
+            gameExportTitle: "ডেটা এক্সপোর্ট",
+            gameExportWd: "WD ইতিহাস:",
+            gameHistEmpty: "এখনো কোনো মাছ ধরা হয়নি — পুকুরের মাছে ট্যাপ করুন।",
+            gameHistTitle: "সাম্প্রতিক ধরা",
+            gameInvalidAddr: "এটি বৈধ BSC ঠিকানা মনে হচ্ছে না (0x + 40 হেক্স অক্ষর)।",
+            gameLbEmpty: "এখনো কোনো খেলোয়াড় রেকর্ড হয়নি।",
+            gameLbTitle: "লিডারবোর্ড (এই ব্রাউজারে)",
+            gameManualLbl: "কোনো ওয়ালেট সংযুক্ত নেই? খেলতে ও আপনার স্কোর সেই ওয়ালেটের অধীনে রেকর্ড করতে আপনার BSC ওয়ালেট ঠিকানা দিন:",
+            gameManualPh: "0x… আপনার BSC ওয়ালেট ঠিকানা",
+            gameMissed: "ও পালিয়ে গেল!",
+            gameMissionCap: "দৈনিক সীমা পূর্ণ — এই মিশনের পুরস্কার আগামীকাল নিন।",
+            gameMissionDone: "সম্পন্ন ✓ — পুরস্কার নেওয়া হয়েছে",
+            gameMissionTgBtn: "Telegram-এ যোগ দিন",
+            gameMissionTgClaim: "আমি যোগ দিয়েছি — 1,000 WFISH নিন",
+            gameMissionTgDesc: "Telegram-এ Woldfish চ্যানেলে যোগ দিন",
+            gameMissionTgTitle: "আমাদের Telegram-এ যোগ দিন",
+            gameMissionXBtn: "X-এ ফলো করুন",
+            gameMissionXClaim: "আমি ফলো করেছি — 1,000 WFISH নিন",
+            gameMissionXDesc: "X-এ @woldfishcoins-কে ফলো করুন",
+            gameMissionXTitle: "X-এ আমাদের ফলো করুন",
+            gameMissionsNeedWallet: "মিশনের পুরস্কার নিতে উপরে আপনার ওয়ালেট সংযুক্ত করুন, অথবা আপনার BSC ঠিকানা দিন।",
+            gameMissionsSub: "প্রতি ওয়ালেটে একবার এই সোশ্যাল মিশনগুলো সম্পন্ন করুন ও আপনার গেম ব্যালেন্সে WFISH আয় করুন — নিচে WD দিয়ে তুলুন। বিশ্বাসের ভিত্তিতে দাবি: এই পেজ আপনার X বা Telegram অ্যাকাউন্ট যাচাই করতে পারে না।",
+            gameMissionsTitle: "মিশন",
+            gameNeedWallet: "মাছ ধরা শুরু করতে উপরে আপনার ওয়ালেট সংযুক্ত করুন, অথবা আপনার BSC ঠিকানা দিন।",
+            gameNoEnergy: "এনার্জি শেষ — ভরার জন্য অপেক্ষা করুন (প্রতি 60 সেকেন্ডে 1)।",
+            gameNoWalletYet: "এখনো কোনো ওয়ালেট নেই",
+            gameNote: "আপনার গেম ব্যালেন্স এই ব্রাউজারে রাখা প্রতি-ওয়ালেট রেকর্ড। উত্তোলন স্বয়ংক্রিয়: ফি দিন আর WFISH সরাসরি WD কন্ট্রাক্ট থেকে আপনার ওয়ালেটে চলে আসে — কোনো ম্যানুয়াল পেমেন্ট লাইন নেই।",
+            gamePlayingAs: "হিসেবে খেলছেন",
+            gamePondHint: "মাছে ট্যাপ করে কাস্ট করুন — প্রতিটি কাস্টে 1 এনার্জি লাগে। এনার্জি প্রতি 60 সেকেন্ডে 1 ভরে (সর্বোচ্চ 20)।",
+            gameRCommon: "নীল · সাধারণ",
+            gameREpic: "বেগুনি · এপিক",
+            gameRLegendary: "লাল · কিংবদন্তি",
+            gameRMythic: "সোনালি · মিথিক",
+            gameRRare: "সবুজ · বিরল",
+            gameShopBtn: "NFT কিনুন — 0.0002 BNB",
+            gameShopDesc: "গেমের ভেতরেই Woldfish NFT কিনুন — একই পেইড মিন্ট: 1 NFT + সঙ্গে সঙ্গে 2,000,000 WFISH + 7 দিন ধরে 1,000 WFISH/দিন বোনাস।",
+            gameShopTitle: "NFT দোকান",
+            gameSub: "সাঁতার কাটা মাছে ট্যাপ করে ধরুন — প্রতিটি ধরায় WFISH পাওয়া যায়।",
+            gameTitle: "Woldfish মাছ ধরার গেম",
+            gameTodayLbl: "আজ আয় (UTC) / 10,000 সীমা",
+            gameUseAddr: "এই ঠিকানাটি ব্যবহার করুন",
+            gameWdAmountPh: "পরিমাণ — যেমন 10000",
+            gameWdBtn: "ফি দিন ও তুলুন",
+            gameWdDailyMax: "WD কন্ট্রাক্ট প্রতি ওয়ালেটে প্রতিদিন সর্বোচ্চ 10,000 WFISH অনুমোদন করে। আজ 10,000 তুলুন, বাকিটা আগামীকাল।",
+            gameWdEmpty: "এখনো কোনো উত্তোলন হয়নি।",
+            gameWdFail: "নেটওয়ার্কে উত্তোলন ব্যর্থ। কোনো WFISH পাঠানো হয়নি এবং আপনার গেম ব্যালেন্স অপরিবর্তিত। কন্ট্রাক্টের সীমা মনে রাখুন: প্রতি ওয়ালেটে প্রতিদিন সর্বোচ্চ 10,000 WFISH।",
+            gameWdFee: "ফি: {amount} WFISH-এর জন্য {fee} BNB (প্রতি 10,000 WFISH-এ 0.00001 BNB), WD কন্ট্রাক্টকে দেওয়া হয় — WFISH একই লেনদেনে আপনার ওয়ালেটে পাঠানো হয়।",
+            gameWdFeeEmpty: "ফি দেখতে পরিমাণ দিন: প্রতি 10,000 WFISH-এ 0.00001 BNB।",
+            gameWdInsufficient: "আপনার গেম ব্যালেন্স এই উত্তোলনের পরিমাণের জন্য যথেষ্ট নয়।",
+            gameWdInvalid: "বৈধ পরিমাণ দিন: 10,000 WFISH-এর গুণিতক, সর্বনিম্ন 10,000।",
+            gameWdMax: "সর্বোচ্চ",
+            gameWdMismatch: "সংযুক্ত ওয়ালেট এই ব্যালেন্সের মালিক গেম ওয়ালেট থেকে আলাদা। ফি দিতে ও এই উত্তোলন করতে গেম ওয়ালেট সংযুক্ত করুন।",
+            gameWdNeedConnect: "প্রথমে গেম ওয়ালেট সংযুক্ত করুন যাতে ফি সেখান থেকে দেওয়া যায় — তারপর আবার WD বোতাম চাপুন।",
+            gameWdNote: "প্রতি ওয়ালেটে প্রতি UTC দিনে সর্বোচ্চ 10,000 WFISH (07:00 WIB-তে রিসেট)। WD কন্ট্রাক্ট যতটুকু আছে ততটুকুই দিতে পারে — বাকি অর্থ নিচে লাইভ দেখানো হয়।",
+            gameWdProcessing: "প্রক্রিয়াকরণ চলছে…",
+            gameWdSub: "স্বয়ংক্রিয় WD — ফি দিন, আর WFISH সরাসরি আপনার ওয়ালেটে চলে আসে। 10,000 WFISH-এর গুণিতকে তুলুন (সর্বনিম্ন 10,000); ফি প্রতি 10,000 WFISH-এ 0.00001 BNB, যা উত্তোলনের সঙ্গে WD কন্ট্রাক্টকে দেওয়া হয়।",
+            gameWdSuccess: "WD সফল! WFISH সরাসরি আপনার ওয়ালেটে চলে এসেছে, এবং আপনার গেম ব্যালেন্স উত্তোলিত পরিমাণে কমে গেছে।",
+            gameWdTitle: "উত্তোলন (WD)"
           },
           ur: {
             metaDesc: "BNB Smart Chain پر 10,000 WFISH مفت منٹ کریں — صرف گیس ادا کریں، فی والیٹ ایک بار۔",
@@ -2117,7 +2487,75 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
             claimSent: "دعویٰ بھیجا گیا — نیٹ ورک تصدیق کا انتظار…",
             claimStillPending: "دعویٰ اب بھی تصدیق کا منتظر ہے۔ نیچے دیے گئے لنک سے اس کی صورتحال دیکھیں۔",
             claimSuccess: "بونس کامیابی سے دعویٰ کیا گیا اور آپ کے والیٹ میں بھیج دیا گیا۔",
-            claimTxFail: "دعویٰ نیٹ ورک پر ناکام ہوا۔ آپ کا بونس ضائع نہیں ہوا — بعد میں دوبارہ دعویٰ کر کے دیکھیں۔"
+            claimTxFail: "دعویٰ نیٹ ورک پر ناکام ہوا۔ آپ کا بونس ضائع نہیں ہوا — بعد میں دوبارہ دعویٰ کر کے دیکھیں۔",
+            gameBadge: "کھیلیں اور WFISH کمائیں",
+            gameBalanceLbl: "گیم بیلنس (WFISH)",
+            gameCapReached: "یومیہ حد پوری — فی والیٹ روزانہ 10,000 WFISH۔ کل پھر آئیں!",
+            gameCatchesLbl: "پکڑی گئی مچھلیاں",
+            gameConnectedNote: "آپ کا منسلک والیٹ گیم کے لیے استعمال ہوتا ہے — پکڑی گئی مچھلیاں خودکار طور پر اس کے تحت درج ہوتی ہیں۔",
+            gameEnergyFull: "انرجی پوری ہے۔ ہر کاسٹ میں 1 انرجی لگتی ہے؛ ہر 60 سیکنڈ میں 1 بھرتی ہے۔",
+            gameEnergyLbl: "انرجی",
+            gameEnergyNext: "اگلی انرجی {sec} سیکنڈ میں · ہر 60 سیکنڈ میں 1 بھرتی ہے (زیادہ سے زیادہ 20)۔",
+            gameExportBalances: "بیلنس:",
+            gameExportSub: "اپنے ریکارڈ کے لیے فی والیٹ گیم بیلنس اور مکمل شدہ نکاسی کی تاریخ ڈاؤن لوڈ کریں۔",
+            gameExportTitle: "ڈیٹا ایکسپورٹ کریں",
+            gameExportWd: "WD تاریخ:",
+            gameHistEmpty: "ابھی کوئی مچھلی نہیں پکڑی — تالاب میں مچھلی پر ٹیپ کریں۔",
+            gameHistTitle: "حالیہ پکڑ",
+            gameInvalidAddr: "یہ درست BSC پتہ نہیں لگتا (0x + 40 ہیکس حروف)۔",
+            gameLbEmpty: "ابھی کوئی کھلاڑی درج نہیں۔",
+            gameLbTitle: "لیڈر بورڈ (اس براؤزر میں)",
+            gameManualLbl: "کوئی والیٹ منسلک نہیں؟ کھیلنے اور اپنا اسکور اس والیٹ کے تحت درج کرنے کے لیے اپنا BSC والیٹ پتہ درج کریں:",
+            gameManualPh: "0x… آپ کا BSC والیٹ پتہ",
+            gameMissed: "وہ بھاگ گئی!",
+            gameMissionCap: "یومیہ حد پوری — یہ مشن انعام کل لیں۔",
+            gameMissionDone: "مکمل ✓ — انعام مل گیا",
+            gameMissionTgBtn: "Telegram جوائن کریں",
+            gameMissionTgClaim: "میں جوائن کر چکا — 1,000 WFISH لیں",
+            gameMissionTgDesc: "Telegram پر Woldfish چینل جوائن کریں",
+            gameMissionTgTitle: "ہمارا Telegram جوائن کریں",
+            gameMissionXBtn: "X پر فالو کریں",
+            gameMissionXClaim: "میں نے فالو کیا — 1,000 WFISH لیں",
+            gameMissionXDesc: "X پر @woldfishcoins کو فالو کریں",
+            gameMissionXTitle: "X پر ہمیں فالو کریں",
+            gameMissionsNeedWallet: "مشن انعام لینے کے لیے اوپر اپنا والیٹ منسلک کریں، یا اپنا BSC پتہ درج کریں۔",
+            gameMissionsSub: "یہ سوشل مشن فی والیٹ ایک بار مکمل کریں اور اپنے گیم بیلنس میں WFISH کمائیں — نیچے WD سے نکالیں۔ اعتماد پر دعویٰ: یہ صفحہ آپ کا X یا Telegram اکاؤنٹ جانچ نہیں سکتا۔",
+            gameMissionsTitle: "مشن",
+            gameNeedWallet: "مچھلی پکڑنا شروع کرنے کے لیے اوپر اپنا والیٹ منسلک کریں، یا اپنا BSC پتہ درج کریں۔",
+            gameNoEnergy: "انرجی ختم — بھرنے کا انتظار کریں (ہر 60 سیکنڈ میں 1)۔",
+            gameNoWalletYet: "ابھی کوئی والیٹ نہیں",
+            gameNote: "آپ کا گیم بیلنس اس براؤزر میں رکھا گیا فی والیٹ ریکارڈ ہے۔ نکاسی خودکار ہے: فیس دیں اور WFISH براہ راست WD کنٹریکٹ سے آپ کے والیٹ میں آ جاتا ہے — کوئی دستی ادائیگی قطار نہیں۔",
+            gamePlayingAs: "اس طور پر کھیل رہے ہیں",
+            gamePondHint: "مچھلی پر ٹیپ کر کے کاسٹ کریں — ہر کاسٹ میں 1 انرجی لگتی ہے۔ انرجی ہر 60 سیکنڈ میں 1 بھرتی ہے (زیادہ سے زیادہ 20)۔",
+            gameRCommon: "نیلی · عام",
+            gameREpic: "جامنی · ایپک",
+            gameRLegendary: "سرخ · لیجنڈری",
+            gameRMythic: "سنہری · میتھک",
+            gameRRare: "سبز · نایاب",
+            gameShopBtn: "NFT خریدیں — 0.0002 BNB",
+            gameShopDesc: "گیم میں ہی Woldfish NFT خریدیں — وہی پیڈ منٹ: 1 NFT + فوری 2,000,000 WFISH + 7 دن تک 1,000 WFISH/دن بونس۔",
+            gameShopTitle: "NFT دکان",
+            gameSub: "تیرتی مچھلیوں پر ٹیپ کر کے انہیں پکڑیں — ہر پکڑ پر WFISH ملتا ہے۔",
+            gameTitle: "Woldfish مچھلی پکڑنے کا گیم",
+            gameTodayLbl: "آج کمایا (UTC) / 10,000 حد",
+            gameUseAddr: "یہ پتہ استعمال کریں",
+            gameWdAmountPh: "رقم — مثلاً 10000",
+            gameWdBtn: "فیس دیں اور نکالیں",
+            gameWdDailyMax: "WD کنٹریکٹ فی والیٹ روزانہ زیادہ سے زیادہ 10,000 WFISH کی اجازت دیتا ہے۔ آج 10,000 نکالیں اور باقی کل۔",
+            gameWdEmpty: "ابھی کوئی نکاسی نہیں۔",
+            gameWdFail: "نیٹ ورک پر نکاسی ناکام۔ کوئی WFISH نہیں بھیجا گیا اور آپ کا گیم بیلنس ویسا ہی ہے۔ کنٹریکٹ کی حد یاد رکھیں: فی والیٹ روزانہ زیادہ سے زیادہ 10,000 WFISH۔",
+            gameWdFee: "فیس: {amount} WFISH کے لیے {fee} BNB (فی 10,000 WFISH ‏0.00001 BNB)، WD کنٹریکٹ کو ادا — WFISH اسی لین دین میں آپ کے والیٹ میں بھیجا جاتا ہے۔",
+            gameWdFeeEmpty: "فیس دیکھنے کے لیے رقم درج کریں: فی 10,000 WFISH ‏0.00001 BNB۔",
+            gameWdInsufficient: "آپ کا گیم بیلنس اس نکاسی رقم کے لیے کافی نہیں۔",
+            gameWdInvalid: "درست رقم درج کریں: 10,000 WFISH کا مضاعف، کم از کم 10,000۔",
+            gameWdMax: "زیادہ سے زیادہ",
+            gameWdMismatch: "منسلک والیٹ اس گیم والیٹ سے مختلف ہے جس کے پاس یہ بیلنس ہے۔ فیس دینے اور یہ نکاسی کرنے کے لیے گیم والیٹ منسلک کریں۔",
+            gameWdNeedConnect: "پہلے گیم والیٹ منسلک کریں تاکہ فیس اسی سے دی جا سکے — پھر WD بٹن دوبارہ دبائیں۔",
+            gameWdNote: "فی والیٹ فی UTC دن زیادہ سے زیادہ 10,000 WFISH (07:00 WIB پر ری سیٹ)۔ WD کنٹریکٹ اتنا ہی دے سکتا ہے جتنا اس کے پاس ہے — باقی رقم نیچے لائیو دکھائی جاتی ہے۔",
+            gameWdProcessing: "جاری ہے…",
+            gameWdSub: "خودکار WD — فیس دیں، اور WFISH براہ راست آپ کے والیٹ میں آ جاتا ہے۔ 10,000 WFISH کے مضاعف میں نکالیں (کم از کم 10,000)؛ فیس فی 10,000 WFISH ‏0.00001 BNB ہے، جو نکاسی کے ساتھ WD کنٹریکٹ کو دی جاتی ہے۔",
+            gameWdSuccess: "WD کامیاب! WFISH براہ راست آپ کے والیٹ میں آ گیا ہے، اور آپ کا گیم بیلنس نکالی گئی رقم سے کم ہو گیا ہے۔",
+            gameWdTitle: "نکاسی (WD)"
           },
           ar: {
             metaDesc: "اصنع 10,000 WFISH مجانًا على BNB Smart Chain — ادفع الغاز فقط، مرة واحدة لكل محفظة.",
@@ -2227,7 +2665,75 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
             claimSent: "تم إرسال المطالبة — في انتظار تأكيد الشبكة…",
             claimStillPending: "المطالبة ما تزال في انتظار التأكيد. تحقق من حالتها عبر الرابط أدناه.",
             claimSuccess: "تمت المطالبة بالمكافأة بنجاح وتم إرسالها إلى محفظتك.",
-            claimTxFail: "فشلت المطالبة على الشبكة. مكافأتك لم تضيع — حاول المطالبة مرة أخرى لاحقًا."
+            claimTxFail: "فشلت المطالبة على الشبكة. مكافأتك لم تضيع — حاول المطالبة مرة أخرى لاحقًا.",
+            gameBadge: "العب واربح WFISH",
+            gameBalanceLbl: "رصيد اللعبة (WFISH)",
+            gameCapReached: "تم بلوغ الحد اليومي — 10,000 WFISH لكل محفظة يوميًا. عُد غدًا!",
+            gameCatchesLbl: "الأسماك المصطادة",
+            gameConnectedNote: "يُستخدم محفظتك المتصلة في اللعبة — تُسجَّل الأسماك المصطادة تحتها تلقائيًا.",
+            gameEnergyFull: "الطاقة ممتلئة. كل رمية تكلف 1 طاقة؛ وتتجدد بمقدار 1 كل 60 ثانية.",
+            gameEnergyLbl: "الطاقة",
+            gameEnergyNext: "نقطة الطاقة التالية خلال {sec} ث · تتجدد بمقدار 1 كل 60 ثانية (بحد أقصى 20).",
+            gameExportBalances: "الأرصدة:",
+            gameExportSub: "نزّل أرصدة اللعبة لكل محفظة وسجل السحوبات المكتملة للاحتفاظ بها.",
+            gameExportTitle: "تصدير البيانات",
+            gameExportWd: "سجل السحب:",
+            gameHistEmpty: "لا صيد بعد — انقر على سمكة في البركة.",
+            gameHistTitle: "أحدث الصيد",
+            gameInvalidAddr: "هذا لا يبدو عنوان BSC صالحًا (0x + 40 حرفًا ست عشريًا).",
+            gameLbEmpty: "لا لاعبين مسجلين بعد.",
+            gameLbTitle: "لوحة المتصدرين (هذا المتصفح)",
+            gameManualLbl: "لا محفظة متصلة؟ أدخل عنوان محفظة BSC الخاصة بك للعب وتسجيل نتيجتك تحت تلك المحفظة:",
+            gameManualPh: "0x… عنوان محفظة BSC الخاصة بك",
+            gameMissed: "أفلتت منك!",
+            gameMissionCap: "تم بلوغ الحد اليومي — اطلب مكافأة هذه المهمة غدًا.",
+            gameMissionDone: "مكتملة ✓ — تم استلام المكافأة",
+            gameMissionTgBtn: "انضم إلى Telegram",
+            gameMissionTgClaim: "لقد انضممت — اطلب 1,000 WFISH",
+            gameMissionTgDesc: "انضم إلى قناة Woldfish على Telegram",
+            gameMissionTgTitle: "انضم إلى Telegram الخاص بنا",
+            gameMissionXBtn: "تابع على X",
+            gameMissionXClaim: "لقد تابعت — اطلب 1,000 WFISH",
+            gameMissionXDesc: "تابع @woldfishcoins على X",
+            gameMissionXTitle: "تابعنا على X",
+            gameMissionsNeedWallet: "لطلب مكافآت المهام، صِل محفظتك أعلاه أو أدخل عنوان BSC الخاص بك.",
+            gameMissionsSub: "أكمل هذه المهام الاجتماعية مرة واحدة لكل محفظة واربح WFISH في رصيد لعبتك — اسحبه عبر WD أدناه. المطالبة على أساس الثقة: لا تستطيع هذه الصفحة التحقق من حسابك على X أو Telegram.",
+            gameMissionsTitle: "المهام",
+            gameNeedWallet: "للبدء في الصيد، صِل محفظتك أعلاه أو أدخل عنوان BSC الخاص بك.",
+            gameNoEnergy: "نفدت الطاقة — انتظر حتى تتجدد (1 كل 60 ثانية).",
+            gameNoWalletYet: "لا محفظة بعد",
+            gameNote: "رصيد لعبتك هو سجل لكل محفظة محفوظ في هذا المتصفح. السحوبات تلقائية: ادفع الرسوم وسيصل WFISH مباشرة إلى محفظتك من عقد WD — دون قائمة دفع يدوية.",
+            gamePlayingAs: "تلعب بصفتك",
+            gamePondHint: "انقر على سمكة للرمي نحوها — كل رمية تكلف 1 طاقة. تتجدد الطاقة بمقدار 1 كل 60 ثانية (بحد أقصى 20).",
+            gameRCommon: "أزرق · عادي",
+            gameREpic: "بنفسجي · ملحمي",
+            gameRLegendary: "أحمر · أسطوري",
+            gameRMythic: "ذهبي · خرافي",
+            gameRRare: "أخضر · نادر",
+            gameShopBtn: "اشترِ NFT — 0.0002 BNB",
+            gameShopDesc: "اشترِ NFT من Woldfish هنا في اللعبة — نفس السك المدفوع: 1 NFT + 2,000,000 WFISH فورًا + مكافأة 1,000 WFISH/يوم لمدة 7 أيام.",
+            gameShopTitle: "متجر NFT",
+            gameSub: "انقر على الأسماك السابحة لاصطيادها — كل صيد يكسبك WFISH.",
+            gameTitle: "لعبة صيد Woldfish",
+            gameTodayLbl: "المكتسب اليوم (UTC) / الحد 10,000",
+            gameUseAddr: "استخدم هذا العنوان",
+            gameWdAmountPh: "المبلغ — مثال 10000",
+            gameWdBtn: "ادفع الرسوم واسحب",
+            gameWdDailyMax: "يسمح عقد WD بحد أقصى 10,000 WFISH لكل محفظة يوميًا. اسحب 10,000 اليوم والباقي غدًا.",
+            gameWdEmpty: "لا سحوبات بعد.",
+            gameWdFail: "فشل السحب على الشبكة. لم يُرسَل أي WFISH ورصيد لعبتك دون تغيير. لاحظ حد العقد: بحد أقصى 10,000 WFISH لكل محفظة يوميًا.",
+            gameWdFee: "الرسوم: {fee} BNB مقابل {amount} WFISH (0.00001 BNB لكل 10,000 WFISH)، تُدفع لعقد WD — ويُرسَل WFISH إلى محفظتك في نفس المعاملة.",
+            gameWdFeeEmpty: "أدخل مبلغًا لعرض الرسوم: 0.00001 BNB لكل 10,000 WFISH.",
+            gameWdInsufficient: "رصيد لعبتك لا يكفي لمبلغ السحب هذا.",
+            gameWdInvalid: "أدخل مبلغًا صالحًا: مضاعف 10,000 WFISH، بحد أدنى 10,000.",
+            gameWdMax: "الحد الأقصى",
+            gameWdMismatch: "المحفظة المتصلة مختلفة عن محفظة اللعبة التي تحمل هذا الرصيد. صِل محفظة اللعبة لدفع الرسوم وإتمام هذا السحب.",
+            gameWdNeedConnect: "صِل محفظة اللعبة أولًا حتى تُدفع الرسوم منها — ثم انقر زر WD مرة أخرى.",
+            gameWdNote: "بحد أقصى 10,000 WFISH لكل محفظة في كل يوم UTC (يُعاد الضبط 07:00 WIB). لا يستطيع عقد WD دفع أكثر مما لديه — تُعرض الأموال المتبقية مباشرة أدناه.",
+            gameWdProcessing: "جارٍ المعالجة…",
+            gameWdSub: "سحب تلقائي — ادفع الرسوم، وسيصل WFISH مباشرة إلى محفظتك. اسحب بمضاعفات 10,000 WFISH (بحد أدنى 10,000)؛ الرسوم 0.00001 BNB لكل 10,000 WFISH، تُدفع لعقد WD مع السحب.",
+            gameWdSuccess: "نجح السحب! وصل WFISH مباشرة إلى محفظتك، وتم خصم المبلغ المسحوب من رصيد لعبتك.",
+            gameWdTitle: "سحب (WD)"
           },
           ru: {
             metaDesc: "Бесплатный минт 10 000 WFISH в BNB Smart Chain — платите только за газ, один раз на кошелёк.",
@@ -2337,7 +2843,75 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
             claimSent: "Запрос отправлен — ожидание подтверждения сети…",
             claimStillPending: "Запрос всё ещё ожидает подтверждения. Проверьте его статус по ссылке ниже.",
             claimSuccess: "Бонус успешно получен и отправлен в ваш кошелёк.",
-            claimTxFail: "Не удалось забрать бонус в сети. Ваш бонус не потерян — попробуйте позже ещё раз."
+            claimTxFail: "Не удалось забрать бонус в сети. Ваш бонус не потерян — попробуйте позже ещё раз.",
+            gameBadge: "Играй и зарабатывай WFISH",
+            gameBalanceLbl: "Игровой баланс (WFISH)",
+            gameCapReached: "Дневной лимит исчерпан — 10,000 WFISH на кошелёк в день. Возвращайтесь завтра!",
+            gameCatchesLbl: "Пойманная рыба",
+            gameConnectedNote: "Ваш подключённый кошелёк используется в игре — улов записывается на него автоматически.",
+            gameEnergyFull: "Энергия полная. Каждый заброс стоит 1 энергии; восстанавливается по 1 каждые 60 секунд.",
+            gameEnergyLbl: "Энергия",
+            gameEnergyNext: "Следующая энергия через {sec} с · восстанавливается по 1 каждые 60 секунд (макс. 20).",
+            gameExportBalances: "Балансы:",
+            gameExportSub: "Скачайте игровые балансы по каждому кошельку и историю завершённых выводов для своих записей.",
+            gameExportTitle: "Экспорт данных",
+            gameExportWd: "История выводов:",
+            gameHistEmpty: "Пока ничего не поймано — нажмите на рыбу в пруду.",
+            gameHistTitle: "Недавний улов",
+            gameInvalidAddr: "Это не похоже на действительный адрес BSC (0x + 40 шестнадцатеричных символов).",
+            gameLbEmpty: "Игроков пока не записано.",
+            gameLbTitle: "Таблица лидеров (этот браузер)",
+            gameManualLbl: "Кошелёк не подключён? Введите адрес своего BSC-кошелька, чтобы играть и записывать счёт на этот кошелёк:",
+            gameManualPh: "0x… адрес вашего BSC-кошелька",
+            gameMissed: "Она уплыла!",
+            gameMissionCap: "Дневной лимит исчерпан — заберите награду за это задание завтра.",
+            gameMissionDone: "Выполнено ✓ — награда получена",
+            gameMissionTgBtn: "Вступить в Telegram",
+            gameMissionTgClaim: "Я вступил — забрать 1,000 WFISH",
+            gameMissionTgDesc: "Вступите в канал Woldfish в Telegram",
+            gameMissionTgTitle: "Вступите в наш Telegram",
+            gameMissionXBtn: "Подписаться в X",
+            gameMissionXClaim: "Я подписался — забрать 1,000 WFISH",
+            gameMissionXDesc: "Подпишитесь на @woldfishcoins в X",
+            gameMissionXTitle: "Подпишитесь на нас в X",
+            gameMissionsNeedWallet: "Чтобы забрать награды за задания, подключите кошелёк выше или введите свой адрес BSC.",
+            gameMissionsSub: "Выполните эти социальные задания один раз на кошелёк и заработайте WFISH на игровой баланс — выведите их через WD ниже. Забирается на доверии: страница не может проверить ваш аккаунт X или Telegram.",
+            gameMissionsTitle: "Задания",
+            gameNeedWallet: "Чтобы начать рыбачить, подключите кошелёк выше или введите свой адрес BSC.",
+            gameNoEnergy: "Энергия закончилась — подождите восстановления (1 каждые 60 секунд).",
+            gameNoWalletYet: "Кошелёк пока не подключён",
+            gameNote: "Ваш игровой баланс — это запись по каждому кошельку, хранящаяся в этом браузере. Вывод автоматический: оплатите комиссию, и WFISH сразу попадёт в ваш кошелёк из контракта WD — без ручной очереди выплат.",
+            gamePlayingAs: "Играете как",
+            gamePondHint: "Нажмите на рыбу, чтобы забросить к ней — каждый заброс стоит 1 энергии. Энергия восстанавливается по 1 каждые 60 секунд (макс. 20).",
+            gameRCommon: "Синяя · Обычная",
+            gameREpic: "Фиолетовая · Эпическая",
+            gameRLegendary: "Красная · Легендарная",
+            gameRMythic: "Золотая · Мифическая",
+            gameRRare: "Зелёная · Редкая",
+            gameShopBtn: "Купить NFT — 0.0002 BNB",
+            gameShopDesc: "Купите NFT Woldfish прямо в игре — тот же платный минт: 1 NFT + 2,000,000 WFISH сразу + бонус 1,000 WFISH/день в течение 7 дней.",
+            gameShopTitle: "Магазин NFT",
+            gameSub: "Нажимайте на плавающих рыб, чтобы поймать их — каждый улов приносит WFISH.",
+            gameTitle: "Игра «Рыбалка Woldfish»",
+            gameTodayLbl: "Заработано сегодня (UTC) / лимит 10,000",
+            gameUseAddr: "Использовать этот адрес",
+            gameWdAmountPh: "Сумма — напр. 10000",
+            gameWdBtn: "Оплатить комиссию и вывести",
+            gameWdDailyMax: "Контракт WD разрешает максимум 10,000 WFISH на кошелёк в день. Выведите 10,000 сегодня, а остальное — завтра.",
+            gameWdEmpty: "Выводов пока нет.",
+            gameWdFail: "Вывод не удался. WFISH не отправлен, игровой баланс не изменился. Учтите лимит контракта: максимум 10,000 WFISH на кошелёк в день.",
+            gameWdFee: "Комиссия: {fee} BNB за {amount} WFISH (0.00001 BNB за 10,000 WFISH), платится контракту WD — WFISH отправляется на ваш кошелёк в той же транзакции.",
+            gameWdFeeEmpty: "Введите сумму, чтобы увидеть комиссию: 0.00001 BNB за 10,000 WFISH.",
+            gameWdInsufficient: "Вашего игрового баланса недостаточно для этой суммы вывода.",
+            gameWdInvalid: "Введите допустимую сумму: кратную 10,000 WFISH, минимум 10,000.",
+            gameWdMax: "Макс.",
+            gameWdMismatch: "Подключённый кошелёк отличается от игрового кошелька, на котором этот баланс. Подключите игровой кошелёк, чтобы оплатить комиссию и сделать вывод.",
+            gameWdNeedConnect: "Сначала подключите игровой кошелёк, чтобы комиссия оплатилась с него, — затем снова нажмите кнопку WD.",
+            gameWdNote: "Максимум 10,000 WFISH на кошелёк за UTC-день (сброс в 07:00 WIB). Контракт WD может выплатить только то, что у него есть, — остаток средств показан ниже в реальном времени.",
+            gameWdProcessing: "Обработка…",
+            gameWdSub: "Автоматический вывод — оплатите комиссию, и WFISH сразу попадёт в ваш кошелёк. Выводите суммами, кратными 10,000 WFISH (минимум 10,000); комиссия — 0.00001 BNB за 10,000 WFISH, платится контракту WD вместе с выводом.",
+            gameWdSuccess: "Вывод успешен! WFISH сразу попал в ваш кошелёк, а игровой баланс уменьшен на выведенную сумму.",
+            gameWdTitle: "Вывод (WD)"
           },
           he: {
             metaDesc: "הטביעו 10,000 WFISH בחינם ב-BNB Smart Chain — שלמו רק גז, פעם אחת לכל ארנק.",
@@ -2447,7 +3021,75 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
             claimSent: "התביעה נשלחה — ממתין לאישור הרשת…",
             claimStillPending: "התביעה עדיין ממתינה לאישור. בדקו את מצבה בקישור למטה.",
             claimSuccess: "הבונוס נתבע בהצלחה ונשלח לארנק שלכם.",
-            claimTxFail: "התביעה נכשלה ברשת. הבונוס שלכם לא אבד — נסו לתבוע שוב מאוחר יותר."
+            claimTxFail: "התביעה נכשלה ברשת. הבונוס שלכם לא אבד — נסו לתבוע שוב מאוחר יותר.",
+            gameBadge: "שחקו והרוויחו WFISH",
+            gameBalanceLbl: "יתרת המשחק (WFISH)",
+            gameCapReached: "המכסה היומית הושלמה — 10,000 WFISH לארנק ביום. חזרו מחר!",
+            gameCatchesLbl: "דגים שנתפסו",
+            gameConnectedNote: "הארנק המחובר משמש למשחק — הדגים שנתפסו נרשמים תחתיו אוטומטית.",
+            gameEnergyFull: "האנרגיה מלאה. כל הטלה עולה 1 אנרגיה; היא מתמלאת ב־1 כל 60 שניות.",
+            gameEnergyLbl: "אנרגיה",
+            gameEnergyNext: "נקודת האנרגיה הבאה בעוד {sec} שנ׳ · מתמלאת ב־1 כל 60 שניות (מקס׳ 20).",
+            gameExportBalances: "יתרות:",
+            gameExportSub: "הורידו את יתרות המשחק לכל ארנק ואת היסטוריית המשיכות שהושלמו לצורך תיעוד.",
+            gameExportTitle: "ייצוא נתונים",
+            gameExportWd: "היסטוריית משיכות:",
+            gameHistEmpty: "עוד לא נתפס דבר — הקישו על דג בבריכה.",
+            gameHistTitle: "תפיסות אחרונות",
+            gameInvalidAddr: "זה לא נראה כמו כתובת BSC תקינה (0x + 40 תווי הקס).",
+            gameLbEmpty: "עוד לא נרשמו שחקנים.",
+            gameLbTitle: "טבלת המובילים (הדפדפן הזה)",
+            gameManualLbl: "אין ארנק מחובר? הזינו את כתובת ארנק ה־BSC שלכם כדי לשחק ולרשום את הניקוד תחת הארנק הזה:",
+            gameManualPh: "0x… כתובת ארנק ה־BSC שלכם",
+            gameMissed: "הוא ברח!",
+            gameMissionCap: "המכסה היומית הושלמה — קבלו את פרס המשימה הזו מחר.",
+            gameMissionDone: "הושלם ✓ — הפרס התקבל",
+            gameMissionTgBtn: "הצטרפו לטלגרם",
+            gameMissionTgClaim: "הצטרפתי — קבלו 1,000 WFISH",
+            gameMissionTgDesc: "הצטרפו לערוץ Woldfish בטלגרם",
+            gameMissionTgTitle: "הצטרפו לטלגרם שלנו",
+            gameMissionXBtn: "עקבו ב־X",
+            gameMissionXClaim: "עקבתי — קבלו 1,000 WFISH",
+            gameMissionXDesc: "עקבו אחר @woldfishcoins ב־X",
+            gameMissionXTitle: "עקבו אחרינו ב־X",
+            gameMissionsNeedWallet: "כדי לקבל את פרסי המשימות, חברו את הארנק למעלה או הזינו את כתובת ה־BSC שלכם.",
+            gameMissionsSub: "השלימו את המשימות החברתיות האלה פעם אחת לארנק והרוויחו WFISH ליתרת המשחק — משכו אותם עם WD למטה. הקבלה מבוססת אמון: הדף לא יכול לבדוק את חשבון ה־X או הטלגרם שלכם.",
+            gameMissionsTitle: "משימות",
+            gameNeedWallet: "כדי להתחיל לדוג, חברו את הארנק למעלה או הזינו את כתובת ה־BSC שלכם.",
+            gameNoEnergy: "נגמרה האנרגיה — המתינו להתמלאות (1 כל 60 שניות).",
+            gameNoWalletYet: "עוד אין ארנק",
+            gameNote: "יתרת המשחק שלכם היא רשומה לכל ארנק הנשמרת בדפדפן הזה. המשיכות אוטומטיות: שלמו את העמלה וה־WFISH יגיע ישירות לארנק שלכם מחוזה ה־WD — ללא תור תשלומים ידני.",
+            gamePlayingAs: "משחקים בתור",
+            gamePondHint: "הקישו על דג כדי להטיל לכיוונו — כל הטלה עולה 1 אנרגיה. האנרגיה מתמלאת ב־1 כל 60 שניות (מקס׳ 20).",
+            gameRCommon: "כחול · רגיל",
+            gameREpic: "סגול · אפי",
+            gameRLegendary: "אדום · אגדי",
+            gameRMythic: "זהב · מיתולוגי",
+            gameRRare: "ירוק · נדיר",
+            gameShopBtn: "קנו NFT — 0.0002 BNB",
+            gameShopDesc: "קנו NFT של Woldfish ממש כאן במשחק — אותה הטבעה בתשלום: 1 NFT + 2,000,000 WFISH מיד + בונוס של 1,000 WFISH ליום למשך 7 ימים.",
+            gameShopTitle: "חנות NFT",
+            gameSub: "הקישו על הדגים השוחים כדי לתפוס אותם — כל תפיסה מרוויחה WFISH.",
+            gameTitle: "משחק הדיג של Woldfish",
+            gameTodayLbl: "הורווח היום (UTC) / מכסה 10,000",
+            gameUseAddr: "השתמשו בכתובת הזו",
+            gameWdAmountPh: "סכום — לדוגמה 10000",
+            gameWdBtn: "שלמו עמלה ומשכו",
+            gameWdDailyMax: "חוזה ה־WD מאפשר לכל היותר 10,000 WFISH לארנק ביום. משכו 10,000 היום ואת השאר מחר.",
+            gameWdEmpty: "עוד אין משיכות.",
+            gameWdFail: "המשיכה נכשלה ברשת. לא נשלח WFISH ויתרת המשחק לא השתנתה. שימו לב למגבלת החוזה: מקס׳ 10,000 WFISH לארנק ביום.",
+            gameWdFee: "עמלה: {fee} BNB עבור {amount} WFISH (0.00001 BNB לכל 10,000 WFISH), משולמת לחוזה ה־WD — ה־WFISH נשלח לארנק שלכם באותה עסקה.",
+            gameWdFeeEmpty: "הזינו סכום כדי לראות את העמלה: 0.00001 BNB לכל 10,000 WFISH.",
+            gameWdInsufficient: "יתרת המשחק שלכם לא מספיקה לסכום המשיכה הזה.",
+            gameWdInvalid: "הזינו סכום תקין: כפולה של 10,000 WFISH, מינימום 10,000.",
+            gameWdMax: "מקס׳",
+            gameWdMismatch: "הארנק המחובר שונה מארנק המשחק שמחזיק ביתרה זו. חברו את ארנק המשחק כדי לשלם את העמלה ולבצע את המשיכה.",
+            gameWdNeedConnect: "חברו תחילה את ארנק המשחק כדי שהעמלה תשולם ממנו — ואז הקישו שוב על כפתור ה־WD.",
+            gameWdNote: "מקס׳ 10,000 WFISH לארנק בכל יום UTC (איפוס ב־07:00 WIB). חוזה ה־WD יכול לשלם רק את מה שיש לו — הכספים שנותרו מוצגים למטה בזמן אמת.",
+            gameWdProcessing: "מעבד…",
+            gameWdSub: "משיכה אוטומטית — שלמו את העמלה, וה־WFISH יגיע ישירות לארנק שלכם. משכו בכפולות של 10,000 WFISH (מינימום 10,000); העמלה היא 0.00001 BNB לכל 10,000 WFISH, ומשולמת לחוזה ה־WD יחד עם המשיכה.",
+            gameWdSuccess: "המשיכה הצליחה! ה־WFISH הגיע ישירות לארנק שלכם, ויתרת המשחק הופחתה בסכום שנמשך.",
+            gameWdTitle: "משיכה (WD)"
           },
           ja: {
             metaDesc: "BNB Smart Chainで10,000 WFISHを無料ミント — ガス代のみ、ウォレットごとに1回まで。",
@@ -2557,7 +3199,75 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
             claimSent: "請求を送信しました — ネットワークの確認を待っています…",
             claimStillPending: "請求はまだ確認待ちです。下のリンクから状態を確認してください。",
             claimSuccess: "ボーナスの請求が成功し、ウォレットに送られました。",
-            claimTxFail: "請求がネットワークで失敗しました。ボーナスは失われていません — 後でもう一度請求してみてください。"
+            claimTxFail: "請求がネットワークで失敗しました。ボーナスは失われていません — 後でもう一度請求してみてください。",
+            gameBadge: "遊んで WFISH を稼ごう",
+            gameBalanceLbl: "ゲーム残高 (WFISH)",
+            gameCapReached: "1日の上限に達しました — 1ウォレットあたり1日 10,000 WFISH。明日また来てください！",
+            gameCatchesLbl: "釣った魚",
+            gameConnectedNote: "接続中のウォレットがゲームに使われます — 釣った魚は自動的にそのウォレットに記録されます。",
+            gameEnergyFull: "エネルギーは満タンです。1回のキャストに1エネルギーが必要で、60秒ごとに1回復します。",
+            gameEnergyLbl: "エネルギー",
+            gameEnergyNext: "次のエネルギーまで {sec} 秒 · 60秒ごとに1回復（最大20）。",
+            gameExportBalances: "残高：",
+            gameExportSub: "各ウォレットのゲーム残高と完了した出金履歴を記録用にダウンロードしてください。",
+            gameExportTitle: "データをエクスポート",
+            gameExportWd: "出金履歴：",
+            gameHistEmpty: "まだ釣れていません — 池の魚をタップしてください。",
+            gameHistTitle: "最近の釣果",
+            gameInvalidAddr: "有効な BSC アドレスではないようです（0x + 40文字の16進数）。",
+            gameLbEmpty: "まだプレイヤーの記録がありません。",
+            gameLbTitle: "リーダーボード（このブラウザ）",
+            gameManualLbl: "ウォレットが接続されていませんか？BSC ウォレットアドレスを入力してプレイし、そのウォレットにスコアを記録してください：",
+            gameManualPh: "0x… あなたの BSC ウォレットアドレス",
+            gameMissed: "逃げられた！",
+            gameMissionCap: "1日の上限に達しました — このミッション報酬は明日受け取ってください。",
+            gameMissionDone: "完了 ✓ — 報酬を受け取りました",
+            gameMissionTgBtn: "Telegram に参加",
+            gameMissionTgClaim: "参加しました — 1,000 WFISH を受け取る",
+            gameMissionTgDesc: "Telegram の Woldfish チャンネルに参加",
+            gameMissionTgTitle: "私たちの Telegram に参加",
+            gameMissionXBtn: "X でフォロー",
+            gameMissionXClaim: "フォローしました — 1,000 WFISH を受け取る",
+            gameMissionXDesc: "X で @woldfishcoins をフォロー",
+            gameMissionXTitle: "X で私たちをフォロー",
+            gameMissionsNeedWallet: "ミッション報酬を受け取るには、上でウォレットを接続するか、BSC アドレスを入力してください。",
+            gameMissionsSub: "これらのソーシャルミッションをウォレットごとに1回完了し、ゲーム残高で WFISH を稼ぎましょう — 下の WD で出金できます。信頼に基づく受け取りです：このページはあなたの X や Telegram アカウントを確認できません。",
+            gameMissionsTitle: "ミッション",
+            gameNeedWallet: "釣りを始めるには、上でウォレットを接続するか、BSC アドレスを入力してください。",
+            gameNoEnergy: "エネルギーがありません — 回復を待ってください（60秒ごとに1）。",
+            gameNoWalletYet: "まだウォレットがありません",
+            gameNote: "ゲーム残高はこのブラウザに保存されるウォレットごとの記録です。出金は自動です：手数料を支払うと、WFISH は WD コントラクトから直接あなたのウォレットに届きます — 手動の支払い待ち行列はありません。",
+            gamePlayingAs: "プレイ中：",
+            gamePondHint: "魚をタップしてキャスト — 1回のキャストに1エネルギーが必要です。エネルギーは60秒ごとに1回復します（最大20）。",
+            gameRCommon: "青 · コモン",
+            gameREpic: "紫 · エピック",
+            gameRLegendary: "赤 · レジェンダリー",
+            gameRMythic: "金 · ミシック",
+            gameRRare: "緑 · レア",
+            gameShopBtn: "NFT を購入 — 0.0002 BNB",
+            gameShopDesc: "ゲーム内で Woldfish NFT を購入 — 有料ミントと同じ内容：NFT 1個 + 2,000,000 WFISH を即獲得 + 7日間毎日 1,000 WFISH ボーナス。",
+            gameShopTitle: "NFT ショップ",
+            gameSub: "泳いでいる魚をタップして釣りましょう — 釣るたびに WFISH がもらえます。",
+            gameTitle: "Woldfish フィッシングゲーム",
+            gameTodayLbl: "本日の獲得（UTC）/ 上限 10,000",
+            gameUseAddr: "このアドレスを使う",
+            gameWdAmountPh: "金額 — 例：10000",
+            gameWdBtn: "手数料を払って出金",
+            gameWdDailyMax: "WD コントラクトでは1ウォレットあたり1日最大 10,000 WFISH までです。今日は 10,000 を出金し、残りは明日。",
+            gameWdEmpty: "まだ出金がありません。",
+            gameWdFail: "ネットワークで出金に失敗しました。WFISH は送られず、ゲーム残高も変わっていません。コントラクトの制限にご注意ください：1ウォレットあたり1日最大 10,000 WFISH。",
+            gameWdFee: "手数料：{amount} WFISH につき {fee} BNB（10,000 WFISH あたり 0.00001 BNB）、WD コントラクトへ支払い — WFISH は同じトランザクションであなたのウォレットに送られます。",
+            gameWdFeeEmpty: "金額を入力すると手数料が表示されます：10,000 WFISH あたり 0.00001 BNB。",
+            gameWdInsufficient: "ゲーム残高がその出金額には足りません。",
+            gameWdInvalid: "有効な金額を入力してください：10,000 WFISH の倍数、最低 10,000。",
+            gameWdMax: "最大",
+            gameWdMismatch: "接続中のウォレットは、この残高を持つゲームウォレットとは異なります。手数料を支払い、この出金を行うにはゲームウォレットを接続してください。",
+            gameWdNeedConnect: "まずゲームウォレットを接続し、そこから手数料を支払えるようにしてください — その後、もう一度 WD ボタンをタップしてください。",
+            gameWdNote: "1ウォレットあたり UTC 1日最大 10,000 WFISH（07:00 WIB にリセット）。WD コントラクトは保有分しか支払えません — 残りの資金は下にライブ表示されます。",
+            gameWdProcessing: "処理中…",
+            gameWdSub: "自動出金 — 手数料を支払うと、WFISH は直接あなたのウォレットに届きます。10,000 WFISH の倍数で出金してください（最低 10,000）。手数料は 10,000 WFISH あたり 0.00001 BNB で、出金と一緒に WD コントラクトへ支払われます。",
+            gameWdSuccess: "出金成功！WFISH は直接あなたのウォレットに届き、ゲーム残高から出金額が差し引かれました。",
+            gameWdTitle: "出金 (WD)"
           },
           ko: {
             metaDesc: "BNB Smart Chain에서 10,000 WFISH 무료 민팅 — 가스비만 지불, 지갑당 1회만 가능.",
@@ -2667,7 +3377,75 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
             claimSent: "청구 전송됨 — 네트워크 확인을 기다리는 중…",
             claimStillPending: "청구가 아직 확인 대기 중입니다. 아래 링크에서 상태를 확인하세요.",
             claimSuccess: "보너스가 성공적으로 청구되어 지갑으로 전송되었습니다.",
-            claimTxFail: "청구가 네트워크에서 실패했습니다. 보너스는 사라지지 않았습니다 — 나중에 다시 청구해 보세요."
+            claimTxFail: "청구가 네트워크에서 실패했습니다. 보너스는 사라지지 않았습니다 — 나중에 다시 청구해 보세요.",
+            gameBadge: "플레이하고 WFISH를 버세요",
+            gameBalanceLbl: "게임 잔액 (WFISH)",
+            gameCapReached: "일일 한도에 도달했습니다 — 지갑당 하루 10,000 WFISH. 내일 다시 오세요!",
+            gameCatchesLbl: "잡은 물고기",
+            gameConnectedNote: "연결된 지갑이 게임에 사용됩니다 — 잡은 물고기는 자동으로 해당 지갑에 기록됩니다.",
+            gameEnergyFull: "에너지가 가득 찼습니다. 캐스트 1회당 에너지 1이 필요하며, 60초마다 1씩 회복됩니다.",
+            gameEnergyLbl: "에너지",
+            gameEnergyNext: "다음 에너지까지 {sec}초 · 60초마다 1씩 회복 (최대 20).",
+            gameExportBalances: "잔액:",
+            gameExportSub: "지갑별 게임 잔액과 완료된 출금 내역을 기록용으로 다운로드하세요.",
+            gameExportTitle: "데이터 내보내기",
+            gameExportWd: "출금 내역:",
+            gameHistEmpty: "아직 잡은 물고기가 없습니다 — 연못의 물고기를 탭하세요.",
+            gameHistTitle: "최근 어획",
+            gameInvalidAddr: "유효한 BSC 주소가 아닌 것 같습니다 (0x + 16진수 40자).",
+            gameLbEmpty: "아직 기록된 플레이어가 없습니다.",
+            gameLbTitle: "리더보드 (이 브라우저)",
+            gameManualLbl: "지갑이 연결되지 않았나요? BSC 지갑 주소를 입력해 플레이하고 해당 지갑에 점수를 기록하세요:",
+            gameManualPh: "0x… 내 BSC 지갑 주소",
+            gameMissed: "놓쳤어요!",
+            gameMissionCap: "일일 한도에 도달했습니다 — 이 미션 보상은 내일 받으세요.",
+            gameMissionDone: "완료 ✓ — 보상을 받았습니다",
+            gameMissionTgBtn: "Telegram 참여하기",
+            gameMissionTgClaim: "참여했습니다 — 1,000 WFISH 받기",
+            gameMissionTgDesc: "Telegram의 Woldfish 채널에 참여하세요",
+            gameMissionTgTitle: "저희 Telegram에 참여하세요",
+            gameMissionXBtn: "X에서 팔로우",
+            gameMissionXClaim: "팔로우했습니다 — 1,000 WFISH 받기",
+            gameMissionXDesc: "X에서 @woldfishcoins 팔로우",
+            gameMissionXTitle: "X에서 저희를 팔로우하세요",
+            gameMissionsNeedWallet: "미션 보상을 받으려면 위에서 지갑을 연결하거나 BSC 주소를 입력하세요.",
+            gameMissionsSub: "지갑당 1회 이 소셜 미션을 완료하고 게임 잔액으로 WFISH를 버세요 — 아래 WD로 출금할 수 있습니다. 신뢰 기반 수령입니다. 이 페이지는 사용자의 X 또는 Telegram 계정을 확인할 수 없습니다.",
+            gameMissionsTitle: "미션",
+            gameNeedWallet: "낚시를 시작하려면 위에서 지갑을 연결하거나 BSC 주소를 입력하세요.",
+            gameNoEnergy: "에너지가 없습니다 — 회복될 때까지 기다리세요 (60초마다 1).",
+            gameNoWalletYet: "아직 지갑이 없습니다",
+            gameNote: "게임 잔액은 이 브라우저에 저장되는 지갑별 기록입니다. 출금은 자동입니다. 수수료를 내면 WFISH가 WD 컨트랙트에서 바로 지갑으로 들어옵니다 — 수동 지급 대기열이 없습니다.",
+            gamePlayingAs: "플레이 중:",
+            gamePondHint: "물고기를 탭해 캐스트하세요 — 캐스트 1회당 에너지 1이 필요합니다. 에너지는 60초마다 1씩 회복됩니다 (최대 20).",
+            gameRCommon: "파랑 · 일반",
+            gameREpic: "보라 · 에픽",
+            gameRLegendary: "빨강 · 레전더리",
+            gameRMythic: "금색 · 미식",
+            gameRRare: "초록 · 레어",
+            gameShopBtn: "NFT 구매 — 0.0002 BNB",
+            gameShopDesc: "게임 안에서 Woldfish NFT를 구매하세요 — 유료 민트와 동일합니다. NFT 1개 + 2,000,000 WFISH 즉시 지급 + 7일간 매일 1,000 WFISH 보너스.",
+            gameShopTitle: "NFT 상점",
+            gameSub: "헤엄치는 물고기를 탭해 잡으세요 — 잡을 때마다 WFISH를 얻습니다.",
+            gameTitle: "Woldfish 낚시 게임",
+            gameTodayLbl: "오늘 획득 (UTC) / 한도 10,000",
+            gameUseAddr: "이 주소 사용",
+            gameWdAmountPh: "금액 — 예: 10000",
+            gameWdBtn: "수수료 내고 출금",
+            gameWdDailyMax: "WD 컨트랙트는 지갑당 하루 최대 10,000 WFISH까지 허용합니다. 오늘 10,000을 출금하고 나머지는 내일 출금하세요.",
+            gameWdEmpty: "아직 출금이 없습니다.",
+            gameWdFail: "네트워크에서 출금에 실패했습니다. WFISH가 전송되지 않았고 게임 잔액도 그대로입니다. 컨트랙트 한도를 참고하세요. 지갑당 하루 최대 10,000 WFISH.",
+            gameWdFee: "수수료: {amount} WFISH당 {fee} BNB (10,000 WFISH당 0.00001 BNB), WD 컨트랙트에 지불 — WFISH는 같은 트랜잭션으로 지갑에 전송됩니다.",
+            gameWdFeeEmpty: "금액을 입력하면 수수료를 확인할 수 있습니다. 10,000 WFISH당 0.00001 BNB.",
+            gameWdInsufficient: "게임 잔액이 해당 출금 금액에 부족합니다.",
+            gameWdInvalid: "유효한 금액을 입력하세요. 10,000 WFISH의 배수, 최소 10,000.",
+            gameWdMax: "최대",
+            gameWdMismatch: "연결된 지갑이 이 잔액을 보유한 게임 지갑과 다릅니다. 수수료를 내고 이 출금을 하려면 게임 지갑을 연결하세요.",
+            gameWdNeedConnect: "먼저 게임 지갑을 연결해 해당 지갑에서 수수료를 낼 수 있게 하세요 — 그런 다음 WD 버튼을 다시 탭하세요.",
+            gameWdNote: "지갑당 UTC 하루 최대 10,000 WFISH (07:00 WIB에 초기화). WD 컨트랙트는 보유한 만큼만 지급할 수 있습니다 — 남은 자금은 아래에 실시간으로 표시됩니다.",
+            gameWdProcessing: "처리 중…",
+            gameWdSub: "자동 출금 — 수수료를 내면 WFISH가 바로 지갑으로 들어옵니다. 10,000 WFISH의 배수로 출금하세요 (최소 10,000). 수수료는 10,000 WFISH당 0.00001 BNB이며, 출금과 함께 WD 컨트랙트에 지불됩니다.",
+            gameWdSuccess: "출금 성공! WFISH가 바로 지갑에 들어왔고, 게임 잔액에서 출금 금액이 차감되었습니다.",
+            gameWdTitle: "출금 (WD)"
           }
         };
 
@@ -2788,6 +3566,7 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
           statTotal.textContent = fmt.format(TOTAL_QUOTA);
           if (stats.remaining !== null) renderStats();
           renderWallet();
+          renderGame();
         }
         if (langSelect) {
           langSelect.addEventListener("change", function () { applyLang(langSelect.value); });
@@ -4253,6 +5032,19 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
           for (var i = 0; i < GAME_MISSIONS.length; i++) if (GAME_MISSIONS[i].id === id) return GAME_MISSIONS[i];
           return GAME_MISSIONS[0];
         }
+        // Daily gameplay missions (B5) — separate from the social missions
+        // above: these are earned by catching fish, reset every UTC day,
+        // and pay 500 WFISH each (counted toward the daily cap).
+        var GAME_DQUESTS = [
+          { id: "catch5", titleKey: "gameDQuestCatch5Title", descKey: "gameDQuestCatch5Desc", type: "catches", goal: 5, reward: 500 },
+          { id: "epic1", titleKey: "gameDQuestEpic1Title", descKey: "gameDQuestEpic1Desc", type: "epic", goal: 1, reward: 500 }
+        ];
+        function gameDQuestById(id) {
+          for (var i = 0; i < GAME_DQUESTS.length; i++) if (GAME_DQUESTS[i].id === id) return GAME_DQUESTS[i];
+          return GAME_DQUESTS[0];
+        }
+        // B8: Golden Hour is 19:00–20:00 WIB = 12:00–12:59 UTC.
+        function isGoldenHour() { return new Date().getUTCHours() === 12; }
         var gamePond = el("game-pond"), gamePondLock = el("game-pond-lock"),
             gameWalletEl = el("game-wallet"), gameManualWrap = el("game-manual-wrap"),
             gameManualInput = el("game-manual-input"), gameManualError = el("game-manual-error"),
@@ -4267,25 +5059,44 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
             gameTxStatus = el("game-tx-status"), gameTxTitle = el("game-tx-title"), gameTxHash = el("game-tx-hash"),
             gameHistoryEl = el("game-history"), gameHistoryEmpty = el("game-history-empty"),
             gameLbEl = el("game-leaderboard"), gameLbEmpty = el("game-lb-empty"),
-            gameMissionsEl = el("game-missions"), gameMissionsNote = el("game-missions-note");
+            gameMissionsEl = el("game-missions"), gameMissionsNote = el("game-missions-note"),
+            gameDQuestsEl = el("game-dquests"), gameDQuestsNote = el("game-dquests-note"),
+            gameMyStatsEl = el("game-mystats"), gameGoldenEl = el("game-golden");
         var gameBusy = false; // a game NFT purchase or WD fee payment is in flight
 
+        // UTC day string (A1): the WD contract counts days in UTC
+        // (block.timestamp / 1 days), so the game's "today" must too.
+        // A local-date reset at 00:00 WIB is 7 hours ahead of the
+        // contract — the UI would allow a second WD that reverts on-chain.
         function gameTodayStr() {
           var d = new Date();
           function pad(n) { return (n < 10 ? "0" : "") + n; }
-          return d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate());
+          return d.getUTCFullYear() + "-" + pad(d.getUTCMonth() + 1) + "-" + pad(d.getUTCDate());
         }
+        function utcDayNumber() { return Math.floor(Date.now() / 86400000); }
         function loadGameStore() {
           try {
             var raw = window.localStorage.getItem(GAME_STORE_KEY);
             if (raw) {
               var p = JSON.parse(raw);
-              if (p && p.wallets) return { wallets: p.wallets, wdQueue: Array.isArray(p.wdQueue) ? p.wdQueue : [], manual: p.manual || "" };
+              if (p && p.wallets) {
+                var wallets = {};
+                for (var k in p.wallets) {
+                  var r = p.wallets[k];
+                  if (r && typeof r === "object" && typeof r.addr === "string") wallets[k] = r;
+                }
+                var q = Array.isArray(p.wdQueue) ? p.wdQueue : [];
+                if (q.length > 50) q = q.slice(0, 50);
+                return { wallets: wallets, wdQueue: q, manual: p.manual || "" };
+              }
             }
           } catch (e) { /* storage unavailable — play with an in-memory store */ }
           return { wallets: {}, wdQueue: [], manual: "" };
         }
         var gameStore = loadGameStore();
+        var gameHistExpanded = false; // C6: history shows 10, "Show all" expands to 30
+        var gameFishLanes = {}; // C1: one vertical lane per live fish (0..4)
+        var gameSoundOn = (gameStore.soundOn !== false); // C2: persisted mute toggle
         function saveGameStore() {
           try { window.localStorage.setItem(GAME_STORE_KEY, JSON.stringify(gameStore)); } catch (e) { /* ignore */ }
         }
@@ -4294,6 +5105,51 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
           if (gameStore.manual && /^0x[0-9a-fA-F]{40}$/.test(gameStore.manual)) return gameStore.manual;
           return null;
         }
+        function numField(v, fallback) {
+          var n = Number(v);
+          return (isFinite(n) && n >= 0) ? n : fallback;
+        }
+        // A11: repair records whose localStorage was corrupted or
+        // hand-edited — numbers must stay numbers, or the UI shows
+        // "undefined / 20" and balance additions become string concat.
+        function normalizeGameRec(rec) {
+          rec.balance = numField(rec.balance, 0);
+          rec.totalEarned = numField(rec.totalEarned, 0);
+          rec.earnedToday = numField(rec.earnedToday, 0);
+          rec.energy = Math.min(numField(rec.energy, GAME_MAX_ENERGY), gameMaxEnergy(rec));
+          rec.energyTs = numField(rec.energyTs, Date.now());
+          rec.catches = numField(rec.catches, 0);
+          rec.combo = numField(rec.combo, 0);
+          if (!Array.isArray(rec.history)) rec.history = [];
+          if (!rec.missions || typeof rec.missions !== "object") rec.missions = {};
+          // B4/B5/B6: stats and daily-quest progress are plain data —
+          // normalize every field (nulling them here used to wipe them
+          // on every load).
+          if (!rec.stats || typeof rec.stats !== "object") rec.stats = {};
+          rec.stats.catches = numField(rec.stats.catches, 0);
+          rec.stats.misses = numField(rec.stats.misses, 0);
+          rec.stats.energyUsed = numField(rec.stats.energyUsed, 0);
+          rec.stats.best = numField(rec.stats.best, 0);
+          if (!rec.stats.byRarity || typeof rec.stats.byRarity !== "object") rec.stats.byRarity = {};
+          for (var ri = 0; ri < GAME_RARITIES.length; ri++) {
+            var rid = GAME_RARITIES[ri].id;
+            rec.stats.byRarity[rid] = numField(rec.stats.byRarity[rid], 0);
+          }
+          if (!rec.dQuest || typeof rec.dQuest !== "object") rec.dQuest = {};
+          for (var dq in rec.dQuest) {
+            var qst = rec.dQuest[dq];
+            if (!qst || typeof qst !== "object") { rec.dQuest[dq] = { n: 0, done: false, claimed: false }; continue; }
+            qst.n = numField(qst.n, 0);
+            qst.done = !!qst.done;
+            qst.claimed = !!qst.claimed;
+          }
+          // B4: streak is a NUMBER of consecutive UTC days (the old code
+          // treated it as an object and reset it to null on every load).
+          rec.streak = numField(rec.streak, 0);
+          rec.lastPlayDay = (typeof rec.lastPlayDay === "number" && isFinite(rec.lastPlayDay)) ? rec.lastPlayDay : null;
+          rec.energyBonus = Math.min(5, Math.max(0, Math.floor(numField(rec.energyBonus, 0))));
+          return rec;
+        }
         function gameRec(addr) {
           var key = addr.toLowerCase();
           var rec = gameStore.wallets[key];
@@ -4301,18 +5157,33 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
             rec = { addr: addr, balance: 0, totalEarned: 0, earnedToday: 0, day: gameTodayStr(), energy: GAME_MAX_ENERGY, energyTs: Date.now(), catches: 0, history: [], missions: {} };
             gameStore.wallets[key] = rec;
           }
-          if (rec.day !== gameTodayStr()) { rec.day = gameTodayStr(); rec.earnedToday = 0; }
-          if (!rec.missions) rec.missions = {};
+          normalizeGameRec(rec);
+          if (rec.day !== gameTodayStr()) { rec.day = gameTodayStr(); rec.earnedToday = 0; rec.dQuest = {}; }
+          // B4: daily streak — opening the game on consecutive UTC days
+          // grows the streak; 3+ days earns +1 max energy per extra day,
+          // capped at +5, while the streak keeps running. A missed day
+          // resets it to 1.
+          var todayNum = utcDayNumber();
+          if (rec.lastPlayDay !== todayNum) {
+            rec.streak = (rec.lastPlayDay === todayNum - 1) ? (rec.streak || 0) + 1 : 1;
+            rec.lastPlayDay = todayNum;
+            rec.energyBonus = (rec.streak >= 3) ? Math.min(5, rec.streak - 2) : 0;
+          }
           gameRegen(rec);
           return rec;
         }
+        // Effective max energy for a wallet: base 20 plus the streak
+        // bonus (B4, Fase 3). rec.energyBonus is 0 until a streak earns it.
+        function gameMaxEnergy(rec) {
+          return GAME_MAX_ENERGY + (rec && rec.energyBonus ? rec.energyBonus : 0);
+        }
         function gameRegen(rec) {
           var now = Date.now();
-          if (rec.energy >= GAME_MAX_ENERGY) { rec.energy = GAME_MAX_ENERGY; rec.energyTs = now; return; }
+          if (rec.energy >= gameMaxEnergy(rec)) { rec.energy = gameMaxEnergy(rec); rec.energyTs = now; return; }
           var gained = Math.floor((now - rec.energyTs) / GAME_ENERGY_MS);
           if (gained > 0) {
-            rec.energy = Math.min(GAME_MAX_ENERGY, rec.energy + gained);
-            rec.energyTs = (rec.energy >= GAME_MAX_ENERGY) ? now : rec.energyTs + gained * GAME_ENERGY_MS;
+            rec.energy = Math.min(gameMaxEnergy(rec), rec.energy + gained);
+            rec.energyTs = (rec.energy >= gameMaxEnergy(rec)) ? now : rec.energyTs + gained * GAME_ENERGY_MS;
           }
         }
         function gameRarityById(id) {
@@ -4330,9 +5201,13 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
 
         /* ---------- Pond ---------- */
         function pickRarity() {
-          var r = Math.random() * 100, acc = 0;
+          var golden = isGoldenHour();
+          var total = golden ? 102.5 : 100; // B8: mythic spawn weight 2.5 -> 5
+          var r = Math.random() * total, acc = 0;
           for (var i = 0; i < GAME_RARITIES.length; i++) {
-            acc += GAME_RARITIES[i].weight;
+            var w = GAME_RARITIES[i].weight;
+            if (golden && GAME_RARITIES[i].id === "mythic") w = 5;
+            acc += w;
             if (r < acc) return GAME_RARITIES[i];
           }
           return GAME_RARITIES[0];
@@ -4345,8 +5220,16 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
           b.type = "button";
           b.className = "gfish c-" + rar.id + (Math.random() < 0.5 ? " rtl" : "");
           b.style.width = rar.size + "px";
-          b.style.setProperty("--fw", (rar.size + 14) + "px");
-          b.style.top = (5 + Math.random() * 74) + "%";
+          b.style.setProperty("--fw", (rar.size + 34) + "px");
+          // C1: one fish per vertical lane — centres are >=48px apart on
+          // desktop (300px pond), so two fish never sit on top of each
+          // other and the fat 16px padding around each fish stays tappable.
+          var lane = -1;
+          for (var li = 0; li < 5; li++) { if (!gameFishLanes[li]) { lane = li; break; } }
+          if (lane < 0) return;
+          gameFishLanes[lane] = true;
+          b._lane = lane;
+          b.style.top = (2 + lane * 16 + Math.random() * 4) + "%";
           var dur = 7 + Math.random() * 7;
           b.style.animationDuration = dur + "s";
           var delay = initial ? (-Math.random() * dur * 0.9) : 0;
@@ -4370,6 +5253,18 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
           b._done = false;
           b.addEventListener("click", function () { attemptCatch(b); });
           gamePond.appendChild(b);
+          // B3: a fish that is never caught swims away after 25 seconds.
+          b._fleeTimer = setTimeout(function () {
+            if (b._done || !b.parentNode) return;
+            b._done = true;
+            pondFloater(b, t("gameFishFled"), true);
+            b.classList.add("gone");
+            setTimeout(function () {
+              if (b.parentNode) b.parentNode.removeChild(b);
+              if (typeof b._lane === "number") delete gameFishLanes[b._lane];
+              spawnFish(false);
+            }, 380);
+          }, 25000);
         }
         function pondFloater(fishEl, text, isMiss) {
           if (!gamePond) return;
@@ -4381,6 +5276,33 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
           gamePond.appendChild(f);
           setTimeout(function () { if (f.parentNode) f.parentNode.removeChild(f); }, 1200);
         }
+        /* C2: tiny haptic + audio feedback on cast. Vibration is skipped
+           when the user asked for reduced motion; sound is a short
+           WebAudio blip (no file) and can be muted with the sound button. */
+        var gameAudioCtx = null;
+        function gameBeep(freq, dur, when) {
+          if (!gameSoundOn) return;
+          try {
+            if (!gameAudioCtx) gameAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            if (gameAudioCtx.state === "suspended") gameAudioCtx.resume();
+            var o = gameAudioCtx.createOscillator();
+            var g = gameAudioCtx.createGain();
+            o.type = "sine"; o.frequency.value = freq;
+            g.gain.setValueAtTime(0.12, gameAudioCtx.currentTime + when);
+            g.gain.exponentialRampToValueAtTime(0.001, gameAudioCtx.currentTime + when + dur);
+            o.connect(g); g.connect(gameAudioCtx.destination);
+            o.start(gameAudioCtx.currentTime + when);
+            o.stop(gameAudioCtx.currentTime + when + dur);
+          } catch (e) { /* audio unavailable — stay silent */ }
+        }
+        function gameCatchFeedback(caught) {
+          var reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+          if (navigator.vibrate && !reduceMotion) {
+            try { navigator.vibrate(caught ? 20 : [30, 50, 30]); } catch (e) { /* ignore */ }
+          }
+          if (caught) { gameBeep(660, 0.12, 0); gameBeep(880, 0.15, 0.09); }
+          else gameBeep(220, 0.18, 0);
+        }
         function attemptCatch(fishEl) {
           if (fishEl._done) return;
           var addr = gameWalletAddr();
@@ -4389,26 +5311,43 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
           if (rec.energy <= 0) { pondFloater(fishEl, t("gameNoEnergy"), true); return; }
           if (rec.earnedToday >= GAME_DAILY_CAP) { pondFloater(fishEl, t("gameCapReached"), true); return; }
           fishEl._done = true;
-          if (rec.energy >= GAME_MAX_ENERGY) rec.energyTs = Date.now();
+          if (fishEl._fleeTimer) clearTimeout(fishEl._fleeTimer);
+          if (rec.energy >= gameMaxEnergy(rec)) rec.energyTs = Date.now();
           rec.energy -= 1;
+          rec.stats.energyUsed += 1;
           var rar = fishEl._rarity;
-          var caught = Math.random() < rar.chance;
+          // B4: a 3-catch combo (no miss in between) gives the next cast
+          // +10% catch chance, capped at 99%.
+          var boost = (rec.combo >= 3) ? 0.10 : 0;
+          var caught = Math.random() < Math.min(0.99, rar.chance + boost);
+          gameCatchFeedback(caught);
           if (caught) {
+            rec.combo = (rec.combo || 0) + 1;
             var reward = Math.min(rar.reward, GAME_DAILY_CAP - rec.earnedToday);
             rec.balance += reward;
             rec.totalEarned += reward;
             rec.earnedToday += reward;
             rec.catches += 1;
+            rec.stats.catches += 1;
+            if (reward > rec.stats.best) rec.stats.best = reward;
+            rec.stats.byRarity[rar.id] = (rec.stats.byRarity[rar.id] || 0) + 1;
             rec.history.unshift({ rarity: rar.id, amount: reward, time: new Date().toISOString() });
             if (rec.history.length > 30) rec.history.length = 30;
-            pondFloater(fishEl, "+" + fmt.format(reward) + " WFISH", false);
+            checkDQuests(rec, rar);
+            // B2: say so plainly when the daily cap clipped the reward.
+            if (reward < rar.reward) pondFloater(fishEl, tpl("gameClampWarn", { amount: fmt.format(reward) }), false);
+            else pondFloater(fishEl, "+" + fmt.format(reward) + " WFISH", false);
           } else {
-            pondFloater(fishEl, t("gameMissed"), true);
+            rec.combo = 0;
+            rec.stats.misses += 1;
+            // B1: a miss still costs 1 energy — say so in the floater.
+            pondFloater(fishEl, t("gameMissed") + " " + t("gameMissedEnergy"), true);
           }
           saveGameStore();
           fishEl.classList.add("gone");
           setTimeout(function () {
             if (fishEl.parentNode) fishEl.parentNode.removeChild(fishEl);
+            if (typeof fishEl._lane === "number") delete gameFishLanes[fishEl._lane];
             spawnFish(false);
           }, 380);
           renderGame();
@@ -4431,7 +5370,7 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
             gameEnergyNote.textContent = "";
           } else {
             var rec = gameRec(addr);
-            gameEnergyEl.textContent = rec.energy + " / " + GAME_MAX_ENERGY;
+            gameEnergyEl.textContent = rec.energy + " / " + gameMaxEnergy(rec);
             gameBalanceEl.textContent = fmt.format(rec.balance);
             gameTodayEl.textContent = fmt.format(rec.earnedToday) + " / " + fmt.format(GAME_DAILY_CAP);
             gameCatchesEl.textContent = fmt.format(rec.catches);
@@ -4440,23 +5379,69 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
           renderGameHistory(addr);
           renderGameLeaderboard(addr);
           renderMissions(addr);
+          renderDQuests(addr);
+          renderMyStats(addr);
           renderGameWdList();
           renderGameWdFee();
-          btnGameBuy.disabled = gameBusy || paidBusy;
-          btnGameBuy.textContent = (gameBusy || paidBusy) ? t("gameWdProcessing") : t("gameShopBtn");
+          renderGameWdFund();
+          renderRarityChances();
+          renderPondStatus(addr);
+          renderSoundBtn();
+          renderGoldenLabel();
+          if (addr) refreshWdChain(addr, false);
+          var shopLoading = (paidStats.remaining === null);
+          btnGameBuy.disabled = gameBusy || paidBusy || shopLoading;
+          btnGameBuy.textContent = (gameBusy || paidBusy) ? t("gameWdProcessing") : (shopLoading ? t("gameShopLoading") : t("gameShopBtn"));
           if (btnGameBuyWfish) {
-            btnGameBuyWfish.disabled = gameBusy || paidBusy;
-            btnGameBuyWfish.textContent = (gameBusy || paidBusy) ? t("gameWdProcessing") : t("gameShopBtnWfish");
+            btnGameBuyWfish.disabled = gameBusy || paidBusy || shopLoading;
+            btnGameBuyWfish.textContent = (gameBusy || paidBusy) ? t("gameWdProcessing") : (shopLoading ? t("gameShopLoading") : t("gameShopBtnWfish"));
           }
           btnGameWd.disabled = gameBusy;
           btnGameWd.textContent = gameBusy ? t("gameWdProcessing") : t("gameWdBtn");
+          // C4: quick amounts + Max only make sense when the balance and
+          // today's remaining quota cover at least 10,000 WFISH.
+          var wdCanQuick = !!addr && gameRec(addr).balance >= WD_STEP && wdRemainingToday(addr) >= WD_STEP;
+          var wdQuickBtns = document.querySelectorAll("[data-wd-quick]");
+          for (var qi2 = 0; qi2 < wdQuickBtns.length; qi2++) wdQuickBtns[qi2].disabled = !wdCanQuick;
+          var btnWdMax2 = el("btn-wd-max");
+          if (btnWdMax2) btnWdMax2.disabled = !wdCanQuick;
+        }
+        function gameEnergyNextSec(rec) {
+          if (rec.energy >= gameMaxEnergy(rec)) return 0;
+          var elapsed = Math.max(0, Date.now() - rec.energyTs);
+          return Math.ceil((GAME_ENERGY_MS - (elapsed % GAME_ENERGY_MS)) / 1000);
         }
         function renderGameEnergyNote(rec) {
-          if (rec.energy >= GAME_MAX_ENERGY) { gameEnergyNote.textContent = t("gameEnergyFull"); return; }
-          var elapsed = Date.now() - rec.energyTs;
-          var into = elapsed % GAME_ENERGY_MS;
-          var sec = Math.ceil((GAME_ENERGY_MS - into) / 1000);
-          gameEnergyNote.textContent = tpl("gameEnergyNext", { sec: sec });
+          if (rec.energy >= gameMaxEnergy(rec)) { gameEnergyNote.textContent = t("gameEnergyFull"); }
+          else gameEnergyNote.textContent = tpl("gameEnergyNext", { sec: gameEnergyNextSec(rec), max: gameMaxEnergy(rec) });
+          // B2: warn while the daily cap is nearly used up.
+          var capLeft = GAME_DAILY_CAP - rec.earnedToday;
+          if (capLeft < 2000) gameEnergyNote.textContent += " · " + tpl("gameCapLow", { left: fmt.format(capLeft) });
+        }
+        /* C3: one persistent line under the pond — energy empty, cap
+           reached, or an active combo (B4). Hidden otherwise. */
+        function renderPondStatus(addr) {
+          var s = el("game-pond-status");
+          if (!s) return;
+          if (!addr) { s.hidden = true; return; }
+          var rec = gameRec(addr);
+          var msg = "";
+          if (rec.earnedToday >= GAME_DAILY_CAP) msg = t("gameCapReached");
+          else if (rec.energy <= 0) msg = tpl("gameEnergyEmpty", { sec: gameEnergyNextSec(rec) });
+          else if (rec.combo >= 2) msg = (rec.combo >= 3) ? tpl("gameComboBoost", { n: rec.combo }) : tpl("gameCombo", { n: rec.combo });
+          if (msg) { s.textContent = msg; s.hidden = false; } else s.hidden = true;
+        }
+        /* B1: catch chances next to each rarity in the list. */
+        function renderRarityChances() {
+          var spans = document.querySelectorAll("[data-rarity]");
+          for (var i = 0; i < spans.length; i++) {
+            var rar = gameRarityById(spans[i].getAttribute("data-rarity"));
+            spans[i].textContent = Math.round(rar.chance * 100) + "% · " + t("gameChance");
+          }
+        }
+        function renderSoundBtn() {
+          var b = el("btn-game-sound");
+          if (b) b.textContent = t(gameSoundOn ? "gameSoundOn" : "gameSoundOff");
         }
         /* ---------- Missions ---------- */
         function renderMissions(addr) {
@@ -4532,12 +5517,134 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
           saveGameStore();
           renderGame();
         }
+        /* ---------- Daily gameplay missions (B5) ---------- */
+        function checkDQuests(rec, rar) {
+          for (var i = 0; i < GAME_DQUESTS.length; i++) {
+            var q = GAME_DQUESTS[i];
+            var st = rec.dQuest[q.id];
+            if (!st) { st = { n: 0, done: false, claimed: false }; rec.dQuest[q.id] = st; }
+            if (st.done) continue;
+            if (q.type === "catches") st.n += 1;
+            else if (q.type === "epic" && rar.id === "epic") st.n += 1;
+            if (st.n >= q.goal) st.done = true;
+          }
+        }
+        function renderDQuests(addr) {
+          if (!gameDQuestsEl) return;
+          gameDQuestsEl.innerHTML = "";
+          gameDQuestsNote.hidden = !!addr;
+          var prog = {};
+          if (addr) {
+            var rec0 = gameStore.wallets[addr.toLowerCase()];
+            if (rec0 && rec0.dQuest) prog = rec0.dQuest;
+          }
+          GAME_DQUESTS.forEach(function (q) {
+            var st = prog[q.id] || { n: 0, done: false, claimed: false };
+            var li = document.createElement("li");
+            li.className = "mission";
+            var top = document.createElement("div");
+            top.className = "mission-top";
+            var name = document.createElement("span");
+            name.className = "mission-name";
+            name.textContent = t(q.titleKey) + "  (" + Math.min(st.n, q.goal) + "/" + q.goal + ")";
+            var reward = document.createElement("span");
+            reward.className = "mission-reward";
+            reward.textContent = "+" + fmt.format(q.reward) + " WFISH";
+            top.appendChild(name); top.appendChild(reward);
+            var desc = document.createElement("p");
+            desc.className = "mission-desc";
+            desc.style.margin = "0";
+            desc.textContent = t(q.descKey);
+            var actions = document.createElement("div");
+            actions.className = "mission-actions";
+            var claim = document.createElement("button");
+            claim.type = "button";
+            claim.className = "btn-action";
+            claim.disabled = !addr || !st.done || st.claimed;
+            claim.textContent = st.claimed ? t("gameDQuestClaimed") : (st.done ? t("gameDQuestClaim") : t("gameDQuestProgress"));
+            claim.addEventListener("click", function () { claimDQuest(q.id); });
+            actions.appendChild(claim);
+            li.appendChild(top);
+            li.appendChild(desc);
+            li.appendChild(actions);
+            var status = document.createElement("p");
+            status.className = "mission-status";
+            status.setAttribute("data-dquest-status", q.id);
+            status.hidden = true;
+            li.appendChild(status);
+            gameDQuestsEl.appendChild(li);
+          });
+        }
+        function claimDQuest(id) {
+          var addr = gameWalletAddr();
+          if (!addr) { gameDQuestsNote.hidden = false; return; }
+          var q = gameDQuestById(id);
+          var rec = gameRec(addr);
+          var st = rec.dQuest[id];
+          if (!st || !st.done || st.claimed) return;
+          if (rec.earnedToday >= GAME_DAILY_CAP) {
+            var stEl = gameDQuestsEl.querySelector('[data-dquest-status="' + id + '"]');
+            if (stEl) { stEl.textContent = t("gameDQuestCap"); stEl.classList.add("warn"); stEl.hidden = false; }
+            return;
+          }
+          var reward = Math.min(q.reward, GAME_DAILY_CAP - rec.earnedToday);
+          rec.balance += reward;
+          rec.totalEarned += reward;
+          rec.earnedToday += reward;
+          st.claimed = true;
+          rec.history.unshift({ mission: "dq:" + id, amount: reward, time: new Date().toISOString() });
+          if (rec.history.length > 30) rec.history.length = 30;
+          saveGameStore();
+          renderGame();
+        }
+        /* ---------- Level titles (B4) + My Stats (B6) ---------- */
+        function gameLevelTitle(catches) {
+          if (catches >= 100) return t("gameLevel5");
+          if (catches >= 50) return t("gameLevel4");
+          if (catches >= 25) return t("gameLevel3");
+          if (catches >= 10) return t("gameLevel2");
+          if (catches >= 1) return t("gameLevel1");
+          return t("gameLevel0");
+        }
+        function renderMyStats(addr) {
+          if (!gameMyStatsEl) return;
+          gameMyStatsEl.innerHTML = "";
+          if (!addr) return;
+          var rec = gameRec(addr);
+          var s = rec.stats;
+          var total = s.catches + s.misses;
+          var ratio = total ? Math.round((s.catches / total) * 100) + "%" : "—";
+          var byRarity = GAME_RARITIES.map(function (r) {
+            return t(r.key) + ": " + fmt.format(s.byRarity[r.id] || 0);
+          }).join(" · ");
+          var rows = [
+            [t("gameStatsLevel"), gameLevelTitle(rec.catches) + " (" + fmt.format(rec.catches) + ")"],
+            [t("gameStatsStreak"), fmt.format(rec.streak || 0) + " " + t("gameStatsDays") + (rec.energyBonus ? " (+" + rec.energyBonus + " " + t("gameStatsEnergyBonus") + ")" : "")],
+            [t("gameStatsCatches"), fmt.format(s.catches)],
+            [t("gameStatsMisses"), fmt.format(s.misses)],
+            [t("gameStatsRatio"), ratio],
+            [t("gameStatsBest"), "+" + fmt.format(s.best) + " WFISH"],
+            [t("gameStatsEnergy"), fmt.format(s.energyUsed)],
+            [t("gameStatsByRarity"), byRarity]
+          ];
+          rows.forEach(function (row) {
+            var dt = document.createElement("dt"); dt.textContent = row[0];
+            var dd = document.createElement("dd"); dd.textContent = row[1];
+            gameMyStatsEl.appendChild(dt); gameMyStatsEl.appendChild(dd);
+          });
+        }
+        /* B8: Golden Hour label — shown only while it is running. */
+        function renderGoldenLabel() {
+          if (!gameGoldenEl) return;
+          if (isGoldenHour()) { gameGoldenEl.textContent = t("gameGoldenActive"); gameGoldenEl.hidden = false; }
+          else gameGoldenEl.hidden = true;
+        }
         function renderGameHistory(addr) {
           gameHistoryEl.innerHTML = "";
           var items = [];
           if (addr) {
             var rec = gameStore.wallets[addr.toLowerCase()];
-            if (rec && rec.history) items = rec.history.slice(0, 8);
+            if (rec && rec.history) items = rec.history.slice(0, gameHistExpanded ? 30 : 10);
           }
           gameHistoryEmpty.hidden = items.length > 0;
           items.forEach(function (h) {
@@ -4548,10 +5655,17 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
             var dot = document.createElement("span");
             dot.className = "rarity-dot";
             if (h.mission) {
-              var mis = gameMissionById(h.mission);
-              dot.style.background = "#e9b949";
-              left.appendChild(dot);
-              left.appendChild(document.createTextNode(t(mis.titleKey)));
+              if (h.mission.indexOf("dq:") === 0) {
+                var dq = gameDQuestById(h.mission.slice(3));
+                dot.style.background = "#e9b949";
+                left.appendChild(dot);
+                left.appendChild(document.createTextNode(t(dq.titleKey)));
+              } else {
+                var mis = gameMissionById(h.mission);
+                dot.style.background = "#e9b949";
+                left.appendChild(dot);
+                left.appendChild(document.createTextNode(t(mis.titleKey)));
+              }
             } else {
               var rar = gameRarityById(h.rarity);
               dot.style.background = rar.color;
@@ -4568,6 +5682,13 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
             li.appendChild(left); li.appendChild(right);
             gameHistoryEl.appendChild(li);
           });
+          // C6: "Show all" expands the list from 10 to 30 entries.
+          var moreBtn = el("btn-game-hist-more");
+          if (moreBtn) {
+            var total = (addr && gameStore.wallets[addr.toLowerCase()] && gameStore.wallets[addr.toLowerCase()].history) ? gameStore.wallets[addr.toLowerCase()].history.length : 0;
+            moreBtn.hidden = total <= 10;
+            moreBtn.textContent = gameHistExpanded ? t("gameHistLess") : t("gameHistMore");
+          }
         }
         function renderGameLeaderboard(addr) {
           gameLbEl.innerHTML = "";
@@ -4594,7 +5715,12 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
           });
         }
         function renderGameWdFee() {
-          var amt = parseInt(gameWdAmount.value, 10);
+          var rawAmt = (gameWdAmount.value || "").trim();
+          if (/[. ,]/.test(rawAmt)) {
+            gameWdFeeEl.textContent = t("gameWdInvalid");
+            return;
+          }
+          var amt = parseInt(rawAmt, 10);
           if (!amt || isNaN(amt) || amt < WD_STEP || amt % WD_STEP !== 0) {
             gameWdFeeEl.textContent = t("gameWdFeeEmpty");
             return;
@@ -4630,6 +5756,37 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
           });
         }
 
+        /* ---------- WD quota + vault funds (on-chain, A1/A2/A4/A5) ---------- */
+        function wdClaimedTodayLocal(addr) {
+          // Sum of this browser's WD history for the current UTC day.
+          // Fallback only — the contract's claimedToday is the truth.
+          var day = gameTodayStr();
+          var sum = 0;
+          function pad(n) { return (n < 10 ? "0" : "") + n; }
+          for (var i = 0; i < gameStore.wdQueue.length; i++) {
+            var w = gameStore.wdQueue[i];
+            if (!w || !w.time || typeof w.amount !== "number") continue;
+            if (w.wallet && w.wallet.toLowerCase() !== addr.toLowerCase()) continue;
+            var d = new Date(w.time);
+            var ds = d.getUTCFullYear() + "-" + pad(d.getUTCMonth() + 1) + "-" + pad(d.getUTCDate());
+            if (ds === day) sum += w.amount;
+          }
+          return sum;
+        }
+        function wdClaimedToday(addr) {
+          if (wdChain.day === utcDayNumber() && wdChain.claimed !== null) return wdChain.claimed;
+          return wdClaimedTodayLocal(addr);
+        }
+        function wdRemainingToday(addr) {
+          return Math.max(0, WD_DAILY_MAX - wdClaimedToday(addr));
+        }
+        function renderGameWdFund() {
+          var f = el("game-wd-fund");
+          if (!f) return;
+          if (wdChain.fund === null) { f.textContent = t("gameWdFundLoading"); return; }
+          f.textContent = tpl("gameWdFund", { fund: fmt.format(wdChain.fund) });
+        }
+
         /* ---------- Game transaction status ---------- */
         function showGameTx(kind, title, hash) {
           gameTxStatus.className = "tx-status show " + kind;
@@ -4642,6 +5799,13 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
             gameTxTitle.textContent = title;
           }
           fillTxHash(gameTxHash, hash);
+          // C5: mirror the latest status in one line right under the WD
+          // button, so the player sees it without scrolling up.
+          var wdSt = el("game-wd-status");
+          if (wdSt) {
+            if (kind === "info") wdSt.hidden = true;
+            else { wdSt.textContent = title; wdSt.hidden = false; }
+          }
         }
         function gameTxError(err, action) {
           if (err && err.message === "session-dead") {
@@ -4774,13 +5938,19 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
           var addr = gameWalletAddr();
           if (!addr) { showGameTx("error", t("gameNeedWallet"), null); return; }
           var rec = gameRec(addr);
-          var amt = parseInt(gameWdAmount.value, 10);
+          var rawAmt = (gameWdAmount.value || "").trim();
+          if (/[. ,]/.test(rawAmt)) { showGameTx("error", t("gameWdInvalid"), null); return; }
+          var amt = parseInt(rawAmt, 10);
           if (!amt || isNaN(amt) || amt < WD_STEP || amt % WD_STEP !== 0) {
             showGameTx("error", t("gameWdInvalid"), null);
             return;
           }
           if (amt > rec.balance) { showGameTx("error", t("gameWdInsufficient"), null); return; }
           if (amt > WD_DAILY_MAX) { showGameTx("error", t("gameWdDailyMax"), null); return; }
+          if (amt > wdRemainingToday(addr)) {
+            showGameTx("error", tpl("gameWdCapUsed", { used: fmt.format(wdClaimedToday(addr)), left: fmt.format(wdRemainingToday(addr)) }), null);
+            return;
+          }
           var p = provider();
           if (!p) { startWalletConnect("gamewd"); return; }
           if (!account) {
@@ -4795,6 +5965,8 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
           if (gameBusy) return;
           var units = amt / WD_STEP;
           var feeWei = WD_FEE_WEI_PER_STEP * BigInt(units);
+          // C8: confirm the amount + fee + gas before any tx is built.
+          if (!window.confirm(tpl("gameWdConfirm", { amount: fmt.format(amt), fee: feeBnbStr(units) }))) return;
           var feeHex = "0x" + feeWei.toString(16);
           // withdraw(uint256) on the automatic WD contract: the amount in
           // WFISH wei as the argument, the fee as the transaction value.
@@ -4803,6 +5975,18 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
           var wdData = SEL_WD.withdraw + encodeUint256(BigInt(amt) * 1000000000000000000n);
           gameBusy = true; renderGame();
           gameTxGate().then(function () {
+            // Fresh pre-flight (A1/A2/A4): re-read the wallet's BNB
+            // balance, today's on-chain claimed amount and the vault
+            // funds — a second WD or a drained vault must fail HERE
+            // with a clear message, not as a reverted tx with lost gas.
+            return refreshStats().then(function () {
+              return refreshWdChain(addr, true);
+            }).then(function () {
+              if (amt > wdRemainingToday(addr)) throw new Error("wd-cap-used");
+              if (wdChain.fund !== null && wdChain.fund < amt) throw new Error("wd-fund-low");
+              if (userBnbBalance !== null && userBnbBalance < feeWei + GAS_MARGIN_WEI) throw new Error("wd-need-bnb");
+            });
+          }).then(function () {
             showGameTx("pending", t("txWaitingApproval"), null);
             return sendTx(p, { from: account, to: WD_CONTRACT, data: wdData, value: feeHex, chainId: CHAIN_ID_HEX }, showGameTx);
           }).then(function (hash) {
@@ -4822,17 +6006,34 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
                   hash: hash,
                   time: new Date().toISOString()
                 });
+                if (gameStore.wdQueue.length > 50) gameStore.wdQueue.length = 50;
                 saveGameStore();
                 gameWdAmount.value = "";
                 showGameTx("success", t("gameWdSuccess"), hash);
               } else {
-                showGameTx("error", t("gameWdFail"), hash);
+                // A failed receipt carries no revert reason — re-read the
+                // chain: if the quota is now exhausted, say so plainly.
+                refreshWdChain(addr, true).then(function () {
+                  if (wdClaimedToday(addr) + amt > WD_DAILY_MAX) {
+                    showGameTx("error", tpl("gameWdCapUsed", { used: fmt.format(wdClaimedToday(addr)), left: fmt.format(wdRemainingToday(addr)) }), hash);
+                  } else {
+                    showGameTx("error", t("gameWdFail"), hash);
+                  }
+                });
               }
               renderGame();
             });
           }).catch(function (err) {
             gameBusy = false;
-            gameTxError(err, "gamewd");
+            if (err && err.message === "wd-cap-used") {
+              showGameTx("error", tpl("gameWdCapUsed", { used: fmt.format(wdClaimedToday(addr)), left: fmt.format(wdRemainingToday(addr)) }), null);
+            } else if (err && err.message === "wd-fund-low") {
+              showGameTx("error", tpl("gameWdFundLow", { fund: fmt.format(wdChain.fund === null ? 0 : wdChain.fund) }), null);
+            } else if (err && err.message === "wd-need-bnb") {
+              showGameTx("error", tpl("gameWdNeedBnb", { fee: feeBnbStr(units) }), null);
+            } else {
+              gameTxError(err, "gamewd");
+            }
             renderGame();
           });
         }
@@ -4856,6 +6057,7 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
           var rows = [];
           for (var key in gameStore.wallets) {
             var rec = gameStore.wallets[key];
+            if (!rec || (rec.totalEarned <= 0 && rec.balance <= 0)) continue; // C7: skip wallets with no activity
             rows.push({
               wallet: rec.addr || key,
               gameBalanceWfish: rec.balance,
@@ -4873,7 +6075,7 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
           var rows = isWd ? gameStore.wdQueue.map(function (w) {
             return { wallet: w.wallet, amountWfish: w.amount, feeBnb: w.feeBnb, feeWei: w.feeWei, feeTxHash: w.hash, time: w.time };
           }) : gameBalanceRows();
-          var base = isWd ? "woldfish-wd-history" : "woldfish-game-balances";
+          var base = (isWd ? "woldfish-wd-history" : "woldfish-game-balances") + "-" + gameTodayStr();
           if (format === "json") {
             downloadFile(base + ".json", JSON.stringify({ exportedAt: new Date().toISOString(), rows: rows }, null, 2), "application/json");
             return;
@@ -4900,6 +6102,23 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
           saveGameStore();
           renderGame();
         });
+        el("btn-game-manual-clear").addEventListener("click", function () {
+          gameStore.manual = "";
+          gameManualInput.value = "";
+          gameManualError.classList.remove("show");
+          saveGameStore();
+          renderGame();
+        });
+        el("btn-game-sound").addEventListener("click", function () {
+          gameSoundOn = !gameSoundOn;
+          gameStore.soundOn = gameSoundOn;
+          saveGameStore();
+          renderSoundBtn();
+        });
+        el("btn-game-hist-more").addEventListener("click", function () {
+          gameHistExpanded = !gameHistExpanded;
+          renderGameHistory(gameWalletAddr());
+        });
         gameWdAmount.addEventListener("input", renderGameWdFee);
         var quickBtns = document.querySelectorAll("[data-wd-quick]");
         for (var qi = 0; qi < quickBtns.length; qi++) {
@@ -4914,7 +6133,10 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
           var addr = gameWalletAddr();
           if (!addr) return;
           var rec = gameRec(addr);
-          gameWdAmount.value = String(Math.min(WD_DAILY_MAX, Math.floor(rec.balance / WD_STEP) * WD_STEP) || "");
+          // A2: Max is capped by today's remaining WD quota as well as
+          // by the balance — a second 10,000 in one UTC day reverts.
+          var cap = Math.min(wdRemainingToday(addr), Math.floor(rec.balance / WD_STEP) * WD_STEP);
+          gameWdAmount.value = String(cap || "");
           renderGameWdFee();
         });
         btnGameWd.addEventListener("click", doGameWithdraw);
@@ -4931,9 +6153,11 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
           var addr = gameWalletAddr();
           if (addr) {
             var rec = gameRec(addr);
-            gameEnergyEl.textContent = rec.energy + " / " + GAME_MAX_ENERGY;
+            gameEnergyEl.textContent = rec.energy + " / " + gameMaxEnergy(rec);
             renderGameEnergyNote(rec);
+            renderPondStatus(addr);
           }
+          renderGoldenLabel();
         }, 1000);
 
         /* ================= Start ================= */
@@ -4989,20 +6213,6 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
               prov.disconnect().catch(function () { /* ignore */ });
             }
           }).catch(function () { /* no session to restore — normal */ });
-        }
-      })();
-    </script>
-    <script>
-      // Open the page directly on the Paid Mint section.
-      (function () {
-        function goToPaidMint() {
-          var target = document.getElementById("paid-mint");
-          if (target) target.scrollIntoView({ block: "start" });
-        }
-        if (document.readyState === "complete") {
-          setTimeout(goToPaidMint, 300);
-        } else {
-          window.addEventListener("load", function () { setTimeout(goToPaidMint, 300); });
         }
       })();
     </script>
