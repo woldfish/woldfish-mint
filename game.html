@@ -391,6 +391,7 @@
       .rarity-list .r-name { color: var(--text); font-weight: 700; min-width: 128px; }
       .rarity-list .r-reward { color: var(--gold-bright); font-weight: 700; font-variant-numeric: tabular-nums; }
       .rarity-list .r-chance { color: var(--muted); font-weight: 600; font-variant-numeric: tabular-nums; margin-left: 6px; }
+      .harvest-row { margin-top: 12px; align-items: center; }
       .game-h3 { margin: 24px 0 4px; font-size: 1rem; font-weight: 700; }
       .game-input {
         width: 100%; background: rgba(3, 13, 22, 0.6); border: 1px solid var(--line);
@@ -568,8 +569,8 @@
       <section class="panel" id="game" aria-labelledby="game-title">
         <div class="stats-head">
           <div>
-            <h2 id="game-title" data-i18n="gameTitle">Woldfish Fishing Game</h2>
-            <p class="sub" data-i18n="gameSub">Tap the swimming fish to catch them — every catch earns WFISH.</p>
+            <h2 id="game-title" data-i18n="gameRaiseTitle">Woldfish Fish Pond</h2>
+            <p class="sub" data-i18n="gameRaiseSub">Raise fish in your pond — feed them and harvest WFISH every hour.</p>
           </div>
           <span class="badge gold" data-i18n="gameBadge">Play &amp; Earn WFISH</span>
         </div>
@@ -587,7 +588,7 @@
           </div>
           <p class="stats-error" id="game-manual-error" data-i18n="gameInvalidAddr">That doesn't look like a valid BSC address (0x + 40 hex characters).</p>
         </div>
-        <p class="sub" id="game-connected-note" style="margin-top:12px;" data-i18n="gameConnectedNote" hidden>Your connected wallet is used for the game — catches are recorded under it automatically.</p>
+        <p class="sub" id="game-connected-note" style="margin-top:12px;" data-i18n="gameRaiseConnectedNote" hidden>Your connected wallet is used for the game — earnings are recorded under it automatically.</p>
 
         <div class="stats-grid four">
           <div class="stat">
@@ -604,26 +605,40 @@
           </div>
           <div class="stat">
             <div class="num plain" id="game-catches">—</div>
-            <div class="lbl" data-i18n="gameCatchesLbl">Fish Caught</div>
+            <div class="lbl" data-i18n="gameRaiseFishLbl">Fish in Pond</div>
           </div>
         </div>
         <p class="fee-line" id="game-energy-note"></p>
 
         <div class="pond" id="game-pond">
-          <div class="pond-lock" id="game-pond-lock" data-i18n="gameNeedWallet">Connect your wallet above, or enter your BSC address, to start fishing.</div>
+          <div class="pond-lock" id="game-pond-lock" data-i18n="gameRaiseNeedWallet">Connect your wallet above, or enter your BSC address, to start raising fish.</div>
         </div>
-        <p class="mint-hint" data-i18n="gamePondHint">Tap a fish to cast at it — 1 cast costs 1 energy. Energy refills by 1 every 60 seconds (max 20).</p>
+        <p class="mint-hint" data-i18n="gameRaisePondHint">Tap a fish to feed it — 1 feeding costs 1 energy and keeps it full for 8 hours.</p>
         <p class="fee-line" id="game-pond-status" hidden></p>
         <p class="fee-line" id="game-golden" hidden></p>
         <div class="quick-row"><button type="button" class="btn-mini" id="btn-game-sound">Sound: on</button></div>
+        <div class="game-row harvest-row">
+          <button type="button" class="btn-action" id="btn-game-harvest" data-i18n="gameRaiseHarvestBtn">Harvest</button>
+          <button type="button" class="btn-mini" id="btn-game-feedall" data-i18n="gameRaiseFeedAllBtn">Feed All</button>
+        </div>
+        <p class="fee-line" id="game-harvest-pending"></p>
 
+        <!-- Adopt a fish: the rarity list doubles as the adoption shop —
+             cost is paid from the game balance, never on-chain. -->
+        <h3 class="game-h3" data-i18n="gameRaiseAdoptTitle">Adopt a Fish</h3>
+        <p class="sub" data-i18n="gameRaiseAdoptSub">Adopt fish with your game balance. Each fish earns WFISH every hour while it is fed — new fish arrive fed for 8 hours. Max 5 fish in the pond.</p>
         <ul class="rarity-list">
-          <li><span class="rarity-dot" style="background:#4a90d9"></span><span class="r-name" data-i18n="gameRCommon">Blue · Common</span><span class="r-chance" data-rarity="common"></span><span class="r-reward">100 WFISH</span></li>
-          <li><span class="rarity-dot" style="background:#35c26e"></span><span class="r-name" data-i18n="gameRRare">Green · Rare</span><span class="r-reward">250 WFISH</span></li>
-          <li><span class="rarity-dot" style="background:#9b5de5"></span><span class="r-name" data-i18n="gameREpic">Purple · Epic</span><span class="r-reward">500 WFISH</span></li>
-          <li><span class="rarity-dot" style="background:#e5484d"></span><span class="r-name" data-i18n="gameRLegendary">Red · Legendary</span><span class="r-reward">1,000 WFISH</span></li>
-          <li><span class="rarity-dot" style="background:#e9b949"></span><span class="r-name" data-i18n="gameRMythic">Gold · Mythic</span><span class="r-reward">2,000 WFISH</span></li>
+          <li><span class="rarity-dot" style="background:#4a90d9"></span><span class="r-name" data-i18n="gameRCommon">Blue · Common</span><span class="r-chance" data-rarity="common"></span><span class="r-reward">500 WFISH</span><button type="button" class="btn-mini" data-adopt="common" data-i18n="gameRaiseAdoptBtn">Adopt</button></li>
+          <li><span class="rarity-dot" style="background:#35c26e"></span><span class="r-name" data-i18n="gameRRare">Green · Rare</span><span class="r-chance" data-rarity="rare"></span><span class="r-reward">1,500 WFISH</span><button type="button" class="btn-mini" data-adopt="rare" data-i18n="gameRaiseAdoptBtn">Adopt</button></li>
+          <li><span class="rarity-dot" style="background:#9b5de5"></span><span class="r-name" data-i18n="gameREpic">Purple · Epic</span><span class="r-chance" data-rarity="epic"></span><span class="r-reward">4,000 WFISH</span><button type="button" class="btn-mini" data-adopt="epic" data-i18n="gameRaiseAdoptBtn">Adopt</button></li>
+          <li><span class="rarity-dot" style="background:#e5484d"></span><span class="r-name" data-i18n="gameRLegendary">Red · Legendary</span><span class="r-chance" data-rarity="legendary"></span><span class="r-reward">10,000 WFISH</span><button type="button" class="btn-mini" data-adopt="legendary" data-i18n="gameRaiseAdoptBtn">Adopt</button></li>
+          <li><span class="rarity-dot" style="background:#e9b949"></span><span class="r-name" data-i18n="gameRMythic">Gold · Mythic</span><span class="r-chance" data-rarity="mythic"></span><span class="r-reward">25,000 WFISH</span><button type="button" class="btn-mini" data-adopt="mythic" data-i18n="gameRaiseAdoptBtn">Adopt</button></li>
         </ul>
+
+        <!-- Your fish: levels, hunger, pending yield, release -->
+        <h3 class="game-h3" data-i18n="gameRaiseYourFish">Your Fish</h3>
+        <ul class="mission-list" id="game-fish-list"></ul>
+        <p class="empty-line" id="game-fish-empty" data-i18n="gameRaiseFishEmpty" hidden>No fish yet — adopt your first fish above.</p>
 
         <p class="game-note" data-i18n="gameNote">Your game balance is a per-wallet record kept in this browser. Withdrawals are automatic: pay the fee and the WFISH lands straight in your wallet from the WD contract — no manual payout queue.</p>
 
@@ -635,7 +650,7 @@
 
         <!-- Daily gameplay missions (B5) — separate from the social Missions above -->
         <h3 class="game-h3" data-i18n="gameDQuestTitle">Daily Missions</h3>
-        <p class="sub" data-i18n="gameDQuestSub">Catch fish to complete them — each reward is 500 WFISH and counts toward today's 10,000 cap. Resets daily (UTC).</p>
+        <p class="sub" data-i18n="gameRaiseDQuestSub">Feed your fish and harvest to complete them — each reward is 500 WFISH and counts toward today's 10,000 cap. Resets daily (UTC).</p>
         <ul class="mission-list" id="game-dquests"></ul>
         <p class="empty-line" id="game-dquests-note" data-i18n="gameDQuestNeedWallet" hidden>Connect your wallet above, or enter your BSC address, to do daily missions.</p>
 
@@ -670,10 +685,10 @@
         </div>
 
         <!-- History & leaderboard -->
-        <h3 class="game-h3" data-i18n="gameHistTitle">Recent Catches</h3>
+        <h3 class="game-h3" data-i18n="gameRaiseHistTitle">Recent Activity</h3>
         <ul class="hist-list" id="game-history"></ul>
         <button type="button" class="btn-mini" id="btn-game-hist-more" data-i18n="gameHistMore" hidden>Show all</button>
-        <p class="empty-line" id="game-history-empty" data-i18n="gameHistEmpty">No catches yet — tap a fish in the pond.</p>
+        <p class="empty-line" id="game-history-empty" data-i18n="gameRaiseHistEmpty">No activity yet — feed your fish or harvest.</p>
 
         <h3 class="game-h3" data-i18n="gameLbTitle">Leaderboard (this browser)</h3>
         <ul class="lb-list" id="game-leaderboard"></ul>
@@ -1589,13 +1604,62 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
             gameLevel4: "Fishing Legend",
             gameLevel5: "Woldfish Deity",
             gameGoldenActive: "Golden Hour! Mythic fish spawn twice as often until 20:00 WIB.",
-            gameShopBtnWfish: "Buy 1 NFT with 100,000 WFISH + 0.00003 BNB",
-            wfishApprove: "Approving 100,000 WFISH for the mint contract…",
-            wfishMinting: "Minting your NFT with WFISH…",
-            wfishSuccess: "Success! 1 Woldfish NFT has been sent to your wallet.",
-            wfishTxFail: "Transaction failed on the network. No WFISH was spent and no NFT was sent.",
-            txInsufficientWfish: "Not enough WFISH. This mint needs 100,000 WFISH plus a little BNB for gas — top up your WFISH balance, then try again.",
-            txInsufficientBnbWfish: "Not enough BNB. This mint needs 0.00003 BNB for gas plus 100,000 WFISH — top up your wallet's BNB (BSC) balance, then try again."
+            gameRaiseTitle: "Woldfish Fish Pond",
+            gameRaiseSub: "Raise fish in your pond — feed them and harvest WFISH every hour.",
+            gameRaiseConnectedNote: "Your connected wallet is used for the game — earnings are recorded under it automatically.",
+            gameRaiseFishLbl: "Fish in Pond",
+            gameRaiseNeedWallet: "Connect your wallet above, or enter your BSC address, to start raising fish.",
+            gameRaisePondHint: "Tap a fish to feed it — 1 feeding costs 1 energy and keeps it full for 8 hours.",
+            gameRaiseEnergyFull: "Energy is full. Each feeding costs 1 energy; it refills by 1 every 60 seconds.",
+            gameRaiseAdoptTitle: "Adopt a Fish",
+            gameRaiseAdoptSub: "Adopt fish with your game balance. Each fish earns WFISH every hour while it is fed — new fish arrive fed for 8 hours. Max 5 fish in the pond.",
+            gameRaiseAdoptBtn: "Adopt",
+            gameRaiseAdoptFull: "Your pond is full — release a fish first to adopt another.",
+            gameRaiseAdoptPoor: "Not enough game balance to adopt this fish.",
+            gameRaiseAdopted: "Adopted! Your new fish is fed for 8 hours.",
+            gameRaiseHarvestBtn: "Harvest",
+            gameRaiseFeedAllBtn: "Feed All",
+            gameRaiseHarvestPending: "Ready to harvest: {amount} WFISH",
+            gameRaiseHarvestEmpty: "Nothing to harvest yet — keep your fish fed and come back later.",
+            gameRaiseHarvested: "Harvested +{amount} WFISH!",
+            gameRaiseHarvestCap: "Daily cap reached — harvest again tomorrow.",
+            gameRaiseClampWarn: "Capped by daily limit: +{amount} WFISH harvested",
+            gameRaiseFed: "Fed! Full for 8 hours.",
+            gameRaiseFedAll: "Fed {n} fish!",
+            gameRaiseAllFed: "All your fish are already fed.",
+            gameRaiseFeedBtn: "Feed",
+            gameRaiseLevelUp: "Level up! Now Level {n}.",
+            gameRaiseHungry: "{n} fish are hungry — feed them to keep earning.",
+            gameRaiseHungryLbl: "Hungry — feed to earn",
+            gameRaiseFedUntil: "Fed until {time}",
+            gameRaiseLevel: "Level {n}",
+            gameRaisePerHour: "{rate} WFISH/hour",
+            gameRaisePendingLbl: "Awaiting harvest: {amount} WFISH",
+            gameRaiseRelease: "Release",
+            gameRaiseReleased: "Fish released.",
+            gameRaiseReleaseConfirm: "Release this {name}? You won't get a refund.",
+            gameRaiseYourFish: "Your Fish",
+            gameRaiseFishEmpty: "No fish yet — adopt your first fish above.",
+            gameRaiseDQuestSub: "Feed your fish and harvest to complete them — each reward is 500 WFISH and counts toward today's 10,000 cap. Resets daily (UTC).",
+            gameRaiseDQuestFeed5Title: "Feed 5 times",
+            gameRaiseDQuestFeed5Desc: "Feed any fish 5 times today.",
+            gameRaiseDQuestHarvest1kTitle: "Harvest 1,000 WFISH",
+            gameRaiseDQuestHarvest1kDesc: "Harvest 1,000 WFISH today.",
+            gameRaiseHistTitle: "Recent Activity",
+            gameRaiseHistEmpty: "No activity yet — feed your fish or harvest.",
+            gameRaiseHistHarvest: "Harvest",
+            gameRaiseHistAdopt: "Adopted",
+            gameRaiseHistRelease: "Released",
+            gameRaiseGoldenActive: "Golden Hour! Fish earn 2× WFISH until 20:00 WIB.",
+            gameStatsFed: "Fish fed",
+            gameStatsHarvested: "Total harvested",
+            gameStatsBestHarvest: "Best harvest",
+            gameRaiseByRarity: "Fish in pond by rarity",
+            gameRaiseKeeper0: "Beginner",
+            gameRaiseKeeper1: "Keeper",
+            gameRaiseKeeper2: "Pond Keeper",
+            gameRaiseKeeper3: "Fish Expert",
+            gameRaiseKeeper4: "Master Woldfish"
           },
           id: {
             metaDesc: "Mint 10.000 WFISH gratis di BNB Smart Chain — hanya bayar gas, sekali per dompet.",
@@ -1834,13 +1898,62 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
             gameLevel4: "Legenda Memancing",
             gameLevel5: "Dewa Woldfish",
             gameGoldenActive: "Golden Hour! Ikan Mythic muncul 2x lebih sering sampai 20:00 WIB.",
-            gameShopBtnWfish: "Beli 1 NFT dengan 100.000 WFISH + 0,00003 BNB",
-            wfishApprove: "Menyetujui 100.000 WFISH untuk kontrak mint…",
-            wfishMinting: "Mencetak NFT kamu dengan WFISH…",
-            wfishSuccess: "Berhasil! 1 NFT Woldfish sudah dikirim ke dompetmu.",
-            wfishTxFail: "Transaksi gagal di jaringan. Tidak ada WFISH yang terpakai dan tidak ada NFT yang terkirim.",
-            txInsufficientWfish: "WFISH tidak cukup. Mint ini butuh 100.000 WFISH ditambah sedikit BNB untuk gas — tambah saldo WFISH kamu, lalu coba lagi.",
-            txInsufficientBnbWfish: "BNB tidak cukup. Mint ini butuh 0,00003 BNB untuk gas ditambah 100.000 WFISH — isi saldo BNB (BSC) dompetmu, lalu coba lagi."
+            gameRaiseTitle: "Kolam Ikan Woldfish",
+            gameRaiseSub: "Pelihara ikan di kolammu — beri makan dan panen WFISH setiap jam.",
+            gameRaiseConnectedNote: "Dompet yang terhubung dipakai untuk game — hasilmu tercatat otomatis atas dompet itu.",
+            gameRaiseFishLbl: "Ikan di Kolam",
+            gameRaiseNeedWallet: "Sambungkan dompetmu di atas, atau masukkan alamat BSC kamu, untuk mulai memelihara ikan.",
+            gameRaisePondHint: "Ketuk ikan untuk memberinya makan — 1 kali makan memakai 1 energi dan membuatnya kenyang selama 8 jam.",
+            gameRaiseEnergyFull: "Energi penuh. Setiap kali makan memakai 1 energi; pulih 1 setiap 60 detik.",
+            gameRaiseAdoptTitle: "Adopsi Ikan",
+            gameRaiseAdoptSub: "Adopsi ikan dengan saldo game kamu. Setiap ikan menghasilkan WFISH per jam selama ia kenyang — ikan baru datang dalam keadaan kenyang selama 8 jam. Maksimal 5 ikan di kolam.",
+            gameRaiseAdoptBtn: "Adopsi",
+            gameRaiseAdoptFull: "Kolammu sudah penuh — lepas satu ikan dulu untuk mengadopsi lagi.",
+            gameRaiseAdoptPoor: "Saldo game tidak cukup untuk mengadopsi ikan ini.",
+            gameRaiseAdopted: "Berhasil diadopsi! Ikan barumu kenyang selama 8 jam.",
+            gameRaiseHarvestBtn: "Panen",
+            gameRaiseFeedAllBtn: "Beri Makan Semua",
+            gameRaiseHarvestPending: "Siap dipanen: {amount} WFISH",
+            gameRaiseHarvestEmpty: "Belum ada yang bisa dipanen — jaga ikanmu tetap kenyang dan kembali lagi nanti.",
+            gameRaiseHarvested: "Panen +{amount} WFISH!",
+            gameRaiseHarvestCap: "Batas harian tercapai — panen lagi besok.",
+            gameRaiseClampWarn: "Dibatasi batas harian: +{amount} WFISH dipanen",
+            gameRaiseFed: "Sudah diberi makan! Kenyang selama 8 jam.",
+            gameRaiseFedAll: "Memberi makan {n} ikan!",
+            gameRaiseAllFed: "Semua ikanmu sudah kenyang.",
+            gameRaiseFeedBtn: "Beri Makan",
+            gameRaiseLevelUp: "Naik level! Sekarang Level {n}.",
+            gameRaiseHungry: "{n} ikan sedang lapar — beri makan supaya terus menghasilkan.",
+            gameRaiseHungryLbl: "Lapar — beri makan supaya menghasilkan",
+            gameRaiseFedUntil: "Kenyang sampai {time}",
+            gameRaiseLevel: "Level {n}",
+            gameRaisePerHour: "{rate} WFISH/jam",
+            gameRaisePendingLbl: "Menunggu panen: {amount} WFISH",
+            gameRaiseRelease: "Lepas",
+            gameRaiseReleased: "Ikan dilepas.",
+            gameRaiseReleaseConfirm: "Lepas {name} ini? Kamu tidak mendapat pengembalian.",
+            gameRaiseYourFish: "Ikanmu",
+            gameRaiseFishEmpty: "Belum ada ikan — adopsi ikan pertamamu di atas.",
+            gameRaiseDQuestSub: "Beri makan ikanmu dan panen untuk menyelesaikannya — tiap hadiah 500 WFISH dan dihitung ke batas harian 10.000. Reset setiap hari (UTC).",
+            gameRaiseDQuestFeed5Title: "Beri makan 5 kali",
+            gameRaiseDQuestFeed5Desc: "Beri makan ikan apa saja 5 kali hari ini.",
+            gameRaiseDQuestHarvest1kTitle: "Panen 1.000 WFISH",
+            gameRaiseDQuestHarvest1kDesc: "Panen 1.000 WFISH hari ini.",
+            gameRaiseHistTitle: "Aktivitas Terakhir",
+            gameRaiseHistEmpty: "Belum ada aktivitas — beri makan ikanmu atau panen.",
+            gameRaiseHistHarvest: "Panen",
+            gameRaiseHistAdopt: "Diadopsi",
+            gameRaiseHistRelease: "Dilepas",
+            gameRaiseGoldenActive: "Golden Hour! Ikan menghasilkan 2× WFISH sampai 20:00 WIB.",
+            gameStatsFed: "Ikan diberi makan",
+            gameStatsHarvested: "Total panen",
+            gameStatsBestHarvest: "Panen terbaik",
+            gameRaiseByRarity: "Ikan di kolam per rarity",
+            gameRaiseKeeper0: "Pemula",
+            gameRaiseKeeper1: "Pengasuh",
+            gameRaiseKeeper2: "Penjaga Kolam",
+            gameRaiseKeeper3: "Ahli Ikan",
+            gameRaiseKeeper4: "Master Woldfish"
           },
           zh: {
             metaDesc: "在 BNB Smart Chain 上免费铸造 10,000 WFISH — 只需支付 gas，每个钱包限一次。",
@@ -5010,12 +5123,16 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
         var WD_STEP = 10000; // WFISH per WD unit
         var WD_FEE_WEI_PER_STEP = 10000000000000n; // 0.00001 BNB per 10,000 WFISH
         var WD_DAILY_MAX = 10000; // WFISH per wallet per day — enforced by the WD contract on-chain
+        // Raising: each rarity has an adoption cost (paid from the game
+        // balance, never on-chain) and a WFISH-per-hour yield while fed.
+        var GAME_MAX_FISH = 5;
+        var GAME_FEED_MS = 8 * 3600 * 1000; // one feeding keeps a fish full for 8 hours
         var GAME_RARITIES = [
-          { id: "common",    key: "gameRCommon",    color: "#4a90d9", reward: 100,  chance: 0.90, weight: 55,  size: 52 },
-          { id: "rare",      key: "gameRRare",      color: "#35c26e", reward: 250,  chance: 0.75, weight: 25,  size: 58 },
-          { id: "epic",      key: "gameREpic",      color: "#9b5de5", reward: 500,  chance: 0.60, weight: 12,  size: 64 },
-          { id: "legendary", key: "gameRLegendary", color: "#e5484d", reward: 1000, chance: 0.45, weight: 5.5, size: 72 },
-          { id: "mythic",    key: "gameRMythic",    color: "#e9b949", reward: 2000, chance: 0.35, weight: 2.5, size: 80 }
+          { id: "common",    key: "gameRCommon",    color: "#4a90d9", adopt: 500,   yieldPerHour: 10,  size: 52 },
+          { id: "rare",      key: "gameRRare",      color: "#35c26e", adopt: 1500,  yieldPerHour: 25,  size: 58 },
+          { id: "epic",      key: "gameREpic",      color: "#9b5de5", adopt: 4000,  yieldPerHour: 60,  size: 64 },
+          { id: "legendary", key: "gameRLegendary", color: "#e5484d", adopt: 10000, yieldPerHour: 120, size: 72 },
+          { id: "mythic",    key: "gameRMythic",    color: "#e9b949", adopt: 25000, yieldPerHour: 250, size: 80 }
         ];
         // Social missions (one-time per wallet, claimed on trust — the page
         // cannot check the player's X/Telegram account). Reward lands in the
@@ -5029,12 +5146,13 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
           for (var i = 0; i < GAME_MISSIONS.length; i++) if (GAME_MISSIONS[i].id === id) return GAME_MISSIONS[i];
           return GAME_MISSIONS[0];
         }
-        // Daily gameplay missions (B5) — separate from the social missions
-        // above: these are earned by catching fish, reset every UTC day,
-        // and pay 500 WFISH each (counted toward the daily cap).
+        // Daily gameplay missions (B5, raising) — separate from the social
+        // missions above: these are earned by feeding fish and harvesting,
+        // reset every UTC day, and pay 500 WFISH each (counted toward the
+        // daily cap).
         var GAME_DQUESTS = [
-          { id: "catch5", titleKey: "gameDQuestCatch5Title", descKey: "gameDQuestCatch5Desc", type: "catches", goal: 5, reward: 500 },
-          { id: "epic1", titleKey: "gameDQuestEpic1Title", descKey: "gameDQuestEpic1Desc", type: "epic", goal: 1, reward: 500 }
+          { id: "feed5", titleKey: "gameRaiseDQuestFeed5Title", descKey: "gameRaiseDQuestFeed5Desc", type: "feed", goal: 5, reward: 500 },
+          { id: "harvest1k", titleKey: "gameRaiseDQuestHarvest1kTitle", descKey: "gameRaiseDQuestHarvest1kDesc", type: "harvest", goal: 1000, reward: 500 }
         ];
         function gameDQuestById(id) {
           for (var i = 0; i < GAME_DQUESTS.length; i++) if (GAME_DQUESTS[i].id === id) return GAME_DQUESTS[i];
@@ -5058,7 +5176,10 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
             gameLbEl = el("game-leaderboard"), gameLbEmpty = el("game-lb-empty"),
             gameMissionsEl = el("game-missions"), gameMissionsNote = el("game-missions-note"),
             gameDQuestsEl = el("game-dquests"), gameDQuestsNote = el("game-dquests-note"),
-            gameMyStatsEl = el("game-mystats"), gameGoldenEl = el("game-golden");
+            gameMyStatsEl = el("game-mystats"), gameGoldenEl = el("game-golden"),
+            gameFishListEl = el("game-fish-list"), gameFishEmptyEl = el("game-fish-empty"),
+            btnGameHarvest = el("btn-game-harvest"), btnGameFeedAll = el("btn-game-feedall"),
+            gameHarvestPendingEl = el("game-harvest-pending");
         var gameBusy = false; // a game NFT purchase or WD fee payment is in flight
 
         // UTC day string (A1): the WD contract counts days in UTC
@@ -5092,7 +5213,8 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
         }
         var gameStore = loadGameStore();
         var gameHistExpanded = false; // C6: history shows 10, "Show all" expands to 30
-        var gameFishLanes = {}; // C1: one vertical lane per live fish (0..4)
+        var gameFishEls = {}; // pond buttons by fish id (demo fish use "demo0".."demo4")
+        var gameFishSeq = 0; // fish id counter
         var gameSoundOn = (gameStore.soundOn !== false); // C2: persisted mute toggle
         function saveGameStore() {
           try { window.localStorage.setItem(GAME_STORE_KEY, JSON.stringify(gameStore)); } catch (e) { /* ignore */ }
@@ -5115,8 +5237,8 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
           rec.earnedToday = numField(rec.earnedToday, 0);
           rec.energy = Math.min(numField(rec.energy, GAME_MAX_ENERGY), gameMaxEnergy(rec));
           rec.energyTs = numField(rec.energyTs, Date.now());
-          rec.catches = numField(rec.catches, 0);
-          rec.combo = numField(rec.combo, 0);
+          rec.catches = numField(rec.catches, 0); // legacy: total catches from the old fishing game
+          rec.combo = numField(rec.combo, 0); // legacy: fishing combo (no longer used)
           if (!Array.isArray(rec.history)) rec.history = [];
           if (!rec.missions || typeof rec.missions !== "object") rec.missions = {};
           // B4/B5/B6: stats and daily-quest progress are plain data —
@@ -5132,6 +5254,10 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
             var rid = GAME_RARITIES[ri].id;
             rec.stats.byRarity[rid] = numField(rec.stats.byRarity[rid], 0);
           }
+          rec.stats.feeds = numField(rec.stats.feeds, 0);
+          rec.stats.harvested = numField(rec.stats.harvested, 0);
+          rec.stats.adopted = numField(rec.stats.adopted, 0);
+          rec.stats.released = numField(rec.stats.released, 0);
           if (!rec.dQuest || typeof rec.dQuest !== "object") rec.dQuest = {};
           for (var dq in rec.dQuest) {
             var qst = rec.dQuest[dq];
@@ -5145,6 +5271,38 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
           rec.streak = numField(rec.streak, 0);
           rec.lastPlayDay = (typeof rec.lastPlayDay === "number" && isFinite(rec.lastPlayDay)) ? rec.lastPlayDay : null;
           rec.energyBonus = Math.min(5, Math.max(0, Math.floor(numField(rec.energyBonus, 0))));
+          // Raising: the pond. Each fish keeps its lane, level, feed
+          // count and fed window; broken entries are dropped, duplicate
+          // lanes are reassigned, and the pond is capped at 5 fish.
+          // Level is always derived from feeds (1 + floor(feeds/10)).
+          if (!Array.isArray(rec.fish)) rec.fish = [];
+          if (rec.fish.length > GAME_MAX_FISH) rec.fish.length = GAME_MAX_FISH;
+          var usedLanes = {};
+          var cleanFish = [];
+          for (var fi = 0; fi < rec.fish.length; fi++) {
+            var f = rec.fish[fi];
+            if (!f || typeof f !== "object") continue;
+            var fr = gameRarityById(f.rarity);
+            if (!fr || fr.id !== f.rarity) continue;
+            var lane = (typeof f.lane === "number" && f.lane >= 0 && f.lane < GAME_MAX_FISH && !usedLanes[f.lane]) ? f.lane : -1;
+            if (lane < 0) {
+              for (var li = 0; li < GAME_MAX_FISH; li++) { if (!usedLanes[li]) { lane = li; break; } }
+            }
+            if (lane < 0) continue;
+            usedLanes[lane] = true;
+            cleanFish.push({
+              id: (typeof f.id === "string" && f.id) ? f.id : ("f" + Date.now().toString(36) + fi),
+              rarity: fr.id,
+              level: Math.min(5, 1 + Math.floor(numField(f.feeds, 0) / 10)),
+              feeds: Math.floor(numField(f.feeds, 0)),
+              fedSince: numField(f.fedSince, 0),
+              fedUntil: numField(f.fedUntil, 0),
+              lastHarvestTs: numField(f.lastHarvestTs, Date.now()),
+              lane: lane
+            });
+          }
+          rec.fish = cleanFish;
+          rec.freeFishGranted = !!rec.freeFishGranted;
           return rec;
         }
         function gameRec(addr) {
@@ -5167,7 +5325,32 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
             rec.energyBonus = (rec.streak >= 3) ? Math.min(5, rec.streak - 2) : 0;
           }
           gameRegen(rec);
+          ensureFreeFish(rec);
           return rec;
+        }
+        // First visit: one Common fish, free, so the pond is never empty
+        // and the player can start earning right away. Granted once per
+        // wallet — releasing all fish does NOT grant another one.
+        function ensureFreeFish(rec) {
+          if (rec.freeFishGranted) return;
+          rec.freeFishGranted = true;
+          if (rec.fish.length === 0) {
+            var now = Date.now();
+            rec.fish.push(newFish("common", 0, now));
+            saveGameStore();
+          }
+        }
+        function newFish(rarityId, lane, now) {
+          return {
+            id: "f" + now.toString(36) + (gameFishSeq++) + Math.floor(Math.random() * 36).toString(36),
+            rarity: rarityId,
+            level: 1,
+            feeds: 0,
+            fedSince: now,
+            fedUntil: now + GAME_FEED_MS,
+            lastHarvestTs: now,
+            lane: lane
+          };
         }
         // Effective max energy for a wallet: base 20 plus the streak
         // bonus (B4, Fase 3). rec.energyBonus is 0 until a streak earns it.
@@ -5196,70 +5379,116 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
           return (DEC_SEP === ".") ? s : s.replace(".", DEC_SEP);
         }
 
-        /* ---------- Pond ---------- */
-        function pickRarity() {
-          var golden = isGoldenHour();
-          var total = golden ? 102.5 : 100; // B8: mythic spawn weight 2.5 -> 5
-          var r = Math.random() * total, acc = 0;
-          for (var i = 0; i < GAME_RARITIES.length; i++) {
-            var w = GAME_RARITIES[i].weight;
-            if (golden && GAME_RARITIES[i].id === "mythic") w = 5;
-            acc += w;
-            if (r < acc) return GAME_RARITIES[i];
+        /* ---------- Pond (raising) ---------- */
+        // Golden Hour is 19:00–20:00 WIB = 12:00–12:59 UTC: fish earn 2x.
+        function goldenMsInRange(start, end) {
+          var ms = 0;
+          var day = Math.floor(start / 86400000);
+          var lastDay = Math.floor(end / 86400000);
+          for (var d = day; d <= lastDay && d < day + 3; d++) {
+            var gStart = d * 86400000 + 12 * 3600000;
+            var gEnd = gStart + 3600000;
+            ms += Math.max(0, Math.min(end, gEnd) - Math.max(start, gStart));
           }
-          return GAME_RARITIES[0];
+          return ms;
         }
-        function spawnFish(initial) {
+        // WFISH per hour for one fish at its current level (Golden Hour
+        // is applied per time window in fishPending, not here).
+        function fishRate(fish) {
+          var rar = gameRarityById(fish.rarity);
+          return rar.yieldPerHour * (1 + 0.10 * (fish.level - 1));
+        }
+        function fishIsHungry(fish, now) { return (fish.fedUntil || 0) <= (now || Date.now()); }
+        // WFISH a fish has earned since its last harvest, counting only
+        // the time it was fed. Golden Hour minutes inside the window pay 2x.
+        function fishPending(fish, now) {
+          var start = Math.max(fish.lastHarvestTs || 0, fish.fedSince || 0);
+          var end = Math.min(now, fish.fedUntil || 0);
+          if (end <= start) return 0;
+          var rate = fishRate(fish);
+          var totalMs = end - start;
+          var goldenMs = goldenMsInRange(start, end);
+          return rate * ((totalMs + goldenMs) / 3600000);
+        }
+        function totalPending(rec, now) {
+          var sum = 0;
+          for (var i = 0; i < rec.fish.length; i++) sum += fishPending(rec.fish[i], now);
+          return sum;
+        }
+        function freeLane(rec) {
+          var used = {};
+          for (var i = 0; i < rec.fish.length; i++) used[rec.fish[i].lane] = true;
+          for (var li = 0; li < GAME_MAX_FISH; li++) if (!used[li]) return li;
+          return -1;
+        }
+        function fishById(rec, id) {
+          for (var i = 0; i < rec.fish.length; i++) if (rec.fish[i].id === id) return rec.fish[i];
+          return null;
+        }
+        // Keep the pond's DOM buttons in sync with the wallet's fish:
+        // buttons are created once and never rebuilt, so the swim
+        // animation is not reset by re-renders. Without a wallet, five
+        // demo fish swim behind the lock, like the old fishing pond.
+        function syncPondFish(rec) {
           if (!gamePond) return;
-          if (gamePond.querySelectorAll(".gfish").length >= 5) return;
-          var rar = pickRarity();
-          var b = document.createElement("button");
-          b.type = "button";
-          b.className = "gfish c-" + rar.id + (Math.random() < 0.5 ? " rtl" : "");
-          b.style.width = rar.size + "px";
-          b.style.setProperty("--fw", (rar.size + 34) + "px");
-          // C1: one fish per vertical lane — centres are >=48px apart on
-          // desktop (300px pond), so two fish never sit on top of each
-          // other and the fat 16px padding around each fish stays tappable.
-          var lane = -1;
-          for (var li = 0; li < 5; li++) { if (!gameFishLanes[li]) { lane = li; break; } }
-          if (lane < 0) return;
-          gameFishLanes[lane] = true;
-          b._lane = lane;
-          b.style.top = (2 + lane * 16 + Math.random() * 4) + "%";
-          var dur = 7 + Math.random() * 7;
-          b.style.animationDuration = dur + "s";
-          var delay = initial ? (-Math.random() * dur * 0.9) : 0;
-          if (initial) b.style.animationDelay = delay + "s";
-          b.setAttribute("aria-label", t(rar.key) + " — " + fmt.format(rar.reward) + " WFISH");
-          // Realistic fish photo (transparent PNG, per rarity) instead of
-          // the old recoloured SVG. The flip cycle runs at twice the swim
-          // duration so the fish turns around exactly when its swim
-          // direction reverses.
-          var img = document.createElement("img");
-          img.src = "assets/fish-" + rar.id + ".png";
-          img.alt = "";
-          img.setAttribute("aria-hidden", "true");
-          img.draggable = false;
-          img.style.animationDuration = (dur * 2) + "s";
-          if (initial) img.style.animationDelay = delay + "s";
-          b.appendChild(img);
-          b._rarity = rar;
-          b._done = false;
-          b.addEventListener("click", function () { attemptCatch(b); });
-          gamePond.appendChild(b);
-          // B3: a fish that is never caught swims away after 25 seconds.
-          b._fleeTimer = setTimeout(function () {
-            if (b._done || !b.parentNode) return;
-            b._done = true;
-            pondFloater(b, t("gameFishFled"), true);
-            b.classList.add("gone");
-            setTimeout(function () {
-              if (b.parentNode) b.parentNode.removeChild(b);
-              if (typeof b._lane === "number") delete gameFishLanes[b._lane];
-              spawnFish(false);
-            }, 380);
-          }, 25000);
+          var want = {};
+          var list = [];
+          var i, j;
+          if (rec) {
+            for (i = 0; i < rec.fish.length; i++) { want[rec.fish[i].id] = rec.fish[i]; list.push(rec.fish[i]); }
+          } else {
+            for (var di = 0; di < GAME_MAX_FISH; di++) {
+              var demo = { id: "demo" + di, rarity: GAME_RARITIES[di % GAME_RARITIES.length].id, level: 1, lane: di };
+              want[demo.id] = demo; list.push(demo);
+            }
+          }
+          for (var id in gameFishEls) {
+            if (!want[id]) {
+              var old = gameFishEls[id];
+              if (old.parentNode) old.parentNode.removeChild(old);
+              delete gameFishEls[id];
+            }
+          }
+          for (j = 0; j < list.length; j++) {
+            var fish = list[j];
+            if (gameFishEls[fish.id]) continue;
+            var rar = gameRarityById(fish.rarity);
+            var b = document.createElement("button");
+            b.type = "button";
+            b.className = "gfish c-" + rar.id + (Math.random() < 0.5 ? " rtl" : "");
+            b.style.width = rar.size + "px";
+            b.style.setProperty("--fw", (rar.size + 34) + "px");
+            // C1: one fish per vertical lane — centres are >=48px apart on
+            // desktop (300px pond), so two fish never sit on top of each
+            // other and the fat 16px padding around each fish stays tappable.
+            b.style.top = (2 + fish.lane * 16 + Math.random() * 4) + "%";
+            var dur = 7 + Math.random() * 7;
+            b.style.animationDuration = dur + "s";
+            b.style.animationDelay = (-Math.random() * dur * 0.9) + "s";
+            b._fishId = fish.id;
+            // Realistic fish photo (transparent PNG, per rarity). The flip
+            // cycle runs at twice the swim duration so the fish turns
+            // around exactly when its swim direction reverses.
+            var img = document.createElement("img");
+            img.src = "assets/fish-" + rar.id + ".png";
+            img.alt = "";
+            img.setAttribute("aria-hidden", "true");
+            img.draggable = false;
+            img.style.animationDuration = (dur * 2) + "s";
+            img.style.animationDelay = b.style.animationDelay;
+            b.appendChild(img);
+            b.addEventListener("click", function () { feedFish(this._fishId, this); });
+            gamePond.appendChild(b);
+            gameFishEls[fish.id] = b;
+            updateFishButton(fish);
+          }
+        }
+        function updateFishButton(fish) {
+          var b = gameFishEls[fish.id];
+          if (!b) return;
+          var rar = gameRarityById(fish.rarity);
+          var hungry = fishIsHungry(fish);
+          b.setAttribute("aria-label", t(rar.key) + " — " + tpl("gameRaiseLevel", { n: fish.level }) + (hungry ? " — " + t("gameRaiseHungryLbl") : ""));
         }
         function pondFloater(fishEl, text, isMiss) {
           if (!gamePond) return;
@@ -5290,64 +5519,133 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
             o.stop(gameAudioCtx.currentTime + when + dur);
           } catch (e) { /* audio unavailable — stay silent */ }
         }
-        function gameCatchFeedback(caught) {
+        function gameFeedFeedback(fed) {
           var reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
           if (navigator.vibrate && !reduceMotion) {
-            try { navigator.vibrate(caught ? 20 : [30, 50, 30]); } catch (e) { /* ignore */ }
+            try { navigator.vibrate(fed ? 20 : [30, 50, 30]); } catch (e) { /* ignore */ }
           }
-          if (caught) { gameBeep(660, 0.12, 0); gameBeep(880, 0.15, 0.09); }
+          if (fed) { gameBeep(660, 0.12, 0); gameBeep(880, 0.15, 0.09); }
           else gameBeep(220, 0.18, 0);
         }
-        function attemptCatch(fishEl) {
-          if (fishEl._done) return;
+        /* ---------- Feed / adopt / release / harvest ---------- */
+        function feedFish(fishId, btnEl) {
           var addr = gameWalletAddr();
           if (!addr) { renderGame(); return; }
           var rec = gameRec(addr);
-          if (rec.energy <= 0) { pondFloater(fishEl, t("gameNoEnergy"), true); return; }
-          if (rec.earnedToday >= GAME_DAILY_CAP) { pondFloater(fishEl, t("gameCapReached"), true); return; }
-          fishEl._done = true;
-          if (fishEl._fleeTimer) clearTimeout(fishEl._fleeTimer);
+          var fish = fishById(rec, fishId);
+          if (!fish) return;
+          var el2 = btnEl || gameFishEls[fishId];
+          if (rec.energy <= 0) { if (el2) pondFloater(el2, t("gameNoEnergy"), true); return; }
           if (rec.energy >= gameMaxEnergy(rec)) rec.energyTs = Date.now();
           rec.energy -= 1;
           rec.stats.energyUsed += 1;
-          var rar = fishEl._rarity;
-          // B4: a 3-catch combo (no miss in between) gives the next cast
-          // +10% catch chance, capped at 99%.
-          var boost = (rec.combo >= 3) ? 0.10 : 0;
-          var caught = Math.random() < Math.min(0.99, rar.chance + boost);
-          gameCatchFeedback(caught);
-          if (caught) {
-            rec.combo = (rec.combo || 0) + 1;
-            var reward = Math.min(rar.reward, GAME_DAILY_CAP - rec.earnedToday);
-            rec.balance += reward;
-            rec.totalEarned += reward;
-            rec.earnedToday += reward;
-            rec.catches += 1;
-            rec.stats.catches += 1;
-            if (reward > rec.stats.best) rec.stats.best = reward;
-            rec.stats.byRarity[rar.id] = (rec.stats.byRarity[rar.id] || 0) + 1;
-            rec.history.unshift({ rarity: rar.id, amount: reward, time: new Date().toISOString() });
-            if (rec.history.length > 30) rec.history.length = 30;
-            checkDQuests(rec, rar);
-            // B2: say so plainly when the daily cap clipped the reward.
-            if (reward < rar.reward) pondFloater(fishEl, tpl("gameClampWarn", { amount: fmt.format(reward) }), false);
-            else pondFloater(fishEl, "+" + fmt.format(reward) + " WFISH", false);
-          } else {
-            rec.combo = 0;
-            rec.stats.misses += 1;
-            // B1: a miss still costs 1 energy — say so in the floater.
-            pondFloater(fishEl, t("gameMissed") + " " + t("gameMissedEnergy"), true);
-          }
+          rec.stats.feeds += 1;
+          fish.feeds += 1;
+          var now = Date.now();
+          if (fishIsHungry(fish, now)) fish.fedSince = now;
+          fish.fedUntil = now + GAME_FEED_MS;
+          var newLevel = Math.min(5, 1 + Math.floor(fish.feeds / 10));
+          var leveled = newLevel > fish.level;
+          fish.level = newLevel;
+          gameFeedFeedback(true);
+          if (el2) pondFloater(el2, leveled ? tpl("gameRaiseLevelUp", { n: fish.level }) : t("gameRaiseFed"), false);
+          checkDQuests(rec, "feed", 0);
           saveGameStore();
-          fishEl.classList.add("gone");
-          setTimeout(function () {
-            if (fishEl.parentNode) fishEl.parentNode.removeChild(fishEl);
-            if (typeof fishEl._lane === "number") delete gameFishLanes[fishEl._lane];
-            spawnFish(false);
-          }, 380);
           renderGame();
         }
-
+        function feedAllFish() {
+          var addr = gameWalletAddr();
+          if (!addr) { renderGame(); return; }
+          var rec = gameRec(addr);
+          var now = Date.now();
+          var hungry = [];
+          for (var i = 0; i < rec.fish.length; i++) if (fishIsHungry(rec.fish[i], now)) hungry.push(rec.fish[i]);
+          if (hungry.length === 0) { pondFloater(gamePond, t("gameRaiseAllFed"), false); return; }
+          if (rec.energy <= 0) { pondFloater(gamePond, t("gameNoEnergy"), true); return; }
+          var fed = 0;
+          for (var j = 0; j < hungry.length && rec.energy > 0; j++) {
+            var f = hungry[j];
+            if (rec.energy >= gameMaxEnergy(rec)) rec.energyTs = Date.now();
+            rec.energy -= 1;
+            rec.stats.energyUsed += 1;
+            rec.stats.feeds += 1;
+            f.feeds += 1;
+            var t2 = Date.now();
+            if (fishIsHungry(f, t2)) f.fedSince = t2;
+            f.fedUntil = t2 + GAME_FEED_MS;
+            f.level = Math.min(5, 1 + Math.floor(f.feeds / 10));
+            checkDQuests(rec, "feed", 0);
+            fed++;
+          }
+          gameFeedFeedback(fed > 0);
+          pondFloater(gamePond, tpl("gameRaiseFedAll", { n: fed }), false);
+          saveGameStore();
+          renderGame();
+        }
+        function adoptFish(rarityId) {
+          var addr = gameWalletAddr();
+          if (!addr) { renderGame(); return; }
+          var rec = gameRec(addr);
+          var rar = gameRarityById(rarityId);
+          if (rec.fish.length >= GAME_MAX_FISH) { pondFloater(gamePond, t("gameRaiseAdoptFull"), true); return; }
+          if (rec.balance < rar.adopt) { pondFloater(gamePond, t("gameRaiseAdoptPoor"), true); return; }
+          var lane = freeLane(rec);
+          if (lane < 0) { pondFloater(gamePond, t("gameRaiseAdoptFull"), true); return; }
+          var now = Date.now();
+          rec.balance -= rar.adopt;
+          rec.stats.adopted += 1;
+          rec.fish.push(newFish(rar.id, lane, now));
+          rec.history.unshift({ kind: "adopt", rarity: rar.id, amount: rar.adopt, time: new Date().toISOString() });
+          if (rec.history.length > 30) rec.history.length = 30;
+          gameFeedFeedback(true);
+          pondFloater(gamePond, t("gameRaiseAdopted"), false);
+          saveGameStore();
+          renderGame();
+        }
+        function releaseFish(fishId) {
+          var addr = gameWalletAddr();
+          if (!addr) return;
+          var rec = gameRec(addr);
+          var fish = fishById(rec, fishId);
+          if (!fish) return;
+          var rar = gameRarityById(fish.rarity);
+          if (!window.confirm(tpl("gameRaiseReleaseConfirm", { name: t(rar.key) }))) return;
+          for (var i = 0; i < rec.fish.length; i++) {
+            if (rec.fish[i].id === fishId) { rec.fish.splice(i, 1); break; }
+          }
+          rec.stats.released += 1;
+          rec.history.unshift({ kind: "release", rarity: rar.id, time: new Date().toISOString() });
+          if (rec.history.length > 30) rec.history.length = 30;
+          saveGameStore();
+          renderGame();
+          pondFloater(gamePond, t("gameRaiseReleased"), false);
+        }
+        function harvestAll() {
+          var addr = gameWalletAddr();
+          if (!addr) { renderGame(); return; }
+          var rec = gameRec(addr);
+          var now = Date.now();
+          var pending = 0;
+          for (var i = 0; i < rec.fish.length; i++) pending += fishPending(rec.fish[i], now);
+          pending = Math.floor(pending);
+          if (pending <= 0) { pondFloater(gamePond, t("gameRaiseHarvestEmpty"), true); return; }
+          if (rec.earnedToday >= GAME_DAILY_CAP) { pondFloater(gamePond, t("gameRaiseHarvestCap"), true); return; }
+          var harvested = Math.min(pending, GAME_DAILY_CAP - rec.earnedToday);
+          rec.balance += harvested;
+          rec.totalEarned += harvested;
+          rec.earnedToday += harvested;
+          rec.stats.harvested += harvested;
+          if (harvested > rec.stats.best) rec.stats.best = harvested;
+          rec.history.unshift({ kind: "harvest", amount: harvested, time: new Date().toISOString() });
+          if (rec.history.length > 30) rec.history.length = 30;
+          for (var j = 0; j < rec.fish.length; j++) rec.fish[j].lastHarvestTs = now;
+          checkDQuests(rec, "harvest", harvested);
+          gameFeedFeedback(true);
+          if (harvested < pending) pondFloater(gamePond, tpl("gameRaiseClampWarn", { amount: fmt.format(harvested) }), false);
+          else pondFloater(gamePond, tpl("gameRaiseHarvested", { amount: fmt.format(harvested) }), false);
+          saveGameStore();
+          renderGame();
+        }
         /* ---------- Rendering ---------- */
         function renderGame() {
           if (!gamePond) return;
@@ -5363,13 +5661,16 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
             gameTodayEl.textContent = "—";
             gameCatchesEl.textContent = "—";
             gameEnergyNote.textContent = "";
+            syncPondFish(null);
           } else {
             var rec = gameRec(addr);
             gameEnergyEl.textContent = rec.energy + " / " + gameMaxEnergy(rec);
             gameBalanceEl.textContent = fmt.format(rec.balance);
             gameTodayEl.textContent = fmt.format(rec.earnedToday) + " / " + fmt.format(GAME_DAILY_CAP);
-            gameCatchesEl.textContent = fmt.format(rec.catches);
+            gameCatchesEl.textContent = fmt.format(rec.fish.length);
             renderGameEnergyNote(rec);
+            syncPondFish(rec);
+            for (var ui = 0; ui < rec.fish.length; ui++) updateFishButton(rec.fish[ui]);
           }
           renderGameHistory(addr);
           renderGameLeaderboard(addr);
@@ -5379,7 +5680,9 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
           renderGameWdList();
           renderGameWdFee();
           renderGameWdFund();
-          renderRarityChances();
+          renderAdoptList();
+          renderFishList(addr);
+          renderHarvestPending(addr);
           renderPondStatus(addr);
           renderSoundBtn();
           renderGoldenLabel();
@@ -5407,7 +5710,7 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
           return Math.ceil((GAME_ENERGY_MS - (elapsed % GAME_ENERGY_MS)) / 1000);
         }
         function renderGameEnergyNote(rec) {
-          if (rec.energy >= gameMaxEnergy(rec)) { gameEnergyNote.textContent = t("gameEnergyFull"); }
+          if (rec.energy >= gameMaxEnergy(rec)) { gameEnergyNote.textContent = t("gameRaiseEnergyFull"); }
           else gameEnergyNote.textContent = tpl("gameEnergyNext", { sec: gameEnergyNextSec(rec), max: gameMaxEnergy(rec) });
           // B2: warn while the daily cap is nearly used up.
           var capLeft = GAME_DAILY_CAP - rec.earnedToday;
@@ -5423,16 +5726,96 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
           var msg = "";
           if (rec.earnedToday >= GAME_DAILY_CAP) msg = t("gameCapReached");
           else if (rec.energy <= 0) msg = tpl("gameEnergyEmpty", { sec: gameEnergyNextSec(rec) });
-          else if (rec.combo >= 2) msg = (rec.combo >= 3) ? tpl("gameComboBoost", { n: rec.combo }) : tpl("gameCombo", { n: rec.combo });
+          else {
+            var hungry = 0;
+            for (var hi = 0; hi < rec.fish.length; hi++) if (fishIsHungry(rec.fish[hi])) hungry++;
+            if (hungry > 0) msg = tpl("gameRaiseHungry", { n: hungry });
+          }
           if (msg) { s.textContent = msg; s.hidden = false; } else s.hidden = true;
         }
         /* B1: catch chances next to each rarity in the list. */
-        function renderRarityChances() {
+        /* Raising: the rarity list shows yield per hour, and each row's
+           Adopt button buys that fish from the game balance. */
+        function renderAdoptList() {
           var spans = document.querySelectorAll("[data-rarity]");
           for (var i = 0; i < spans.length; i++) {
             var rar = gameRarityById(spans[i].getAttribute("data-rarity"));
-            spans[i].textContent = Math.round(rar.chance * 100) + "% · " + t("gameChance");
+            spans[i].textContent = tpl("gameRaisePerHour", { rate: fmt.format(rar.yieldPerHour) });
           }
+          var addr = gameWalletAddr();
+          var rec = addr ? gameRec(addr) : null;
+          var btns = document.querySelectorAll("[data-adopt]");
+          for (var j = 0; j < btns.length; j++) {
+            var b = btns[j];
+            var r2 = gameRarityById(b.getAttribute("data-adopt"));
+            b.disabled = !addr || !rec || rec.fish.length >= GAME_MAX_FISH || rec.balance < r2.adopt;
+          }
+        }
+        function renderHarvestPending(addr) {
+          if (!gameHarvestPendingEl) return;
+          if (!addr) {
+            gameHarvestPendingEl.textContent = "";
+            if (btnGameHarvest) btnGameHarvest.disabled = true;
+            if (btnGameFeedAll) btnGameFeedAll.disabled = true;
+            return;
+          }
+          var rec = gameRec(addr);
+          var pending = Math.floor(totalPending(rec, Date.now()));
+          gameHarvestPendingEl.textContent = pending > 0 ? tpl("gameRaiseHarvestPending", { amount: fmt.format(pending) }) : t("gameRaiseHarvestEmpty");
+          if (btnGameHarvest) btnGameHarvest.disabled = pending <= 0 || rec.earnedToday >= GAME_DAILY_CAP;
+          if (btnGameFeedAll) {
+            var anyHungry = false;
+            for (var i = 0; i < rec.fish.length; i++) if (fishIsHungry(rec.fish[i])) { anyHungry = true; break; }
+            btnGameFeedAll.disabled = rec.fish.length === 0 || !anyHungry || rec.energy <= 0;
+          }
+        }
+        function renderFishList(addr) {
+          if (!gameFishListEl) return;
+          gameFishListEl.innerHTML = "";
+          var fish = [];
+          if (addr) {
+            var rec0 = gameStore.wallets[addr.toLowerCase()];
+            if (rec0 && rec0.fish) fish = rec0.fish;
+          }
+          gameFishEmptyEl.hidden = !addr || fish.length > 0;
+          var now = Date.now();
+          fish.forEach(function (f) {
+            var rar = gameRarityById(f.rarity);
+            var li = document.createElement("li");
+            li.className = "mission";
+            var top = document.createElement("div");
+            top.className = "mission-top";
+            var name = document.createElement("span");
+            name.className = "mission-name";
+            name.textContent = t(rar.key) + " · " + tpl("gameRaiseLevel", { n: f.level });
+            var rate = document.createElement("span");
+            rate.className = "mission-reward";
+            rate.textContent = tpl("gameRaisePerHour", { rate: fmt.format(Math.round(fishRate(f) * 10) / 10) });
+            top.appendChild(name); top.appendChild(rate);
+            var desc = document.createElement("p");
+            desc.className = "mission-desc";
+            desc.style.margin = "0";
+            var hungry = fishIsHungry(f, now);
+            var status = hungry ? t("gameRaiseHungryLbl") : tpl("gameRaiseFedUntil", { time: new Date(f.fedUntil).toLocaleTimeString(LOCALE, { hour: "2-digit", minute: "2-digit" }) });
+            var pend = Math.floor(fishPending(f, now));
+            desc.textContent = status + " · " + tpl("gameRaisePendingLbl", { amount: fmt.format(pend) });
+            var actions = document.createElement("div");
+            actions.className = "mission-actions";
+            var feedBtn = document.createElement("button");
+            feedBtn.type = "button";
+            feedBtn.className = "btn-action";
+            feedBtn.textContent = t("gameRaiseFeedBtn");
+            feedBtn.addEventListener("click", function () { feedFish(f.id, gameFishEls[f.id]); });
+            actions.appendChild(feedBtn);
+            var relBtn = document.createElement("button");
+            relBtn.type = "button";
+            relBtn.className = "btn-mini";
+            relBtn.textContent = t("gameRaiseRelease");
+            relBtn.addEventListener("click", function () { releaseFish(f.id); });
+            actions.appendChild(relBtn);
+            li.appendChild(top); li.appendChild(desc); li.appendChild(actions);
+            gameFishListEl.appendChild(li);
+          });
         }
         function renderSoundBtn() {
           var b = el("btn-game-sound");
@@ -5513,14 +5896,14 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
           renderGame();
         }
         /* ---------- Daily gameplay missions (B5) ---------- */
-        function checkDQuests(rec, rar) {
+        function checkDQuests(rec, type, amount) {
           for (var i = 0; i < GAME_DQUESTS.length; i++) {
             var q = GAME_DQUESTS[i];
             var st = rec.dQuest[q.id];
             if (!st) { st = { n: 0, done: false, claimed: false }; rec.dQuest[q.id] = st; }
             if (st.done) continue;
-            if (q.type === "catches") st.n += 1;
-            else if (q.type === "epic" && rar.id === "epic") st.n += 1;
+            if (q.type === "feed" && type === "feed") st.n += 1;
+            else if (q.type === "harvest" && type === "harvest") st.n += (amount || 0);
             if (st.n >= q.goal) st.done = true;
           }
         }
@@ -5592,14 +5975,13 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
           saveGameStore();
           renderGame();
         }
-        /* ---------- Level titles (B4) + My Stats (B6) ---------- */
-        function gameLevelTitle(catches) {
-          if (catches >= 100) return t("gameLevel5");
-          if (catches >= 50) return t("gameLevel4");
-          if (catches >= 25) return t("gameLevel3");
-          if (catches >= 10) return t("gameLevel2");
-          if (catches >= 1) return t("gameLevel1");
-          return t("gameLevel0");
+        /* ---------- Keeper level titles (B4) + My Stats (B6) ---------- */
+        function gameKeeperTitle(totalHarvested) {
+          if (totalHarvested >= 100000) return t("gameRaiseKeeper4");
+          if (totalHarvested >= 50000) return t("gameRaiseKeeper3");
+          if (totalHarvested >= 10000) return t("gameRaiseKeeper2");
+          if (totalHarvested >= 1000) return t("gameRaiseKeeper1");
+          return t("gameRaiseKeeper0");
         }
         function renderMyStats(addr) {
           if (!gameMyStatsEl) return;
@@ -5607,20 +5989,19 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
           if (!addr) return;
           var rec = gameRec(addr);
           var s = rec.stats;
-          var total = s.catches + s.misses;
-          var ratio = total ? Math.round((s.catches / total) * 100) + "%" : "—";
           var byRarity = GAME_RARITIES.map(function (r) {
-            return t(r.key) + ": " + fmt.format(s.byRarity[r.id] || 0);
+            var n = 0;
+            for (var i = 0; i < rec.fish.length; i++) if (rec.fish[i].rarity === r.id) n++;
+            return t(r.key) + ": " + fmt.format(n);
           }).join(" · ");
           var rows = [
-            [t("gameStatsLevel"), gameLevelTitle(rec.catches) + " (" + fmt.format(rec.catches) + ")"],
+            [t("gameStatsLevel"), gameKeeperTitle(s.harvested) + " (" + fmt.format(s.harvested) + ")"],
             [t("gameStatsStreak"), fmt.format(rec.streak || 0) + " " + t("gameStatsDays") + (rec.energyBonus ? " (+" + rec.energyBonus + " " + t("gameStatsEnergyBonus") + ")" : "")],
-            [t("gameStatsCatches"), fmt.format(s.catches)],
-            [t("gameStatsMisses"), fmt.format(s.misses)],
-            [t("gameStatsRatio"), ratio],
-            [t("gameStatsBest"), "+" + fmt.format(s.best) + " WFISH"],
+            [t("gameStatsFed"), fmt.format(s.feeds)],
+            [t("gameStatsHarvested"), "+" + fmt.format(s.harvested) + " WFISH"],
+            [t("gameStatsBestHarvest"), "+" + fmt.format(s.best) + " WFISH"],
             [t("gameStatsEnergy"), fmt.format(s.energyUsed)],
-            [t("gameStatsByRarity"), byRarity]
+            [t("gameRaiseByRarity"), byRarity]
           ];
           rows.forEach(function (row) {
             var dt = document.createElement("dt"); dt.textContent = row[0];
@@ -5628,10 +6009,9 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
             gameMyStatsEl.appendChild(dt); gameMyStatsEl.appendChild(dd);
           });
         }
-        /* B8: Golden Hour label — shown only while it is running. */
         function renderGoldenLabel() {
           if (!gameGoldenEl) return;
-          if (isGoldenHour()) { gameGoldenEl.textContent = t("gameGoldenActive"); gameGoldenEl.hidden = false; }
+          if (isGoldenHour()) { gameGoldenEl.textContent = t("gameRaiseGoldenActive"); gameGoldenEl.hidden = false; }
           else gameGoldenEl.hidden = true;
         }
         function renderGameHistory(addr) {
@@ -5649,7 +6029,24 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
             left.className = "rname";
             var dot = document.createElement("span");
             dot.className = "rarity-dot";
-            if (h.mission) {
+            var amtText = null;
+            if (h.kind === "harvest") {
+              dot.style.background = "#e9b949";
+              left.appendChild(dot);
+              left.appendChild(document.createTextNode(t("gameRaiseHistHarvest")));
+              amtText = "+" + fmt.format(h.amount) + " WFISH";
+            } else if (h.kind === "adopt") {
+              var rarA = gameRarityById(h.rarity);
+              dot.style.background = rarA.color;
+              left.appendChild(dot);
+              left.appendChild(document.createTextNode(t("gameRaiseHistAdopt") + " · " + t(rarA.key)));
+              amtText = "−" + fmt.format(h.amount) + " WFISH";
+            } else if (h.kind === "release") {
+              var rarR = gameRarityById(h.rarity);
+              dot.style.background = rarR.color;
+              left.appendChild(dot);
+              left.appendChild(document.createTextNode(t("gameRaiseHistRelease") + " · " + t(rarR.key)));
+            } else if (h.mission) {
               if (h.mission.indexOf("dq:") === 0) {
                 var dq = gameDQuestById(h.mission.slice(3));
                 dot.style.background = "#e9b949";
@@ -5661,19 +6058,25 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
                 left.appendChild(dot);
                 left.appendChild(document.createTextNode(t(mis.titleKey)));
               }
+              amtText = "+" + fmt.format(h.amount) + " WFISH";
             } else {
+              // Legacy: a catch from the old fishing game.
               var rar = gameRarityById(h.rarity);
               dot.style.background = rar.color;
               left.appendChild(dot);
               left.appendChild(document.createTextNode(t(rar.key)));
+              amtText = "+" + fmt.format(h.amount) + " WFISH";
             }
             var right = document.createElement("span");
-            var amt = document.createElement("span");
-            amt.className = "amt";
-            amt.textContent = "+" + fmt.format(h.amount) + " WFISH";
+            if (amtText !== null) {
+              var amt = document.createElement("span");
+              amt.className = "amt";
+              amt.textContent = amtText;
+              right.appendChild(amt);
+              right.appendChild(document.createTextNode(" · "));
+            }
             var when = new Date(h.time);
-            right.appendChild(amt);
-            right.appendChild(document.createTextNode(" · " + when.toLocaleString(LOCALE, { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })));
+            right.appendChild(document.createTextNode(when.toLocaleString(LOCALE, { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })));
             li.appendChild(left); li.appendChild(right);
             gameHistoryEl.appendChild(li);
           });
@@ -6059,7 +6462,8 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
               totalEarnedWfish: rec.totalEarned,
               earnedTodayWfish: rec.earnedToday,
               day: rec.day,
-              catches: rec.catches
+              fish: (rec.fish || []).length,
+              totalHarvestedWfish: (rec.stats && rec.stats.harvested) || 0
             });
           }
           rows.sort(function (a, b) { return b.totalEarnedWfish - a.totalEarnedWfish; });
@@ -6077,7 +6481,7 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
           }
           var cols = isWd
             ? ["wallet", "amountWfish", "feeBnb", "feeWei", "feeTxHash", "time"]
-            : ["wallet", "gameBalanceWfish", "totalEarnedWfish", "earnedTodayWfish", "day", "catches"];
+            : ["wallet", "gameBalanceWfish", "totalEarnedWfish", "earnedTodayWfish", "day", "fish", "totalHarvestedWfish"];
           var lines = [cols.join(",")];
           rows.forEach(function (r) {
             lines.push(cols.map(function (c) { return csvCell(r[c]); }).join(","));
@@ -6110,6 +6514,14 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
           saveGameStore();
           renderSoundBtn();
         });
+        var adoptBtns = document.querySelectorAll("[data-adopt]");
+        for (var ai = 0; ai < adoptBtns.length; ai++) {
+          (function (btn) {
+            btn.addEventListener("click", function () { adoptFish(btn.getAttribute("data-adopt")); });
+          })(adoptBtns[ai]);
+        }
+        btnGameHarvest.addEventListener("click", harvestAll);
+        btnGameFeedAll.addEventListener("click", feedAllFish);
         el("btn-game-hist-more").addEventListener("click", function () {
           gameHistExpanded = !gameHistExpanded;
           renderGameHistory(gameWalletAddr());
@@ -6141,16 +6553,23 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
         el("btn-exp-bal-json").addEventListener("click", function () { exportGame("balances", "json"); });
         el("btn-exp-wd-csv").addEventListener("click", function () { exportGame("wd", "csv"); });
         el("btn-exp-wd-json").addEventListener("click", function () { exportGame("wd", "json"); });
-        for (var fi = 0; fi < 5; fi++) spawnFish(true);
+        renderGame();
+        var gameTick = 0;
         setInterval(function () {
-          // Keep the pond populated and the energy readout ticking.
-          if (gamePond && gamePond.querySelectorAll(".gfish").length < 5) spawnFish(false);
+          // Keep the pond in sync, the energy readout ticking, and the
+          // pending harvest amount fresh while fish earn over time.
           var addr = gameWalletAddr();
           if (addr) {
             var rec = gameRec(addr);
+            syncPondFish(rec);
             gameEnergyEl.textContent = rec.energy + " / " + gameMaxEnergy(rec);
             renderGameEnergyNote(rec);
             renderPondStatus(addr);
+            renderHarvestPending(addr);
+            gameTick++;
+            if (gameTick % 5 === 0) renderFishList(addr);
+          } else {
+            syncPondFish(null);
           }
           renderGoldenLabel();
         }, 1000);
