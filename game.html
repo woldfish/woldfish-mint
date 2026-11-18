@@ -346,7 +346,9 @@
         position: relative; height: 300px; margin-top: 16px;
         border-radius: 14px; overflow: hidden;
         border: 1px solid var(--line-soft);
-        background: linear-gradient(180deg, rgba(28, 92, 128, 0.55), rgba(6, 26, 41, 0.92) 62%, rgba(3, 13, 22, 0.96));
+        /* Realistic pond photo (assets/pond.webp) under a light dark
+           gradient so the swimming fish stay readable. */
+        background: linear-gradient(180deg, rgba(6, 26, 41, 0.18), rgba(3, 13, 22, 0.38) 62%, rgba(3, 13, 22, 0.55)), url(assets/pond.webp) center/cover no-repeat;
       }
       .pond::before {
         content: ""; position: absolute; inset: 0; pointer-events: none;
@@ -362,16 +364,11 @@
         animation-iteration-count: infinite; animation-direction: alternate;
         -webkit-tap-highlight-color: transparent;
       }
-      .gfish svg { display: block; width: 100%; height: auto; filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.45)); animation-name: pond-flip; animation-timing-function: linear; animation-iteration-count: infinite; }
+      .gfish img { display: block; width: 100%; height: auto; filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.45)); animation-name: pond-flip; animation-timing-function: linear; animation-iteration-count: infinite; }
       .gfish.rtl { animation-direction: alternate-reverse; }
-      .gfish.rtl svg { animation-name: pond-flip-rtl; }
+      .gfish.rtl img { animation-name: pond-flip-rtl; }
       @keyframes pond-flip { 0%, 49.9% { transform: scaleX(1); } 50%, 99.9% { transform: scaleX(-1); } 100% { transform: scaleX(1); } }
       @keyframes pond-flip-rtl { 0%, 49.9% { transform: scaleX(-1); } 50%, 99.9% { transform: scaleX(1); } 100% { transform: scaleX(-1); } }
-      .gfish.c-common svg { fill: #4a90d9; }
-      .gfish.c-rare svg { fill: #35c26e; }
-      .gfish.c-epic svg { fill: #9b5de5; }
-      .gfish.c-legendary svg { fill: #e5484d; }
-      .gfish.c-mythic svg { fill: #e9b949; }
       .gfish.gone { animation-play-state: paused; transition: transform 0.35s ease, opacity 0.35s ease; transform: scale(1.22) rotate(-14deg); opacity: 0; }
       @keyframes pond-swim { from { left: 2px; } to { left: calc(100% - var(--fw, 76px)); } }
       .floater {
@@ -446,7 +443,7 @@
       }
       @media (prefers-reduced-motion: reduce) {
         .gfish { animation-duration: 60s !important; }
-        .gfish svg { animation: none; }
+        .gfish img { animation: none; }
         .floater { animation: none; }
       }
 
@@ -5235,20 +5232,18 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
           var delay = initial ? (-Math.random() * dur * 0.9) : 0;
           if (initial) b.style.animationDelay = delay + "s";
           b.setAttribute("aria-label", t(rar.key) + " — " + fmt.format(rar.reward) + " WFISH");
-          var svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-          svg.setAttribute("aria-hidden", "true");
-          // Own viewBox: without it the svg has no intrinsic aspect ratio
-          // and height:auto falls back to the 150px default, making the
-          // fish button far taller than the fish and clipping the pond.
-          svg.setAttribute("viewBox", "0 0 100 40");
-          // The body-flip cycle runs at twice the swim duration so the
-          // fish turns around exactly when its swim direction reverses.
-          svg.style.animationDuration = (dur * 2) + "s";
-          if (initial) svg.style.animationDelay = delay + "s";
-          var use = document.createElementNS("http://www.w3.org/2000/svg", "use");
-          use.setAttribute("href", "#fish-shape");
-          svg.appendChild(use);
-          b.appendChild(svg);
+          // Realistic fish photo (transparent PNG, per rarity) instead of
+          // the old recoloured SVG. The flip cycle runs at twice the swim
+          // duration so the fish turns around exactly when its swim
+          // direction reverses.
+          var img = document.createElement("img");
+          img.src = "assets/fish-" + rar.id + ".png";
+          img.alt = "";
+          img.setAttribute("aria-hidden", "true");
+          img.draggable = false;
+          img.style.animationDuration = (dur * 2) + "s";
+          if (initial) img.style.animationDelay = delay + "s";
+          b.appendChild(img);
           b._rarity = rar;
           b._done = false;
           b.addEventListener("click", function () { attemptCatch(b); });
