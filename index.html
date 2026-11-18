@@ -630,6 +630,57 @@
         <p class="mint-hint" id="paid-hint">Connect your wallet first — the Connect Wallet button is in the Free Mint section below.</p>
       </section>
 
+      <!-- ================= AGENT ID BONUS ================= -->
+      <section class="panel" id="agent-bonus" aria-labelledby="agent-title">
+        <div class="stats-head">
+          <div>
+            <h2 id="agent-title" data-i18n="agentTitle">Agent ID Bonus</h2>
+            <p class="sub" data-i18n="agentSub">5,000 WFISH once per wallet — only for wallets that hold a Binance Agent ID.</p>
+          </div>
+          <span class="badge" id="agent-badge" hidden data-i18n="agentBadgeHolder">Agent ID holder</span>
+        </div>
+
+        <ul class="rules">
+          <li>
+            <span class="ic gold">
+              <svg class="ic-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M15 8h4M15 12h4M7 16h10"/></svg>
+            </span>
+            <p data-i18n-html="agentRule1"><strong>Hold a Binance Agent ID</strong>
+            Your wallet must hold a Binance Agent ID (.ai name). The contract checks this on-chain — no sign-up, no form, no QR code to scan.</p>
+          </li>
+          <li>
+            <span class="ic">
+              <svg class="ic-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="8" width="18" height="4"/><path d="M12 8v13M5 12v9h14v-9"/><path d="M12 8a2.5 2.5 0 1 1 2.5-2.5C14.5 7 12 8 12 8zM12 8a2.5 2.5 0 1 0-2.5-2.5C9.5 7 12 8 12 8z"/></svg>
+            </span>
+            <p data-i18n-html="agentRule2"><strong>One claim per wallet, free except gas</strong>
+            5,000 WFISH, once per wallet. You only pay the BSC network gas fee; the bonus itself costs nothing.</p>
+          </li>
+        </ul>
+
+        <div class="stats-grid two">
+          <div class="stat">
+            <div class="num" id="agent-remaining">…</div>
+            <div class="lbl" data-i18n="agentRemainingLbl">Bonus Claims Remaining</div>
+          </div>
+          <div class="stat">
+            <div class="num" id="agent-claimable">—</div>
+            <div class="lbl" data-i18n="agentClaimableLbl">Your Claimable Bonus (WFISH)</div>
+          </div>
+        </div>
+
+        <button type="button" class="btn-claim" id="btn-agent-claim" disabled>
+          <svg class="ic-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="8" width="18" height="4"/><path d="M12 8v13M5 12v9h14v-9"/><path d="M12 8a2.5 2.5 0 1 1 2.5-2.5C14.5 7 12 8 12 8zM12 8a2.5 2.5 0 1 0-2.5-2.5C9.5 7 12 8 12 8z"/></svg>
+          <span data-i18n="agentBtnDefault">Claim 5,000 WFISH Bonus</span>
+        </button>
+
+        <div class="tx-status" id="agent-tx-status" role="status" aria-live="polite">
+          <div class="tx-title" id="agent-tx-title"></div>
+          <div class="tx-hash" id="agent-tx-hash"></div>
+        </div>
+
+        <p class="mint-hint" id="agent-hint">Connect your wallet to check whether it holds an Agent ID.</p>
+      </section>
+
       <!-- ================= LIVE STATUS ================= -->
       <section class="panel" aria-labelledby="status-title">
         <div class="stats-head">
@@ -874,6 +925,13 @@
             </div>
             <div class="addr-value">0x38C36a2Ea9B80c984f8ec51Bc71a1019E53C92b5</div>
           </div>
+
+          <div class="addr-item">
+            <div class="addr-top">
+              <span class="addr-name" data-i18n="addrBonus">Agent ID Bonus Contract</span>
+            </div>
+            <div class="addr-value" data-i18n="addrBonusSoon">0x5e21957337484F8AF66cA9BCDC6490de2CCb536D</div>
+          </div>
         </div>
       </section>
 
@@ -1083,6 +1141,17 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
         var GAS_MARGIN_WEI = 30000000000000n; // 0.00003 BNB headroom for gas on top of the price
         var TOKEN_CONTRACT = "0x05492d04c520677cc37fff0f38e3061ee25ff301";
         var NFT_CONTRACT = "0x29c52529a7956b9ca939f085df63d15cbc4395f0";
+        // WoldfishAgentBonus (Binance Agent ID Hackathon): one-time 5,000
+        // WFISH bonus per Agent ID holder. TBD — fill with the deployed
+        // contract address after deployment; while it is the zero address
+        // the bonus section shows "opens soon" and stays disabled.
+        var BONUS_CONTRACT = "0x5e21957337484F8AF66cA9BCDC6490de2CCb536D";
+        // Live once BONUS_CONTRACT holds the deployed address (derived,
+        // so filling the address above is the only step needed).
+        var BONUS_LIVE = BONUS_CONTRACT !== "0x0000000000000000000000000000000000000000";
+        // SPACE ID Agent ID registry (ERC-721, non-transferable), as named
+        // in the official hackathon announcement. balanceOf > 0 = holds an ID.
+        var AGENT_ID_REGISTRY = "0x60B9262456dE011F7d15a54CdD8c48bAaa8B022F";
         var BSCSCAN = "https://bscscan.com";
         var TOTAL_QUOTA = 1000;
 
@@ -1128,6 +1197,13 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
         };
         var SEL_WD = {
           withdraw: "0x2e1a7d4d" // withdraw(uint256) — amount in WFISH wei (10,000 WFISH = 10000 × 10^18); the fee rides as the tx value
+        };
+        var SEL_BONUS = {
+          claim: "0x4e71d92d",           // claim()
+          hasAgentID: "0x69a83035",      // hasAgentID(address) — on WoldfishAgentBonus
+          claimableAmount: "0x89885049", // claimableAmount(address)
+          remainingClaims: "0x09a8c9e9", // remainingClaims()
+          claimed: "0xc884ef83"          // claimed(address)
         };
 
         /* ================= Languages ================= */
@@ -1338,7 +1414,31 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
             gameExportTitle: "Export Data",
             gameExportSub: "Download the per-wallet game balances and the completed withdrawal history for your records.",
             gameExportBalances: "Balances:",
-            gameExportWd: "WD history:"
+            gameExportWd: "WD history:",
+            agentTitle: "Agent ID Bonus",
+            agentSub: "5,000 WFISH once per wallet — only for wallets that hold a Binance Agent ID.",
+            agentBadgeHolder: "Agent ID holder",
+            agentBadgeNoId: "No Agent ID",
+            agentRule1: "<strong>Hold a Binance Agent ID</strong> Your wallet must hold a Binance Agent ID (.ai name). The contract checks this on-chain — no sign-up, no form, no QR code to scan.",
+            agentRule2: "<strong>One claim per wallet, free except gas</strong> 5,000 WFISH, once per wallet. You only pay the BSC network gas fee; the bonus itself costs nothing.",
+            agentRemainingLbl: "Bonus Claims Remaining",
+            agentClaimableLbl: "Your Claimable Bonus (WFISH)",
+            agentBtnDefault: "Claim 5,000 WFISH Bonus",
+            agentBtnClaimed: "Bonus Already Claimed",
+            agentBtnNoId: "No Agent ID on This Wallet",
+            agentBtnSoon: "Bonus Opens Soon",
+            agentHintConnect: "Connect your wallet to check whether it holds an Agent ID.",
+            agentHintHolder: "Your wallet holds an Agent ID — click the button above, then approve the transaction in your wallet. You only pay gas.",
+            agentHintNoId: "This wallet does not hold a Binance Agent ID, so it cannot claim this bonus. The free mint above is still open to every wallet.",
+            agentHintClaimed: "This wallet has already claimed its 5,000 WFISH Agent ID bonus.",
+            agentHintSoon: "The Agent ID bonus contract is deploying soon — the claim button opens here once it is live.",
+            agentHintSoldOut: "The 1,000 Agent ID bonuses are all claimed. Thanks for joining!",
+            agentSuccess: "Success! 5,000 WFISH has landed in your wallet.",
+            agentTxFail: "Claim failed on the network. Your bonus isn't lost — try claiming again later.",
+            agentClaimSent: "Claim sent — waiting for network confirmation…",
+            agentClaimStillPending: "Claim is still awaiting confirmation. Check its status via the link below.",
+            addrBonus: "Agent ID Bonus Contract",
+            addrBonusSoon: "0x5e21957337484F8AF66cA9BCDC6490de2CCb536D"
           },
           id: {
             metaDesc: "Mint 10.000 WFISH gratis di BNB Smart Chain — hanya bayar gas, sekali per dompet.",
@@ -1511,7 +1611,31 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
             gameExportTitle: "Ekspor Data",
             gameExportSub: "Unduh saldo game per dompet dan riwayat WD yang berhasil untuk catatanmu.",
             gameExportBalances: "Saldo:",
-            gameExportWd: "Riwayat WD:"
+            gameExportWd: "Riwayat WD:",
+            agentTitle: "Bonus Agent ID",
+            agentSub: "5.000 WFISH sekali per dompet — hanya untuk dompet yang memegang Agent ID Binance.",
+            agentBadgeHolder: "Pemegang Agent ID",
+            agentBadgeNoId: "Tanpa Agent ID",
+            agentRule1: "<strong>Pegang Agent ID Binance</strong> Dompetmu harus memegang Agent ID Binance (nama .ai). Kontrak mengeceknya langsung on-chain — tanpa daftar, tanpa formulir, tanpa scan QR.",
+            agentRule2: "<strong>Satu klaim per dompet, gratis kecuali gas</strong> 5.000 WFISH, sekali per dompet. Kamu hanya bayar gas jaringan BSC; bonusnya sendiri gratis.",
+            agentRemainingLbl: "Sisa Klaim Bonus",
+            agentClaimableLbl: "Bonus Kamu yang Bisa Diklaim (WFISH)",
+            agentBtnDefault: "Klaim Bonus 5.000 WFISH",
+            agentBtnClaimed: "Bonus Sudah Diklaim",
+            agentBtnNoId: "Dompet Ini Tanpa Agent ID",
+            agentBtnSoon: "Bonus Segera Dibuka",
+            agentHintConnect: "Sambungkan dompetmu untuk mengecek apakah dompet itu memegang Agent ID.",
+            agentHintHolder: "Dompetmu memegang Agent ID — klik tombol di atas, lalu setujui transaksi di dompetmu. Kamu hanya bayar gas.",
+            agentHintNoId: "Dompet ini tidak memegang Agent ID Binance, jadi tidak bisa klaim bonus ini. Free mint di atas tetap terbuka untuk semua dompet.",
+            agentHintClaimed: "Dompet ini sudah mengklaim bonus Agent ID 5.000 WFISH.",
+            agentHintSoon: "Kontrak bonus Agent ID segera di-deploy — tombol klaim dibuka di sini begitu kontraknya live.",
+            agentHintSoldOut: "1.000 bonus Agent ID sudah habis diklaim. Terima kasih sudah ikut!",
+            agentSuccess: "Berhasil! 5.000 WFISH sudah masuk ke dompetmu.",
+            agentTxFail: "Klaim gagal di jaringan. Bonusmu tidak hilang — coba klaim lagi nanti.",
+            agentClaimSent: "Klaim dikirim — menunggu konfirmasi jaringan…",
+            agentClaimStillPending: "Klaim masih menunggu konfirmasi. Cek statusnya lewat tautan di bawah.",
+            addrBonus: "Kontrak Bonus Agent ID",
+            addrBonusSoon: "0x5e21957337484F8AF66cA9BCDC6490de2CCb536D"
           },
           zh: {
             metaDesc: "在 BNB Smart Chain 上免费铸造 10,000 WFISH — 只需支付 gas，每个钱包限一次。",
@@ -2548,6 +2672,10 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
             btnSwitchPaid = el("btn-switch-paid"),
             paidTxStatus = el("paid-tx-status"), paidTxTitle = el("paid-tx-title"),
             paidTxHash = el("paid-tx-hash"), paidHint = el("paid-hint"),
+            agentRemaining = el("agent-remaining"), agentClaimable = el("agent-claimable"),
+            btnAgentClaim = el("btn-agent-claim"), agentBadge = el("agent-badge"),
+            agentTxStatus = el("agent-tx-status"), agentTxTitle = el("agent-tx-title"),
+            agentTxHash = el("agent-tx-hash"), agentHint = el("agent-hint"),
             balancePanel = el("balance-panel"), balanceWfish = el("balance-wfish"),
             balanceNft = el("balance-nft"), balanceError = el("balance-error"),
             balanceUpdated = el("balance-updated"), btnRefreshBalance = el("btn-refresh-balance"),
@@ -2566,6 +2694,14 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
         var paidStats = { remaining: null };
         var paidClaimableVal = null; // BigInt (wei WFISH) or null
         var paidBusy = false;
+        // Agent ID bonus (Binance Agent ID Hackathon). agentHasId reads the
+        // Agent ID registry, so the badge works even before BONUS_CONTRACT
+        // is deployed; the claim button stays disabled until BONUS_LIVE.
+        var agentStats = { remaining: null };
+        var agentClaimableVal = null; // BigInt (wei WFISH) or null
+        var agentHasId = null; // true/false once read, null while unknown
+        var agentClaimedVal = null; // true/false once read, null while unknown
+        var agentBusy = false;
         var userWfishBalance = null; // BigInt (wei WFISH) or null
         var userNftCount = null; // Number or null
         var userBnbBalance = null; // BigInt (wei BNB on BSC) or null
@@ -2763,8 +2899,25 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
             batchEthCall(SEL.mintActive),
             batchEthCall(SEL_PAID.remainingPaidMints, PAID_CONTRACT)
           ];
+          var idxBonusRemaining = -1;
+          if (BONUS_LIVE) {
+            idxBonusRemaining = requests.length;
+            requests.push(batchEthCall(SEL_BONUS.remainingClaims, BONUS_CONTRACT));
+          }
           var idxHasMinted = -1, idxClaimable = -1, idxBalToken = -1, idxBalNft = -1, idxBnb = -1;
+          var idxAgentId = -1, idxAgentClaimable = -1, idxAgentClaimed = -1;
           if (account) {
+            // Agent ID badge: balanceOf on the registry itself (> 0 means
+            // the wallet holds an Agent ID), so it works even before the
+            // bonus contract is deployed.
+            idxAgentId = requests.length;
+            requests.push(batchEthCall(SEL_BALANCE.balanceOf + addrParam, AGENT_ID_REGISTRY));
+            if (BONUS_LIVE) {
+              idxAgentClaimable = requests.length;
+              requests.push(batchEthCall(SEL_BONUS.claimableAmount + addrParam, BONUS_CONTRACT));
+              idxAgentClaimed = requests.length;
+              requests.push(batchEthCall(SEL_BONUS.claimed + addrParam, BONUS_CONTRACT));
+            }
             idxHasMinted = requests.length;
             requests.push(batchEthCall(SEL.hasMinted + addrParam));
             idxClaimable = requests.length;
@@ -2785,7 +2938,11 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
             stats.count = decodeUint(batchResult(res, 1));
             stats.active = decodeBool(batchResult(res, 2));
             try { paidStats.remaining = decodeUint(batchResult(res, 3)); } catch (e) { /* keep previous */ }
+            if (idxBonusRemaining >= 0) { try { agentStats.remaining = decodeUint(batchResult(res, idxBonusRemaining)); } catch (e) { /* keep previous */ } }
             if (forAccount && account === forAccount) {
+              try { agentHasId = decodeBool(batchResult(res, idxAgentId)); } catch (e) { /* keep previous */ }
+              if (idxAgentClaimable >= 0) { try { agentClaimableVal = BigInt(batchResult(res, idxAgentClaimable)); } catch (e) { /* keep previous */ } }
+              if (idxAgentClaimed >= 0) { try { agentClaimedVal = decodeBool(batchResult(res, idxAgentClaimed)); } catch (e) { /* keep previous */ } }
               try { userMinted = decodeBool(batchResult(res, idxHasMinted)); } catch (e) { /* keep previous */ }
               try { paidClaimableVal = BigInt(batchResult(res, idxClaimable)); } catch (e) { /* keep previous */ }
               try {
@@ -2872,6 +3029,7 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
           renderPaid();
           renderBalances();
           renderGame();
+          renderAgent();
         }
 
         function renderMintButton() {
@@ -3787,6 +3945,95 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
           paidHint.textContent = hint;
         }
 
+        /* ================= Agent ID bonus ================= */
+        function renderAgent() {
+          setNum(agentRemaining, (agentStats.remaining === null) ? "…" : fmt.format(agentStats.remaining));
+          if (!account) setNum(agentClaimable, "—");
+          else if (agentClaimableVal === null) setNum(agentClaimable, "…");
+          else setNum(agentClaimable, formatToken(agentClaimableVal));
+
+          // Read-only badge: whether the connected wallet holds an Agent ID.
+          if (!account || agentHasId === null) {
+            agentBadge.hidden = true;
+          } else if (agentHasId) {
+            agentBadge.hidden = false;
+            agentBadge.classList.add("gold");
+            agentBadge.textContent = t("agentBadgeHolder");
+          } else {
+            agentBadge.hidden = false;
+            agentBadge.classList.remove("gold");
+            agentBadge.textContent = t("agentBadgeNoId");
+          }
+
+          var label = t("agentBtnDefault");
+          var hint = "";
+          if (agentBusy) {
+            label = t("processing");
+            hint = t("hintProcessing");
+          } else if (!provider()) {
+            hint = t("hintNoProviderPaid");
+          } else if (!account) {
+            hint = t("agentHintConnect");
+          } else if (!chainOk) {
+            hint = t("hintWrongChain");
+          } else if (!BONUS_LIVE) {
+            label = t("agentBtnSoon");
+            hint = t("agentHintSoon");
+          } else if (agentStats.remaining === 0) {
+            label = t("agentBtnSoon");
+            hint = t("agentHintSoldOut");
+          } else if (agentClaimedVal === true) {
+            label = t("agentBtnClaimed");
+            hint = t("agentHintClaimed");
+          } else if (agentHasId === false) {
+            label = t("agentBtnNoId");
+            hint = t("agentHintNoId");
+          } else if (agentClaimableVal === null || agentHasId === null) {
+            hint = t("hintChecking");
+          } else {
+            hint = t("agentHintHolder");
+          }
+          // The button label lives in its inner <span> (the SVG icon sits
+          // beside it); applyLang resets that span to the default label on
+          // every language switch, and renderWallet() re-runs renderAgent()
+          // right after, so the state label always wins.
+          var labelSpan = btnAgentClaim.querySelector("span");
+          if (labelSpan) labelSpan.textContent = label;
+          btnAgentClaim.disabled = agentBusy || !account || !chainOk || !BONUS_LIVE || agentHasId !== true || agentClaimedVal === true || agentClaimableVal === null || agentClaimableVal === 0n;
+          agentHint.textContent = hint;
+        }
+
+        function showAgentTx(kind, title, hash) {
+          agentTxStatus.className = "tx-status show " + kind;
+          if (kind === "pending") {
+            agentTxTitle.innerHTML = "";
+            var sp = document.createElement("span"); sp.className = "spinner";
+            var tx = document.createElement("span"); tx.textContent = title;
+            agentTxTitle.appendChild(sp); agentTxTitle.appendChild(tx);
+          } else {
+            agentTxTitle.textContent = title;
+          }
+          fillTxHash(agentTxHash, hash);
+        }
+        function hideAgentTx() { agentTxStatus.className = "tx-status"; }
+
+        function agentTxError(err, action) {
+          if (err && err.message === "session-dead") {
+            recoverFromDeadSession(action || "agent", showAgentTx);
+          } else if (err && err.message === "tx-no-response") {
+            showAgentTx("error", t("txNoResponse"), null);
+          } else if (err && err.message === "wrong-network") {
+            showAgentTx("error", t("txWrongNetwork"), null);
+          } else if (err && err.message === "insufficient-bnb") {
+            showAgentTx("error", t("txInsufficientBnb"), null);
+          } else if (err && err.code === 4001) {
+            showAgentTx("error", t("txCancelled"), null);
+          } else {
+            var msg = (err && err.message) ? String(err.message) : t("genericError");
+            showAgentTx("error", t("txFailedPrefix") + msg, null);
+          }
+        }
+
         function showPaidTx(kind, title, hash) {
           paidTxStatus.className = "tx-status show " + kind;
           if (kind === "pending") {
@@ -3931,6 +4178,48 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
           });
         }
 
+        function doClaimAgentBonus() {
+          var p = provider();
+          if (!p || !account || agentBusy || !BONUS_LIVE) return;
+          hideAgentTx();
+          agentBusy = true; renderAgent();
+          checkChain().then(function () {
+            if (chainOk) return true;
+            // Wrong network: ask the wallet to switch to BSC itself
+            // (see ensureBsc) rather than only reporting the problem.
+            showAgentTx("pending", t("txSwitching"), null);
+            return ensureBsc();
+          }).then(function (onBsc) {
+            if (!onBsc) throw new Error("wrong-network");
+            showAgentTx("pending", t("txCheckingSession"), null);
+            return ensureSessionAlive().then(function (alive) {
+              if (!alive) throw new Error("session-dead");
+              showAgentTx("pending", t("txWaitingApproval"), null);
+              return sendTx(p, { from: account, to: BONUS_CONTRACT, data: SEL_BONUS.claim, value: "0x0", chainId: CHAIN_ID_HEX }, showAgentTx);
+            });
+          }).then(function (hash) {
+            showAgentTx("pending", t("agentClaimSent"), hash);
+            return pollReceipt(hash, 40).then(function (receipt) {
+              agentBusy = false;
+              if (!receipt) {
+                showAgentTx("pending", t("agentClaimStillPending"), hash);
+              } else if (receipt.status === "0x1") {
+                agentClaimedVal = true;
+                agentClaimableVal = 0n;
+                showAgentTx("success", t("agentSuccess"), hash);
+              } else {
+                showAgentTx("error", t("agentTxFail"), hash);
+              }
+              renderAgent();
+              return refreshStats();
+            });
+          }).catch(function (err) {
+            agentBusy = false;
+            agentTxError(err, "agent");
+            renderAgent();
+          });
+        }
+
         /* ================= Copy address ================= */
         function copyText(text, btn) {
           var labelEl = btn.querySelector(".copy-label");
@@ -4046,6 +4335,7 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
         btnMint.addEventListener("click", doMint);
         btnPaidMint.addEventListener("click", doPaidMint);
         btnClaim.addEventListener("click", doClaimBonus);
+        btnAgentClaim.addEventListener("click", doClaimAgentBonus);
         btnWatch.addEventListener("click", watchAsset);
         btnRefresh.addEventListener("click", function () { refreshStats(); });
         if (btnRefreshBalance) btnRefreshBalance.addEventListener("click", function () { refreshBalances(); });
