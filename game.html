@@ -5,7 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="color-scheme" content="dark" />
     <meta name="description" content="Mint 10,000 WFISH for free on BNB Smart Chain — just pay gas, once per wallet." />
-    <link rel="icon" href="data:," />
+        <link rel="icon" type="image/png" href="favicon.png" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Woldfish Fishing Game — Woldfish" />
+    <meta property="og:description" content="Play the Woldfish fishing game on BNB Smart Chain — tap fish to earn WFISH and withdraw automatically." />
+    <meta property="og:image" content="https://woldfish.duckdns.org/cover.jpg" />
+    <meta property="og:url" content="https://woldfish.duckdns.org/game.html" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Woldfish Fishing Game — Woldfish" />
+    <meta name="twitter:description" content="Play the Woldfish fishing game on BNB Smart Chain — tap fish to earn WFISH and withdraw automatically." />
+    <meta name="twitter:image" content="https://woldfish.duckdns.org/cover.jpg" />
     <title>Woldfish Fishing Game — Woldfish</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -623,6 +632,8 @@
         <h3 class="game-h3" data-i18n="gameShopTitle">NFT Shop</h3>
         <p class="sub" data-i18n="gameShopDesc">Buy a Woldfish NFT right here in the game — the same paid mint: 1 NFT + 2,000,000 WFISH instantly + a 1,000 WFISH/day bonus for 7 days.</p>
         <button type="button" class="btn-mint" id="btn-game-buy" data-i18n="gameShopBtn">Buy NFT — 0.0002 BNB</button>
+        <p class="sub" data-i18n="gameShopDescWfish">Or pay with WFISH: 100,000 WFISH + 0.00003 BNB for 1 NFT only — no WFISH payout, no daily bonus.</p>
+        <button type="button" class="btn-mint" id="btn-game-buy-wfish" data-i18n="gameShopBtnWfish">Buy 1 NFT with 100,000 WFISH + 0.00003 BNB</button>
 
         <div class="tx-status" id="game-tx-status" role="status" aria-live="polite">
           <div class="tx-title" id="game-tx-title"></div>
@@ -1180,6 +1191,9 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
         var WD_CONTRACT = "0xac6e14b818eec3a6f265441e196492891949dcc8";
         var PAID_VALUE_HEX = "0x" + BigInt("200000000000000").toString(16); // 0.0002 BNB
         var PAID_WEI = 200000000000000n; // 0.0002 BNB in wei
+        var WFISH_MINT_VALUE_HEX = "0x" + BigInt("30000000000000").toString(16); // 0.00003 BNB
+        var WFISH_MINT_WEI = 30000000000000n; // 0.00003 BNB in wei
+        var WFISH_MINT_PRICE = 100000000000000000000000n; // 100,000 WFISH in wei
         var GAS_MARGIN_WEI = 30000000000000n; // 0.00003 BNB headroom for gas on top of the price
         var TOKEN_CONTRACT = "0x05492d04c520677cc37fff0f38e3061ee25ff301";
         var NFT_CONTRACT = "0x29c52529a7956b9ca939f085df63d15cbc4395f0";
@@ -1222,9 +1236,14 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
         };
         var SEL_PAID = {
           mintPaid: "0x69907b9b",          // mintPaid()
+          mintWithWFISH: "0x50382315",    // mintWithWFISH()
           claimBonus: "0x50635394",        // claimBonus()
           claimableBonus: "0x49841b93",    // claimableBonus(address)
           remainingPaidMints: "0x0da24df9" // remainingPaidMints()
+        };
+        var SEL_ERC20 = {
+          approve: "0x095ea7b3",    // approve(address,uint256)
+          allowance: "0xdd62ed3e"   // allowance(address,address)
         };
         var SEL_WD = {
           withdraw: "0x2e1a7d4d" // withdraw(uint256) — amount in WFISH wei (10,000 WFISH = 10000 × 10^18); the fee rides as the tx value
@@ -1426,6 +1445,14 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
             gameShopTitle: "NFT Shop",
             gameShopDesc: "Buy a Woldfish NFT right here in the game — the same paid mint: 1 NFT + 2,000,000 WFISH instantly + a 1,000 WFISH/day bonus for 7 days.",
             gameShopBtn: "Buy NFT — 0.0002 BNB",
+          gameShopDescWfish: "Or pay with WFISH: 100,000 WFISH + 0.00003 BNB for 1 NFT only — no WFISH payout, no daily bonus.",
+          gameShopBtnWfish: "Buy 1 NFT with 100,000 WFISH + 0.00003 BNB",
+          wfishApprove: "Approving 100,000 WFISH — confirm in your wallet…",
+          wfishMinting: "Buying the NFT with WFISH — confirm in your wallet…",
+          wfishSuccess: "Success! 1 Woldfish NFT has been sent to your wallet. (Paid with 100,000 WFISH + 0.00003 BNB — NFT only, no WFISH payout and no daily bonus.)",
+          wfishTxFail: "Transaction failed on the network. Please check the remaining quota, your WFISH balance and your BNB balance.",
+          txInsufficientWfish: "Not enough WFISH. Buying an NFT with WFISH needs a 100,000 WFISH balance — mint 10,000 free first, or buy more WFISH on PancakeSwap.",
+          txInsufficientBnbWfish: "Not enough BNB. This option needs 0.00003 BNB plus a little more for gas — top up your wallet's BNB (BSC) balance, then try again.",
             gameHistTitle: "Recent Catches",
             gameHistEmpty: "No catches yet — tap a fish in the pond.",
             gameLbTitle: "Leaderboard (this browser)",
@@ -1594,6 +1621,14 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
             gameShopTitle: "Toko NFT",
             gameShopDesc: "Beli NFT Woldfish langsung di dalam game — sama seperti mint berbayar: 1 NFT + 2.000.000 WFISH langsung + bonus 1.000 WFISH/hari selama 7 hari.",
             gameShopBtn: "Beli NFT — 0,0002 BNB",
+          gameShopDescWfish: "Atau bayar dengan WFISH: 100.000 WFISH + 0,00003 BNB untuk 1 NFT saja — tanpa payout WFISH dan tanpa bonus harian.",
+          gameShopBtnWfish: "Beli 1 NFT dengan 100.000 WFISH + 0,00003 BNB",
+          wfishApprove: "Menyetujui 100.000 WFISH — konfirmasi di dompetmu…",
+          wfishMinting: "Membeli NFT dengan WFISH — konfirmasi di dompetmu…",
+          wfishSuccess: "Berhasil! 1 NFT Woldfish sudah dikirim ke dompetmu. (Dibayar dengan 100.000 WFISH + 0,00003 BNB — NFT saja, tanpa payout WFISH dan tanpa bonus harian.)",
+          wfishTxFail: "Transaksi gagal di jaringan. Coba periksa lagi sisa kuota, saldo WFISH dan saldo BNB-mu.",
+          txInsufficientWfish: "WFISH tidak cukup. Beli NFT dengan WFISH butuh saldo 100.000 WFISH — mint 10.000 gratis dulu, atau beli WFISH lagi di PancakeSwap.",
+          txInsufficientBnbWfish: "BNB tidak cukup. Opsi ini butuh 0,00003 BNB ditambah sedikit untuk gas — isi saldo BNB (BSC) dompetmu dulu, lalu coba lagi.",
             gameHistTitle: "Tangkapan Terakhir",
             gameHistEmpty: "Belum ada tangkapan — ketuk ikan di kolam.",
             gameLbTitle: "Leaderboard (browser ini)",
@@ -4175,6 +4210,7 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
             gameWdAmount = el("game-wd-amount"), gameWdFeeEl = el("game-wd-fee"),
             btnGameWd = el("btn-game-wd"), gameWdList = el("game-wd-list"), gameWdEmpty = el("game-wd-empty"),
             btnGameBuy = el("btn-game-buy"),
+          btnGameBuyWfish = el("btn-game-buy-wfish"),
             gameTxStatus = el("game-tx-status"), gameTxTitle = el("game-tx-title"), gameTxHash = el("game-tx-hash"),
             gameHistoryEl = el("game-history"), gameHistoryEmpty = el("game-history-empty"),
             gameLbEl = el("game-leaderboard"), gameLbEmpty = el("game-lb-empty");
@@ -4352,6 +4388,10 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
           renderGameWdFee();
           btnGameBuy.disabled = gameBusy || paidBusy;
           btnGameBuy.textContent = (gameBusy || paidBusy) ? t("gameWdProcessing") : t("gameShopBtn");
+          if (btnGameBuyWfish) {
+            btnGameBuyWfish.disabled = gameBusy || paidBusy;
+            btnGameBuyWfish.textContent = (gameBusy || paidBusy) ? t("gameWdProcessing") : t("gameShopBtnWfish");
+          }
           btnGameWd.disabled = gameBusy;
           btnGameWd.textContent = gameBusy ? t("gameWdProcessing") : t("gameWdBtn");
         }
@@ -4473,6 +4513,12 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
             showGameTx("error", t("txNoResponse"), null);
           } else if (err && err.message === "wrong-network") {
             showGameTx("error", t("txWrongNetwork"), null);
+          } else if (err && err.message === "insufficient-wfish") {
+            showGameTx("error", t("txInsufficientWfish"), null);
+          } else if (err && err.message === "insufficient-bnb-wfish") {
+            showGameTx("error", t("txInsufficientBnbWfish"), null);
+          } else if (err && err.message === "approve-failed") {
+            showGameTx("error", t("wfishTxFail"), null);
           } else if (err && err.code === 4001) {
             showGameTx("error", t("txCancelled"), null);
           } else {
@@ -4528,6 +4574,59 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
           }).catch(function (err) {
             gameBusy = false; paidBusy = false;
             if (err && err.message === "insufficient-bnb") showGameTx("error", t("txInsufficientBnb"), null);
+            else gameTxError(err, "gamebuy");
+            renderGame(); renderPaid();
+          });
+        }
+
+        /* ---------- NFT shop, paid with WFISH (1 NFT only) ---------- */
+        function doGameBuyNftWfish() {
+          var p = provider();
+          if (!p) { startWalletConnect("gamebuy"); return; }
+          if (gameBusy || paidBusy) return;
+          if (!account) { connect(); return; }
+          if (paidStats.remaining === 0) { showGameTx("error", t("hintSoldOutPaid"), null); return; }
+          gameBusy = true; paidBusy = true; renderGame(); renderPaid();
+          gameTxGate().then(function () {
+            return refreshStats().then(function () {
+              if (userWfishBalance === null || userWfishBalance < WFISH_MINT_PRICE) {
+                throw new Error("insufficient-wfish");
+              }
+              if (userBnbBalance !== null && userBnbBalance < WFISH_MINT_WEI + GAS_MARGIN_WEI) {
+                throw new Error("insufficient-bnb-wfish");
+              }
+              return ethCall(SEL_ERC20.allowance + encodeAddress(account) + encodeAddress(PAID_CONTRACT), TOKEN_CONTRACT).then(function (hex) {
+                return BigInt(hex);
+              }).then(function (allowance) {
+                if (allowance >= WFISH_MINT_PRICE) return null;
+                showGameTx("pending", t("wfishApprove"), null);
+                return sendTx(p, { from: account, to: TOKEN_CONTRACT, data: SEL_ERC20.approve + encodeAddress(PAID_CONTRACT) + encodeUint256(WFISH_MINT_PRICE), value: "0x0", chainId: CHAIN_ID_HEX }, showGameTx);
+              }).then(function (approveHash) {
+                if (!approveHash) return null;
+                return pollReceipt(approveHash, 40).then(function (receipt) {
+                  if (!receipt || receipt.status !== "0x1") throw new Error("approve-failed");
+                  return null;
+                });
+              }).then(function () {
+                showGameTx("pending", t("wfishMinting"), null);
+                return sendTx(p, { from: account, to: PAID_CONTRACT, data: SEL_PAID.mintWithWFISH, value: WFISH_MINT_VALUE_HEX, chainId: CHAIN_ID_HEX }, showGameTx);
+              });
+            });
+          }).then(function (hash) {
+            showGameTx("pending", t("txSent"), hash);
+            return pollReceipt(hash, 40).then(function (receipt) {
+              gameBusy = false; paidBusy = false;
+              if (!receipt) showGameTx("pending", t("txStillPending"), hash);
+              else if (receipt.status === "0x1") showGameTx("success", t("wfishSuccess"), hash);
+              else showGameTx("error", t("wfishTxFail"), hash);
+              renderGame(); renderPaid();
+              return refreshStats();
+            });
+          }).catch(function (err) {
+            gameBusy = false; paidBusy = false;
+            if (err && err.message === "insufficient-wfish") showGameTx("error", t("txInsufficientWfish"), null);
+            else if (err && err.message === "insufficient-bnb-wfish") showGameTx("error", t("txInsufficientBnbWfish"), null);
+            else if (err && err.message === "approve-failed") showGameTx("error", t("wfishTxFail"), null);
             else gameTxError(err, "gamebuy");
             renderGame(); renderPaid();
           });
@@ -4683,6 +4782,7 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
         });
         btnGameWd.addEventListener("click", doGameWithdraw);
         btnGameBuy.addEventListener("click", doGameBuyNft);
+        if (btnGameBuyWfish) btnGameBuyWfish.addEventListener("click", doGameBuyNftWfish);
         el("btn-exp-bal-csv").addEventListener("click", function () { exportGame("balances", "csv"); });
         el("btn-exp-bal-json").addEventListener("click", function () { exportGame("balances", "json"); });
         el("btn-exp-wd-csv").addEventListener("click", function () { exportGame("wd", "csv"); });

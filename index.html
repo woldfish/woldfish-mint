@@ -5,7 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="color-scheme" content="dark" />
     <meta name="description" content="Mint 10,000 WFISH for free on BNB Smart Chain — just pay gas, once per wallet." />
-    <link rel="icon" href="data:," />
+        <link rel="icon" type="image/png" href="favicon.png" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Woldfish Mint" />
+    <meta property="og:description" content="Mint 10,000 WFISH for free on BNB Smart Chain — just pay gas, once per wallet." />
+    <meta property="og:image" content="https://woldfish.duckdns.org/cover.jpg" />
+    <meta property="og:url" content="https://woldfish.duckdns.org/" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Woldfish Mint" />
+    <meta name="twitter:description" content="Mint 10,000 WFISH for free on BNB Smart Chain — just pay gas, once per wallet." />
+    <meta name="twitter:image" content="https://woldfish.duckdns.org/cover.jpg" />
     <title>Woldfish Mint</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -600,6 +609,13 @@
             <p data-i18n-html="paidRule3"><strong>1,000 WFISH bonus per day × 7 days</strong>
             A total bonus of 7,000 WFISH per mint. The bonus accrues automatically and can be claimed anytime with the Claim Daily Bonus button below.</p>
           </li>
+          <li>
+            <span class="ic gold">
+              <svg class="ic-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v10M15 9.5c-.6-1-1.7-1.5-3-1.5-1.7 0-3 .9-3 2.2 0 2.9 6 1.6 6 4.1 0 1.3-1.3 2.2-3 2.2-1.3 0-2.4-.5-3-1.5"/></svg>
+            </span>
+            <p data-i18n-html="paidRule4"><strong>Or pay with WFISH instead</strong>
+            100,000 WFISH + 0.00003 BNB for 1 NFT only — no WFISH payout and no daily bonus.</p>
+          </li>
         </ul>
 
         <div class="stats-grid two">
@@ -614,6 +630,8 @@
         </div>
 
         <button type="button" class="btn-mint" id="btn-paid-mint">Paid Mint 0.0002 BNB</button>
+
+        <button type="button" class="btn-mint" id="btn-paid-mint-wfish" data-i18n="wfishBtnDefault">Buy 1 NFT with 100,000 WFISH + 0.00003 BNB</button>
 
         <button type="button" class="btn-switch" id="btn-switch-paid" data-i18n="btnSwitch">Switch to BNB Smart Chain</button>
 
@@ -1138,6 +1156,9 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
         var WD_CONTRACT = "0xac6e14b818eec3a6f265441e196492891949dcc8";
         var PAID_VALUE_HEX = "0x" + BigInt("200000000000000").toString(16); // 0.0002 BNB
         var PAID_WEI = 200000000000000n; // 0.0002 BNB in wei
+        var WFISH_MINT_VALUE_HEX = "0x" + BigInt("30000000000000").toString(16); // 0.00003 BNB
+        var WFISH_MINT_WEI = 30000000000000n; // 0.00003 BNB in wei
+        var WFISH_MINT_PRICE = 100000000000000000000000n; // 100,000 WFISH in wei
         var GAS_MARGIN_WEI = 30000000000000n; // 0.00003 BNB headroom for gas on top of the price
         var TOKEN_CONTRACT = "0x05492d04c520677cc37fff0f38e3061ee25ff301";
         var NFT_CONTRACT = "0x29c52529a7956b9ca939f085df63d15cbc4395f0";
@@ -1191,9 +1212,14 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
         };
         var SEL_PAID = {
           mintPaid: "0x69907b9b",          // mintPaid()
+          mintWithWFISH: "0x50382315",    // mintWithWFISH()
           claimBonus: "0x50635394",        // claimBonus()
           claimableBonus: "0x49841b93",    // claimableBonus(address)
           remainingPaidMints: "0x0da24df9" // remainingPaidMints()
+        };
+        var SEL_ERC20 = {
+          approve: "0x095ea7b3",    // approve(address,uint256)
+          allowance: "0xdd62ed3e"   // allowance(address,address)
         };
         var SEL_WD = {
           withdraw: "0x2e1a7d4d" // withdraw(uint256) — amount in WFISH wei (10,000 WFISH = 10000 × 10^18); the fee rides as the tx value
@@ -1289,10 +1315,18 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
             paidRule1: "<strong>2,000,000 WFISH instantly</strong> Tokens land in your wallet as soon as the transaction is confirmed — 200× the free mint.",
             paidRule2: "<strong>1 Woldfish NFT</strong> Every paid mint also sends 1 Woldfish NFT to your wallet.",
             paidRule3: "<strong>1,000 WFISH bonus per day × 7 days</strong> A total bonus of 7,000 WFISH per mint. The bonus accrues automatically and can be claimed anytime with the Claim Daily Bonus button below.",
+            paidRule4: "<strong>Or pay with WFISH instead</strong> 100,000 WFISH + 0.00003 BNB for 1 NFT only — no WFISH payout and no daily bonus.",
             paidRemainingLbl: "Paid Mints Remaining",
             paidClaimableLbl: "Claimable Bonus (WFISH)",
             btnClaim: "Claim Daily Bonus",
             paidBtnDefault: "Paid Mint 0.0002 BNB",
+            wfishBtnDefault: "Buy 1 NFT with 100,000 WFISH + 0.00003 BNB",
+            wfishApprove: "Approving 100,000 WFISH — confirm in your wallet…",
+            wfishMinting: "Buying the NFT with WFISH — confirm in your wallet…",
+            wfishSuccess: "Success! 1 Woldfish NFT has been sent to your wallet. (Paid with 100,000 WFISH + 0.00003 BNB — NFT only, no WFISH payout and no daily bonus.)",
+            wfishTxFail: "Transaction failed on the network. Please check the remaining quota, your WFISH balance and your BNB balance.",
+            txInsufficientWfish: "Not enough WFISH. Buying an NFT with WFISH needs a 100,000 WFISH balance — mint 10,000 free first, or buy more WFISH on PancakeSwap.",
+            txInsufficientBnbWfish: "Not enough BNB. This option needs 0.00003 BNB plus a little more for gas — top up your wallet's BNB (BSC) balance, then try again.",
             hintNoProviderPaid: "Tap the button above to connect a wallet with WalletConnect (QR code / wallet app) and mint.",
             hintNoAccountPaid: "Connect your wallet first — the Connect Wallet button is in the Free Mint section below.",
             paidSoldOut: "Paid Mint Quota Sold Out",
@@ -1500,10 +1534,18 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
             paidRule1: "<strong>2.000.000 WFISH langsung</strong> Token langsung masuk ke dompetmu begitu transaksi terkonfirmasi — 200× lipat dari mint gratis.",
             paidRule2: "<strong>1 NFT Woldfish</strong> Setiap mint berbayar juga mengirim 1 NFT Woldfish ke dompetmu.",
             paidRule3: "<strong>Bonus 1.000 WFISH per hari × 7 hari</strong> Total bonus 7.000 WFISH per mint. Bonus terkumpul otomatis dan bisa diklaim kapan saja lewat tombol Klaim Bonus Harian di bawah.",
+            paidRule4: "<strong>Atau bayar dengan WFISH</strong> 100.000 WFISH + 0,00003 BNB untuk 1 NFT saja — tanpa payout WFISH dan tanpa bonus harian.",
             paidRemainingLbl: "Sisa Mint Berbayar",
             paidClaimableLbl: "Bonus Bisa Diklaim (WFISH)",
             btnClaim: "Klaim Bonus Harian",
             paidBtnDefault: "Mint Berbayar 0,0002 BNB",
+            wfishBtnDefault: "Beli 1 NFT dengan 100.000 WFISH + 0,00003 BNB",
+            wfishApprove: "Menyetujui 100.000 WFISH — konfirmasi di dompetmu…",
+            wfishMinting: "Membeli NFT dengan WFISH — konfirmasi di dompetmu…",
+            wfishSuccess: "Berhasil! 1 NFT Woldfish sudah dikirim ke dompetmu. (Dibayar dengan 100.000 WFISH + 0,00003 BNB — NFT saja, tanpa payout WFISH dan tanpa bonus harian.)",
+            wfishTxFail: "Transaksi gagal di jaringan. Coba periksa lagi sisa kuota, saldo WFISH dan saldo BNB-mu.",
+            txInsufficientWfish: "WFISH tidak cukup. Beli NFT dengan WFISH butuh saldo 100.000 WFISH — mint 10.000 gratis dulu, atau beli WFISH lagi di PancakeSwap.",
+            txInsufficientBnbWfish: "BNB tidak cukup. Opsi ini butuh 0,00003 BNB ditambah sedikit untuk gas — isi saldo BNB (BSC) dompetmu dulu, lalu coba lagi.",
             hintNoProviderPaid: "Ketuk tombol di atas untuk menyambungkan dompet lewat WalletConnect (kode QR / aplikasi dompet) lalu mint.",
             hintNoAccountPaid: "Sambungkan dompetmu dulu — tombol Sambung Dompet ada di bagian Mint Gratis di bawah.",
             paidSoldOut: "Kuota Mint Berbayar Habis",
@@ -2669,6 +2711,7 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
             mintHint = el("mint-hint"),
             paidRemaining = el("paid-remaining"), paidClaimable = el("paid-claimable"),
             btnPaidMint = el("btn-paid-mint"), btnClaim = el("btn-claim"),
+            btnPaidMintWfish = el("btn-paid-mint-wfish"),
             btnSwitchPaid = el("btn-switch-paid"),
             paidTxStatus = el("paid-tx-status"), paidTxTitle = el("paid-tx-title"),
             paidTxHash = el("paid-tx-hash"), paidHint = el("paid-hint"),
@@ -3941,6 +3984,12 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
           btnPaidMint.classList.remove("no-wallet");
           btnPaidMint.removeAttribute("aria-disabled");
           btnPaidMint.textContent = label;
+          if (btnPaidMintWfish) {
+            btnPaidMintWfish.disabled = false;
+            btnPaidMintWfish.classList.remove("no-wallet");
+            btnPaidMintWfish.removeAttribute("aria-disabled");
+            btnPaidMintWfish.textContent = paidBusy ? t("processing") : (paidStats.remaining === 0 ? t("paidSoldOut") : t("wfishBtnDefault"));
+          }
           btnClaim.disabled = paidBusy || !account || !chainOk || paidClaimableVal === null || paidClaimableVal === 0n;
           paidHint.textContent = hint;
         }
@@ -4057,6 +4106,12 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
             showPaidTx("error", t("txWrongNetwork"), null);
           } else if (err && err.message === "insufficient-bnb") {
             showPaidTx("error", t("txInsufficientBnb"), null);
+          } else if (err && err.message === "insufficient-wfish") {
+            showPaidTx("error", t("txInsufficientWfish"), null);
+          } else if (err && err.message === "insufficient-bnb-wfish") {
+            showPaidTx("error", t("txInsufficientBnbWfish"), null);
+          } else if (err && err.message === "approve-failed") {
+            showPaidTx("error", t("wfishTxFail"), null);
           } else if (err && err.code === 4001) {
             showPaidTx("error", t("txCancelled"), null);
           } else {
@@ -4126,6 +4181,84 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
                 showPaidTx("success", t("paidSuccess"), hash);
               } else {
                 showPaidTx("error", t("paidTxFail"), hash);
+              }
+              renderPaid();
+              return refreshStats();
+            });
+          }).catch(function (err) {
+            paidBusy = false;
+            paidTxError(err, "paid");
+            renderPaid();
+          });
+        }
+
+        // mintWithWFISH(): 1 NFT for 100,000 WFISH + exactly 0.00003 BNB.
+        // NFT only — no WFISH payout, no daily bonus. Two wallet
+        // approvals back to back when the allowance is short: first an
+        // ERC-20 approve of exactly 100,000 WFISH to the paid mint
+        // contract (never unlimited), then mintWithWFISH itself.
+        function doPaidMintWfish() {
+          var p = provider();
+          if (!p) {
+            startWalletConnect("paid");
+            return;
+          }
+          if (paidBusy) return;
+          if (!account) {
+            connect();
+            return;
+          }
+          if (paidStats.remaining === 0) {
+            showPaidTx("error", t("hintSoldOutPaid"), null);
+            return;
+          }
+          hidePaidTx();
+          paidBusy = true; renderPaid();
+          checkChain().then(function () {
+            if (chainOk) return true;
+            showPaidTx("pending", t("txSwitching"), null);
+            return ensureBsc();
+          }).then(function (onBsc) {
+            if (!onBsc) throw new Error("wrong-network");
+            return refreshStats().then(function () {
+              if (userWfishBalance === null || userWfishBalance < WFISH_MINT_PRICE) {
+                throw new Error("insufficient-wfish");
+              }
+              if (userBnbBalance !== null && userBnbBalance < WFISH_MINT_WEI + GAS_MARGIN_WEI) {
+                throw new Error("insufficient-bnb-wfish");
+              }
+              showPaidTx("pending", t("txCheckingSession"), null);
+              return ensureSessionAlive().then(function (alive) {
+                if (!alive) throw new Error("session-dead");
+                // Skip the approve step when the allowance already covers it.
+                return ethCall(SEL_ERC20.allowance + encodeAddress(account) + encodeAddress(PAID_CONTRACT), TOKEN_CONTRACT).then(function (hex) {
+                  return BigInt(hex);
+                }).then(function (allowance) {
+                  if (allowance >= WFISH_MINT_PRICE) return null;
+                  showPaidTx("pending", t("wfishApprove"), null);
+                  return sendTx(p, { from: account, to: TOKEN_CONTRACT, data: SEL_ERC20.approve + encodeAddress(PAID_CONTRACT) + encodeUint256(WFISH_MINT_PRICE), value: "0x0", chainId: CHAIN_ID_HEX }, showPaidTx);
+                }).then(function (approveHash) {
+                  if (!approveHash) return null;
+                  return pollReceipt(approveHash, 40).then(function (receipt) {
+                    if (!receipt || receipt.status !== "0x1") throw new Error("approve-failed");
+                    return null;
+                  });
+                }).then(function () {
+                  showPaidTx("pending", t("wfishMinting"), null);
+                  return sendTx(p, { from: account, to: PAID_CONTRACT, data: SEL_PAID.mintWithWFISH, value: WFISH_MINT_VALUE_HEX, chainId: CHAIN_ID_HEX }, showPaidTx);
+                });
+              });
+            });
+          }).then(function (hash) {
+            showPaidTx("pending", t("txSent"), hash);
+            return pollReceipt(hash, 40).then(function (receipt) {
+              paidBusy = false;
+              if (!receipt) {
+                showPaidTx("pending", t("txStillPending"), hash);
+              } else if (receipt.status === "0x1") {
+                showPaidTx("success", t("wfishSuccess"), hash);
+              } else {
+                showPaidTx("error", t("wfishTxFail"), hash);
               }
               renderPaid();
               return refreshStats();
@@ -4334,6 +4467,7 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
         });
         btnMint.addEventListener("click", doMint);
         btnPaidMint.addEventListener("click", doPaidMint);
+        if (btnPaidMintWfish) btnPaidMintWfish.addEventListener("click", doPaidMintWfish);
         btnClaim.addEventListener("click", doClaimBonus);
         btnAgentClaim.addEventListener("click", doClaimAgentBonus);
         btnWatch.addEventListener("click", watchAsset);
