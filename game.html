@@ -416,6 +416,15 @@
       .fee-line { margin: 10px 0 0; font-size: 0.92rem; color: var(--muted); }
       .fee-line strong { color: var(--gold-bright); font-variant-numeric: tabular-nums; }
       .game-note { margin: 10px 0 0; font-size: 0.88rem; color: #f3e3bb; }
+      .mission-list { list-style: none; margin: 10px 0 0; padding: 0; display: grid; gap: 10px; }
+      .mission { border: 1px solid var(--line); border-radius: 12px; padding: 12px; display: grid; gap: 8px; }
+      .mission-top { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+      .mission-name { font-weight: 700; }
+      .mission-reward { color: var(--gold-bright); font-weight: 700; font-variant-numeric: tabular-nums; white-space: nowrap; }
+      .mission-desc { color: var(--muted); font-size: 0.92rem; }
+      .mission-actions { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+      .mission-status { margin: 0; font-size: 0.9rem; color: var(--ok); }
+      .mission-status.warn { color: #f0a35e; }
       .lb-list, .hist-list, .wd-list { list-style: none; margin: 10px 0 0; padding: 0; display: grid; gap: 8px; }
       .lb-row, .hist-row, .wd-row-item {
         display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap;
@@ -611,6 +620,12 @@
         </ul>
 
         <p class="game-note" data-i18n="gameNote">Your game balance is a per-wallet record kept in this browser. Withdrawals are automatic: pay the fee and the WFISH lands straight in your wallet from the WD contract — no manual payout queue.</p>
+
+        <!-- Missions -->
+        <h3 class="game-h3" data-i18n="gameMissionsTitle">Missions</h3>
+        <p class="sub" data-i18n="gameMissionsSub">Complete these social missions once per wallet and earn WFISH in your game balance — withdraw it with WD below. Claimed on trust: this page cannot check your X or Telegram account.</p>
+        <ul class="mission-list" id="game-missions"></ul>
+        <p class="empty-line" id="game-missions-note" data-i18n="gameMissionsNeedWallet" hidden>Connect your wallet above, or enter your BSC address, to claim mission rewards.</p>
 
         <!-- Withdraw -->
         <h3 class="game-h3" data-i18n="gameWdTitle">Withdraw (WD)</h3>
@@ -1422,6 +1437,19 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
             gameRLegendary: "Red · Legendary",
             gameRMythic: "Gold · Mythic",
             gameNote: "Your game balance is a per-wallet record kept in this browser. Withdrawals are automatic: pay the fee and the WFISH lands straight in your wallet from the WD contract — no manual payout queue.",
+            gameMissionsTitle: "Missions",
+            gameMissionsSub: "Complete these social missions once per wallet and earn WFISH in your game balance — withdraw it with WD below. Claimed on trust: this page cannot check your X or Telegram account.",
+            gameMissionsNeedWallet: "Connect your wallet above, or enter your BSC address, to claim mission rewards.",
+            gameMissionXTitle: "Follow us on X",
+            gameMissionXDesc: "Follow @woldfishcoins on X",
+            gameMissionXBtn: "Follow on X",
+            gameMissionXClaim: "I followed — Claim 1,000 WFISH",
+            gameMissionTgTitle: "Join our Telegram",
+            gameMissionTgDesc: "Join the Woldfish channel on Telegram",
+            gameMissionTgBtn: "Join Telegram",
+            gameMissionTgClaim: "I joined — Claim 1,000 WFISH",
+            gameMissionDone: "Completed ✓ — reward claimed",
+            gameMissionCap: "Daily cap reached — claim this mission reward tomorrow.",
             gameMissed: "It got away!",
             gameNoEnergy: "Out of energy — wait for it to refill (1 per 60 seconds).",
             gameCapReached: "Daily cap reached — 10,000 WFISH per wallet per day. Come back tomorrow!",
@@ -1598,6 +1626,19 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
             gameRLegendary: "Merah · Legendary",
             gameRMythic: "Kuning · Mythic",
             gameNote: "Saldo game adalah catatan per dompet yang disimpan di browser ini. WD-nya otomatis: bayar biayanya dan WFISH langsung masuk dompetmu dari kontrak WD — tanpa antrean pembayaran manual.",
+            gameMissionsTitle: "Misi",
+            gameMissionsSub: "Selesaikan misi sosial ini sekali per dompet dan dapatkan WFISH ke saldo game kamu — tarik lewat WD di bawah. Klaim berdasarkan kejujuran: halaman ini tidak bisa memeriksa akun X atau Telegram kamu.",
+            gameMissionsNeedWallet: "Sambungkan dompetmu di atas, atau masukkan alamat BSC kamu, untuk klaim reward misi.",
+            gameMissionXTitle: "Follow kami di X",
+            gameMissionXDesc: "Follow @woldfishcoins di X",
+            gameMissionXBtn: "Follow di X",
+            gameMissionXClaim: "Saya sudah follow — Klaim 1.000 WFISH",
+            gameMissionTgTitle: "Gabung Telegram kami",
+            gameMissionTgDesc: "Gabung channel Woldfish di Telegram",
+            gameMissionTgBtn: "Gabung Telegram",
+            gameMissionTgClaim: "Saya sudah gabung — Klaim 1.000 WFISH",
+            gameMissionDone: "Selesai ✓ — reward sudah diklaim",
+            gameMissionCap: "Batas harian tercapai — klaim reward misi ini besok.",
             gameMissed: "Ikannya lepas!",
             gameNoEnergy: "Energi habis — tunggu pulih dulu (1 per 60 detik).",
             gameCapReached: "Batas harian tercapai — 10.000 WFISH per dompet per hari. Kembali lagi besok!",
@@ -4200,6 +4241,18 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
           { id: "legendary", key: "gameRLegendary", color: "#e5484d", reward: 1000, chance: 0.45, weight: 5.5, size: 72 },
           { id: "mythic",    key: "gameRMythic",    color: "#e9b949", reward: 2000, chance: 0.35, weight: 2.5, size: 80 }
         ];
+        // Social missions (one-time per wallet, claimed on trust — the page
+        // cannot check the player's X/Telegram account). Reward lands in the
+        // same game balance as catches, so it counts toward the daily cap
+        // and can be withdrawn with WD like any other game earning.
+        var GAME_MISSIONS = [
+          { id: "x",  titleKey: "gameMissionXTitle",  descKey: "gameMissionXDesc",  btnKey: "gameMissionXBtn",  claimKey: "gameMissionXClaim",  url: "https://x.com/woldfishcoins",  reward: 1000 },
+          { id: "tg", titleKey: "gameMissionTgTitle", descKey: "gameMissionTgDesc", btnKey: "gameMissionTgBtn", claimKey: "gameMissionTgClaim", url: "https://t.me/WorldFishmint", reward: 1000 }
+        ];
+        function gameMissionById(id) {
+          for (var i = 0; i < GAME_MISSIONS.length; i++) if (GAME_MISSIONS[i].id === id) return GAME_MISSIONS[i];
+          return GAME_MISSIONS[0];
+        }
         var gamePond = el("game-pond"), gamePondLock = el("game-pond-lock"),
             gameWalletEl = el("game-wallet"), gameManualWrap = el("game-manual-wrap"),
             gameManualInput = el("game-manual-input"), gameManualError = el("game-manual-error"),
@@ -4213,7 +4266,8 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
           btnGameBuyWfish = el("btn-game-buy-wfish"),
             gameTxStatus = el("game-tx-status"), gameTxTitle = el("game-tx-title"), gameTxHash = el("game-tx-hash"),
             gameHistoryEl = el("game-history"), gameHistoryEmpty = el("game-history-empty"),
-            gameLbEl = el("game-leaderboard"), gameLbEmpty = el("game-lb-empty");
+            gameLbEl = el("game-leaderboard"), gameLbEmpty = el("game-lb-empty"),
+            gameMissionsEl = el("game-missions"), gameMissionsNote = el("game-missions-note");
         var gameBusy = false; // a game NFT purchase or WD fee payment is in flight
 
         function gameTodayStr() {
@@ -4244,10 +4298,11 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
           var key = addr.toLowerCase();
           var rec = gameStore.wallets[key];
           if (!rec) {
-            rec = { addr: addr, balance: 0, totalEarned: 0, earnedToday: 0, day: gameTodayStr(), energy: GAME_MAX_ENERGY, energyTs: Date.now(), catches: 0, history: [] };
+            rec = { addr: addr, balance: 0, totalEarned: 0, earnedToday: 0, day: gameTodayStr(), energy: GAME_MAX_ENERGY, energyTs: Date.now(), catches: 0, history: [], missions: {} };
             gameStore.wallets[key] = rec;
           }
           if (rec.day !== gameTodayStr()) { rec.day = gameTodayStr(); rec.earnedToday = 0; }
+          if (!rec.missions) rec.missions = {};
           gameRegen(rec);
           return rec;
         }
@@ -4384,6 +4439,7 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
           }
           renderGameHistory(addr);
           renderGameLeaderboard(addr);
+          renderMissions(addr);
           renderGameWdList();
           renderGameWdFee();
           btnGameBuy.disabled = gameBusy || paidBusy;
@@ -4402,6 +4458,80 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
           var sec = Math.ceil((GAME_ENERGY_MS - into) / 1000);
           gameEnergyNote.textContent = tpl("gameEnergyNext", { sec: sec });
         }
+        /* ---------- Missions ---------- */
+        function renderMissions(addr) {
+          if (!gameMissionsEl) return;
+          gameMissionsEl.innerHTML = "";
+          gameMissionsNote.hidden = !!addr;
+          var done = {};
+          if (addr) {
+            var rec0 = gameStore.wallets[addr.toLowerCase()];
+            if (rec0 && rec0.missions) done = rec0.missions;
+          }
+          GAME_MISSIONS.forEach(function (m) {
+            var li = document.createElement("li");
+            li.className = "mission";
+            var top = document.createElement("div");
+            top.className = "mission-top";
+            var name = document.createElement("span");
+            name.className = "mission-name";
+            name.textContent = t(m.titleKey);
+            var reward = document.createElement("span");
+            reward.className = "mission-reward";
+            reward.textContent = "+" + fmt.format(m.reward) + " WFISH";
+            top.appendChild(name); top.appendChild(reward);
+            var desc = document.createElement("p");
+            desc.className = "mission-desc";
+            desc.style.margin = "0";
+            desc.textContent = t(m.descKey);
+            var actions = document.createElement("div");
+            actions.className = "mission-actions";
+            var link = document.createElement("a");
+            link.className = "btn-mini";
+            link.href = m.url;
+            link.target = "_blank";
+            link.rel = "noopener";
+            link.textContent = t(m.btnKey);
+            actions.appendChild(link);
+            var claim = document.createElement("button");
+            claim.type = "button";
+            claim.className = "btn-action";
+            claim.disabled = !addr || !!done[m.id];
+            claim.textContent = done[m.id] ? t("gameMissionDone") : t(m.claimKey);
+            claim.addEventListener("click", function () { claimMission(m.id); });
+            actions.appendChild(claim);
+            li.appendChild(top);
+            li.appendChild(desc);
+            li.appendChild(actions);
+            var status = document.createElement("p");
+            status.className = "mission-status";
+            status.setAttribute("data-mission-status", m.id);
+            status.hidden = true;
+            li.appendChild(status);
+            gameMissionsEl.appendChild(li);
+          });
+        }
+        function claimMission(id) {
+          var addr = gameWalletAddr();
+          if (!addr) { gameMissionsNote.hidden = false; return; }
+          var m = gameMissionById(id);
+          var rec = gameRec(addr);
+          if (rec.missions[id]) return;
+          if (rec.earnedToday >= GAME_DAILY_CAP) {
+            var st = gameMissionsEl.querySelector('[data-mission-status="' + id + '"]');
+            if (st) { st.textContent = t("gameMissionCap"); st.classList.add("warn"); st.hidden = false; }
+            return;
+          }
+          var reward = Math.min(m.reward, GAME_DAILY_CAP - rec.earnedToday);
+          rec.balance += reward;
+          rec.totalEarned += reward;
+          rec.earnedToday += reward;
+          rec.missions[id] = true;
+          rec.history.unshift({ mission: id, amount: reward, time: new Date().toISOString() });
+          if (rec.history.length > 30) rec.history.length = 30;
+          saveGameStore();
+          renderGame();
+        }
         function renderGameHistory(addr) {
           gameHistoryEl.innerHTML = "";
           var items = [];
@@ -4411,16 +4541,23 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
           }
           gameHistoryEmpty.hidden = items.length > 0;
           items.forEach(function (h) {
-            var rar = gameRarityById(h.rarity);
             var li = document.createElement("li");
             li.className = "hist-row";
             var left = document.createElement("span");
             left.className = "rname";
             var dot = document.createElement("span");
             dot.className = "rarity-dot";
-            dot.style.background = rar.color;
-            left.appendChild(dot);
-            left.appendChild(document.createTextNode(t(rar.key)));
+            if (h.mission) {
+              var mis = gameMissionById(h.mission);
+              dot.style.background = "#e9b949";
+              left.appendChild(dot);
+              left.appendChild(document.createTextNode(t(mis.titleKey)));
+            } else {
+              var rar = gameRarityById(h.rarity);
+              dot.style.background = rar.color;
+              left.appendChild(dot);
+              left.appendChild(document.createTextNode(t(rar.key)));
+            }
             var right = document.createElement("span");
             var amt = document.createElement("span");
             amt.className = "amt";
