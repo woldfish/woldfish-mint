@@ -778,6 +778,83 @@
         <p class="mint-hint" id="mint-hint">Connect your wallet to start minting.</p>
       </section>
 
+      <!-- ================= REFERRAL ================= -->
+      <section class="panel" id="referral" aria-labelledby="ref-title">
+        <div class="stats-head">
+          <div>
+            <h2 id="ref-title" data-i18n="refTitle">Referral Program</h2>
+            <p class="sub" data-i18n="refSub">Share your link — when a friend free-mints 10,000 WFISH, you earn 1,000 WFISH.</p>
+          </div>
+          <span class="badge" id="ref-badge" hidden data-i18n="refBadgeLive">Referral live</span>
+        </div>
+
+        <ul class="rules">
+          <li>
+            <span class="ic gold">
+              <svg class="ic-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+            </span>
+            <p data-i18n-html="refRule1"><strong>Share your link</strong>
+            Connect your wallet, copy your personal referral link below, and share it anywhere.</p>
+          </li>
+          <li>
+            <span class="ic">
+              <svg class="ic-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="8" width="18" height="4"/><path d="M12 8v13M5 12v9h14v-9"/><path d="M12 8a2.5 2.5 0 1 1 2.5-2.5C14.5 7 12 8 12 8zM12 8a2.5 2.5 0 1 0-2.5-2.5C9.5 7 12 8 12 8z"/></svg>
+            </span>
+            <p data-i18n-html="refRule2"><strong>Your friend free-mints</strong>
+            Your friend opens your link and mints 10,000 WFISH free (once per wallet, gas only). They can register you as their referrer on this page first — one registration per wallet, checked on-chain.</p>
+          </li>
+          <li>
+            <span class="ic gold">
+              <svg class="ic-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v10M15 9.5c0-1.5-1.5-2-3-2s-3 .8-3 2 1 1.8 3 2 3 .8 3 2-1.5 2-3 2-3-.5-3-2"/></svg>
+            </span>
+            <p data-i18n-html="refRule3"><strong>You claim 1,000 WFISH</strong>
+            Once your friend has minted, paste their wallet address below and claim 1,000 WFISH per friend. One reward per friend, forever.</p>
+          </li>
+        </ul>
+
+        <div class="stats-grid two">
+          <div class="stat">
+            <div class="num" id="ref-remaining">…</div>
+            <div class="lbl" data-i18n="refRemainingLbl">Referral Rewards Remaining</div>
+          </div>
+          <div class="stat">
+            <div class="num" id="ref-claimed">—</div>
+            <div class="lbl" data-i18n="refClaimedLbl">Rewards Claimed So Far</div>
+          </div>
+        </div>
+
+        <h3 class="game-h3" data-i18n="refLinkLbl">Your referral link</h3>
+        <div class="game-row">
+          <input type="text" class="game-input mono" id="ref-link" readonly value="" data-i18n-ph="refLinkPh" placeholder="Connect your wallet to see your link">
+          <button type="button" class="btn-mini" id="btn-ref-copy"><span class="copy-label" data-i18n="copy">Copy</span></button>
+        </div>
+
+        <div class="notice" id="ref-referred-banner" hidden>
+          <span data-i18n="refReferredBy">You were referred by</span>
+          <strong id="ref-referrer-addr">—</strong>
+          <span data-i18n="refReferredNote">Register them as your referrer before or after you mint — one registration per wallet, and it cannot be changed. The link is stored only in this browser.</span>
+          <button type="button" class="btn-claim" id="btn-ref-register" disabled style="margin-top: 10px; width: 100%;">
+            <span data-i18n="refRegisterBtn">Register this referrer</span>
+          </button>
+        </div>
+
+        <h3 class="game-h3" data-i18n="refClaimLbl">Claim a referral reward</h3>
+        <div class="game-row">
+          <input type="text" class="game-input mono" id="ref-claim-addr" data-i18n-ph="refClaimPh" placeholder="0x… — your friend's wallet address" autocomplete="off" spellcheck="false">
+          <button type="button" class="btn-action" id="btn-ref-claim" disabled>
+            <span data-i18n="refClaimBtn">Claim 1,000 WFISH</span>
+          </button>
+        </div>
+        <p class="mint-hint" id="ref-claim-hint"></p>
+
+        <div class="tx-status" id="ref-tx-status" role="status" aria-live="polite">
+          <div class="tx-title" id="ref-tx-title"></div>
+          <div class="tx-hash" id="ref-tx-hash"></div>
+        </div>
+
+        <p class="mint-hint" id="ref-hint">Connect your wallet to use the referral program.</p>
+      </section>
+
       <!-- ================= YOUR BALANCE ================= -->
       <section class="panel" id="balance-panel" hidden aria-labelledby="balance-title">
         <div class="stats-head">
@@ -1173,6 +1250,15 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
         // SPACE ID Agent ID registry (ERC-721, non-transferable), as named
         // in the official hackathon announcement. balanceOf > 0 = holds an ID.
         var AGENT_ID_REGISTRY = "0x60B9262456dE011F7d15a54CdD8c48bAaa8B022F";
+        // WoldfishReferral: 1,000 WFISH per friend who free-mints.
+        // TBD — fill with the deployed contract address after deployment;
+        // while it is the zero address the referral section shows
+        // "opens soon" and stays disabled (same pattern as BONUS_LIVE).
+        var REFERRAL_CONTRACT = "0x872eC03DB9A5C37d393383C7e25f645e3E0A0468";
+        // Live once REFERRAL_CONTRACT holds the deployed address
+        // (derived, so filling the address above is the only step needed).
+        var REF_LIVE = REFERRAL_CONTRACT !== "0x0000000000000000000000000000000000000000";
+        var REFERRAL_SITE = "https://woldfish.dpdns.org/";
         var BSCSCAN = "https://bscscan.com";
         var TOTAL_QUOTA = 1000;
 
@@ -1230,6 +1316,16 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
           claimableAmount: "0x89885049", // claimableAmount(address)
           remainingClaims: "0x09a8c9e9", // remainingClaims()
           claimed: "0xc884ef83"          // claimed(address)
+        };
+        var SEL_REF = {
+          registerReferral: "0x209ab711", // registerReferral(address)
+          claimReferral: "0xe61aee51",   // claimReferral(address)
+          referral: "0x7247959a",        // referral(address)
+          claimed: "0xc884ef83",         // claimed(address)
+          claimableFor: "0x96727fc1",    // claimableFor(address,address)
+          remainingClaims: "0x09a8c9e9",  // remainingClaims()
+          claimCount: "0x8da4d3c9",       // claimCount()
+          claimsActive: "0xb5f8a18f"      // claimsActive()
         };
 
         /* ================= Languages ================= */
@@ -1471,6 +1567,38 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
             agentTxFail: "Claim failed on the network. Your bonus isn't lost — try claiming again later.",
             agentClaimSent: "Claim sent — waiting for network confirmation…",
             agentClaimStillPending: "Claim is still awaiting confirmation. Check its status via the link below.",
+            refTitle: "Referral Program",
+            refSub: "Share your link — when a friend free-mints 10,000 WFISH, you earn 1,000 WFISH.",
+            refBadgeLive: "Referral live",
+            refRule1: "<strong>Share your link</strong> Connect your wallet, copy your personal referral link below, and share it anywhere.",
+            refRule2: "<strong>Your friend free-mints</strong> Your friend opens your link and mints 10,000 WFISH free (once per wallet, gas only). They can register you as their referrer on this page first — one registration per wallet, checked on-chain.",
+            refRule3: "<strong>You claim 1,000 WFISH</strong> Once your friend has minted, paste their wallet address below and claim 1,000 WFISH per friend. One reward per friend, forever.",
+            refRemainingLbl: "Referral Rewards Remaining",
+            refClaimedLbl: "Rewards Claimed So Far",
+            refLinkLbl: "Your referral link",
+            refLinkPh: "Connect your wallet to see your link",
+            refReferredBy: "You were referred by",
+            refReferredNote: "Register them as your referrer before or after you mint — one registration per wallet, and it cannot be changed. The link is stored only in this browser.",
+            refRegisterBtn: "Register this referrer",
+            refRegisteredBtn: "Referrer Registered",
+            refClaimLbl: "Claim a referral reward",
+            refClaimPh: "0x… — your friend's wallet address",
+            refClaimBtn: "Claim 1,000 WFISH",
+            refHintConnect: "Connect your wallet to use the referral program.",
+            refHintSoon: "The referral program opens soon — the link and claim buttons open here once the contract is live.",
+            refHintSoldOut: "All 1,000 referral rewards have been claimed. Thanks for sharing!",
+            refHintRegistered: "This wallet registered {addr} as its referrer.",
+            refHintReady: "Share your link above — each friend who free-mints earns you 1,000 WFISH.",
+            refRegisterSent: "Registration sent — waiting for network confirmation…",
+            refRegisterSuccess: "Success! Your referrer is registered on-chain.",
+            refTxFail: "Transaction failed on the network. Nothing was registered or claimed — try again later.",
+            refClaimSent: "Claim sent — waiting for network confirmation…",
+            refClaimSuccess: "Success! 1,000 WFISH has landed in your wallet.",
+            refClaimStillPending: "Transaction is still awaiting confirmation. Check its status via the link below.",
+            refInvalidAddr: "That doesn't look like a wallet address — paste a full 0x… address.",
+            refNotYourReferee: "That wallet did not register you as its referrer, so there is no reward to claim for it.",
+            refAlreadyClaimed: "The reward for that wallet has already been claimed.",
+            refNotMintedYet: "That wallet hasn't free-minted yet — the reward opens once it mints.",
             addrBonus: "Agent ID Bonus Contract",
             addrBonusSoon: "0x5e21957337484F8AF66cA9BCDC6490de2CCb536D"
           },
@@ -1676,6 +1804,38 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
             agentTxFail: "Klaim gagal di jaringan. Bonusmu tidak hilang — coba klaim lagi nanti.",
             agentClaimSent: "Klaim dikirim — menunggu konfirmasi jaringan…",
             agentClaimStillPending: "Klaim masih menunggu konfirmasi. Cek statusnya lewat tautan di bawah.",
+            refTitle: "Program Referral",
+            refSub: "Bagikan link kamu — saat temanmu free-mint 10.000 WFISH, kamu dapat 1.000 WFISH.",
+            refBadgeLive: "Referral aktif",
+            refRule1: "<strong>Bagikan link kamu</strong> Sambungkan dompetmu, salin link referral pribadimu di bawah, dan bagikan ke mana saja.",
+            refRule2: "<strong>Temanmu free-mint</strong> Temanmu membuka link kamu dan mint 10.000 WFISH gratis (sekali per dompet, bayar gas saja). Mereka bisa mendaftarkan kamu sebagai referrer di halaman ini dulu — satu pendaftaran per dompet, dicek on-chain.",
+            refRule3: "<strong>Kamu klaim 1.000 WFISH</strong> Begitu temanmu sudah mint, tempel alamat dompetnya di bawah dan klaim 1.000 WFISH per teman. Satu reward per teman, selamanya.",
+            refRemainingLbl: "Sisa Reward Referral",
+            refClaimedLbl: "Reward yang Sudah Diklaim",
+            refLinkLbl: "Link referral kamu",
+            refLinkPh: "Sambungkan dompetmu untuk melihat link kamu",
+            refReferredBy: "Kamu direferensikan oleh",
+            refReferredNote: "Daftarkan mereka sebagai referrer kamu sebelum atau sesudah kamu mint — satu pendaftaran per dompet, dan tidak bisa diubah. Link ini hanya disimpan di browser ini.",
+            refRegisterBtn: "Daftarkan referrer ini",
+            refRegisteredBtn: "Referrer Sudah Terdaftar",
+            refClaimLbl: "Klaim reward referral",
+            refClaimPh: "0x… — alamat dompet temanmu",
+            refClaimBtn: "Klaim 1.000 WFISH",
+            refHintConnect: "Sambungkan dompetmu untuk memakai program referral.",
+            refHintSoon: "Program referral segera dibuka — link dan tombol klaim dibuka di sini begitu kontraknya live.",
+            refHintSoldOut: "1.000 reward referral sudah habis diklaim. Terima kasih sudah berbagi!",
+            refHintRegistered: "Dompet ini mendaftarkan {addr} sebagai referrer-nya.",
+            refHintReady: "Bagikan link kamu di atas — setiap teman yang free-mint memberimu 1.000 WFISH.",
+            refRegisterSent: "Pendaftaran terkirim — menunggu konfirmasi jaringan…",
+            refRegisterSuccess: "Berhasil! Referrer kamu sudah terdaftar on-chain.",
+            refTxFail: "Transaksi gagal di jaringan. Tidak ada yang terdaftar atau terklaim — coba lagi nanti.",
+            refClaimSent: "Klaim dikirim — menunggu konfirmasi jaringan…",
+            refClaimSuccess: "Berhasil! 1.000 WFISH sudah masuk ke dompetmu.",
+            refClaimStillPending: "Transaksi masih menunggu konfirmasi. Cek statusnya lewat tautan di bawah.",
+            refInvalidAddr: "Itu bukan alamat dompet — tempel alamat lengkap 0x….",
+            refNotYourReferee: "Dompet itu tidak mendaftarkan kamu sebagai referrer-nya, jadi tidak ada reward untuk diklaim.",
+            refAlreadyClaimed: "Reward untuk dompet itu sudah diklaim.",
+            refNotMintedYet: "Dompet itu belum free-mint — reward baru terbuka begitu ia mint.",
             addrBonus: "Kontrak Bonus Agent ID",
             addrBonusSoon: "0x5e21957337484F8AF66cA9BCDC6490de2CCb536D"
           },
@@ -2719,6 +2879,16 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
             btnAgentClaim = el("btn-agent-claim"), agentBadge = el("agent-badge"),
             agentTxStatus = el("agent-tx-status"), agentTxTitle = el("agent-tx-title"),
             agentTxHash = el("agent-tx-hash"), agentHint = el("agent-hint"),
+            refRemaining = el("ref-remaining"), refClaimed = el("ref-claimed"),
+            refBadge = el("ref-badge"), refLink = el("ref-link"),
+            btnRefCopy = el("btn-ref-copy"),
+            refReferredBanner = el("ref-referred-banner"),
+            refReferrerAddr = el("ref-referrer-addr"),
+            btnRefRegister = el("btn-ref-register"),
+            refClaimAddrInput = el("ref-claim-addr"), btnRefClaim = el("btn-ref-claim"),
+            refClaimHint = el("ref-claim-hint"),
+            refTxStatus = el("ref-tx-status"), refTxTitle = el("ref-tx-title"),
+            refTxHash = el("ref-tx-hash"), refHint = el("ref-hint"),
             balancePanel = el("balance-panel"), balanceWfish = el("balance-wfish"),
             balanceNft = el("balance-nft"), balanceError = el("balance-error"),
             balanceUpdated = el("balance-updated"), btnRefreshBalance = el("btn-refresh-balance"),
@@ -2745,6 +2915,31 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
         var agentHasId = null; // true/false once read, null while unknown
         var agentClaimedVal = null; // true/false once read, null while unknown
         var agentBusy = false;
+        // Referral program (WoldfishReferral). refRegistered reads
+        // referral[account] on-chain, so the register button works
+        // even if this browser never stored the link.
+        var refStats = { remaining: null, claimed: null };
+        var refRegistered = null; // address string, "" = none registered, null = unknown
+        var refBusy = false;
+        // Referral: the ?ref= address from the URL is stored only in
+        // this browser (localStorage), never sent to a server.
+        var REF_STORE_KEY = "woldfish-ref";
+        function readStoredReferrer() {
+          try {
+            var v = window.localStorage.getItem(REF_STORE_KEY);
+            return (v && /^0x[0-9a-f]{40}$/.test(v)) ? v : null;
+          } catch (e) { return null; }
+        }
+        function storeReferrer(addr) {
+          try { window.localStorage.setItem(REF_STORE_KEY, addr); } catch (e) { /* private mode */ }
+        }
+        (function captureRefParam() {
+          try {
+            var m = window.location.search.match(/[?&]ref=(0x[0-9a-fA-F]{40})(?:&|$)/);
+            if (m) storeReferrer(m[1].toLowerCase());
+          } catch (e) { /* ignore */ }
+        })();
+        var storedReferrer = readStoredReferrer();
         var userWfishBalance = null; // BigInt (wei WFISH) or null
         var userNftCount = null; // Number or null
         var userBnbBalance = null; // BigInt (wei BNB on BSC) or null
@@ -2947,8 +3142,16 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
             idxBonusRemaining = requests.length;
             requests.push(batchEthCall(SEL_BONUS.remainingClaims, BONUS_CONTRACT));
           }
+          var idxRefRemaining = -1, idxRefClaimed = -1;
+          if (REF_LIVE) {
+            idxRefRemaining = requests.length;
+            requests.push(batchEthCall(SEL_REF.remainingClaims, REFERRAL_CONTRACT));
+            idxRefClaimed = requests.length;
+            requests.push(batchEthCall(SEL_REF.claimCount, REFERRAL_CONTRACT));
+          }
           var idxHasMinted = -1, idxClaimable = -1, idxBalToken = -1, idxBalNft = -1, idxBnb = -1;
           var idxAgentId = -1, idxAgentClaimable = -1, idxAgentClaimed = -1;
+          var idxRefRegistered = -1;
           if (account) {
             // Agent ID badge: balanceOf on the registry itself (> 0 means
             // the wallet holds an Agent ID), so it works even before the
@@ -2960,6 +3163,10 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
               requests.push(batchEthCall(SEL_BONUS.claimableAmount + addrParam, BONUS_CONTRACT));
               idxAgentClaimed = requests.length;
               requests.push(batchEthCall(SEL_BONUS.claimed + addrParam, BONUS_CONTRACT));
+            }
+            if (REF_LIVE) {
+              idxRefRegistered = requests.length;
+              requests.push(batchEthCall(SEL_REF.referral + addrParam, REFERRAL_CONTRACT));
             }
             idxHasMinted = requests.length;
             requests.push(batchEthCall(SEL.hasMinted + addrParam));
@@ -2982,10 +3189,19 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
             stats.active = decodeBool(batchResult(res, 2));
             try { paidStats.remaining = decodeUint(batchResult(res, 3)); } catch (e) { /* keep previous */ }
             if (idxBonusRemaining >= 0) { try { agentStats.remaining = decodeUint(batchResult(res, idxBonusRemaining)); } catch (e) { /* keep previous */ } }
+            if (idxRefRemaining >= 0) { try { refStats.remaining = decodeUint(batchResult(res, idxRefRemaining)); } catch (e) { /* keep previous */ } }
+            if (idxRefClaimed >= 0) { try { refStats.claimed = decodeUint(batchResult(res, idxRefClaimed)); } catch (e) { /* keep previous */ } }
             if (forAccount && account === forAccount) {
               try { agentHasId = decodeBool(batchResult(res, idxAgentId)); } catch (e) { /* keep previous */ }
               if (idxAgentClaimable >= 0) { try { agentClaimableVal = BigInt(batchResult(res, idxAgentClaimable)); } catch (e) { /* keep previous */ } }
               if (idxAgentClaimed >= 0) { try { agentClaimedVal = decodeBool(batchResult(res, idxAgentClaimed)); } catch (e) { /* keep previous */ } }
+              if (idxRefRegistered >= 0) {
+                try {
+                  var regHex = batchResult(res, idxRefRegistered);
+                  if (!regHex || regHex === "0x") throw new Error("Empty result");
+                  refRegistered = ("0x" + regHex.slice(-40)).toLowerCase();
+                } catch (e) { /* keep previous */ }
+              }
               try { userMinted = decodeBool(batchResult(res, idxHasMinted)); } catch (e) { /* keep previous */ }
               try { paidClaimableVal = BigInt(batchResult(res, idxClaimable)); } catch (e) { /* keep previous */ }
               try {
@@ -3073,6 +3289,7 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
           renderBalances();
           renderGame();
           renderAgent();
+          renderReferral();
         }
 
         function renderMintButton() {
@@ -4083,6 +4300,124 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
           }
         }
 
+        /* ================= Referral ================= */
+        function refLinkFor(addr) {
+          return REFERRAL_SITE + "?ref=" + addr.toLowerCase();
+        }
+        function renderReferral() {
+          setNum(refRemaining, (refStats.remaining === null) ? "…" : fmt.format(refStats.remaining));
+          setNum(refClaimed, (refStats.claimed === null) ? "—" : fmt.format(refStats.claimed));
+          if (!REF_LIVE) {
+            refBadge.hidden = true;
+          } else {
+            refBadge.hidden = false;
+            refBadge.classList.add("gold");
+            refBadge.textContent = t("refBadgeLive");
+          }
+
+          // Your referral link (only once a wallet is connected).
+          if (account) {
+            refLink.value = refLinkFor(account);
+          } else {
+            refLink.value = "";
+          }
+          btnRefCopy.disabled = !account;
+
+          // "You were referred by …" banner: shown when this browser
+          // stored a ?ref= address and the wallet has not registered one.
+          var showBanner = false;
+          if (storedReferrer && account) {
+            if (storedReferrer.toLowerCase() === account.toLowerCase()) {
+              showBanner = false; // own link — nothing to register
+            } else if (refRegistered === "" || refRegistered === null) {
+              showBanner = true;
+            }
+          }
+          refReferredBanner.hidden = !showBanner;
+          if (showBanner) refReferrerAddr.textContent = shortAddr(storedReferrer);
+
+          var regLabel = t("refRegisterBtn");
+          var regDisabled = true;
+          if (refBusy) {
+            regLabel = t("processing");
+          } else if (!REF_LIVE) {
+            regDisabled = true;
+          } else if (!account || !chainOk) {
+            regDisabled = true;
+          } else if (!storedReferrer || storedReferrer.toLowerCase() === account.toLowerCase()) {
+            regDisabled = true;
+          } else if (refRegistered && refRegistered !== "") {
+            regLabel = t("refRegisteredBtn");
+            regDisabled = true;
+          } else if (refRegistered === null) {
+            regDisabled = true; // still reading on-chain state
+          } else {
+            regDisabled = false;
+          }
+          var regLabelSpan = btnRefRegister.querySelector("span");
+          if (regLabelSpan) regLabelSpan.textContent = regLabel;
+          btnRefRegister.disabled = regDisabled;
+
+          // Claim box: enabled when a wallet is connected and the
+          // referral contract is live; the typed address is checked
+          // on-chain at claim time (see doClaimReferral).
+          var claimAddr = (refClaimAddrInput.value || "").trim();
+          btnRefClaim.disabled = refBusy || !account || !chainOk || !REF_LIVE || !/^0x[0-9a-fA-F]{40}$/.test(claimAddr);
+
+          var hint = "";
+          if (refBusy) {
+            hint = t("hintProcessing");
+          } else if (!provider()) {
+            hint = t("hintNoProviderPaid");
+          } else if (!account) {
+            hint = t("refHintConnect");
+          } else if (!chainOk) {
+            hint = t("hintWrongChain");
+          } else if (!REF_LIVE) {
+            hint = t("refHintSoon");
+          } else if (refStats.remaining === 0) {
+            hint = t("refHintSoldOut");
+          } else if (refRegistered === null) {
+            hint = t("hintChecking");
+          } else if (refRegistered !== "") {
+            hint = tpl("refHintRegistered", { addr: shortAddr(refRegistered) });
+          } else {
+            hint = t("refHintReady");
+          }
+          refHint.textContent = hint;
+        }
+
+        function showRefTx(kind, title, hash) {
+          refTxStatus.className = "tx-status show " + kind;
+          if (kind === "pending") {
+            refTxTitle.innerHTML = "";
+            var sp = document.createElement("span"); sp.className = "spinner";
+            var tx = document.createElement("span"); tx.textContent = title;
+            refTxTitle.appendChild(sp); refTxTitle.appendChild(tx);
+          } else {
+            refTxTitle.textContent = title;
+          }
+          fillTxHash(refTxHash, hash);
+        }
+        function hideRefTx() { refTxStatus.className = "tx-status"; }
+
+        function refTxError(err, action) {
+          if (err && err.message === "session-dead") {
+            recoverFromDeadSession(action || "ref", showRefTx);
+          } else if (err && err.message === "tx-no-response") {
+            showRefTx("error", t("txNoResponse"), null);
+          } else if (err && err.message === "wrong-network") {
+            showRefTx("error", t("txWrongNetwork"), null);
+          } else if (err && err.message === "insufficient-bnb") {
+            showRefTx("error", t("txInsufficientBnb"), null);
+          } else if (err && err.code === 4001) {
+            showRefTx("error", t("txCancelled"), null);
+          } else {
+            var msg = (err && err.message) ? String(err.message) : t("genericError");
+            showRefTx("error", t("txFailedPrefix") + msg, null);
+          }
+        }
+
         function showPaidTx(kind, title, hash) {
           paidTxStatus.className = "tx-status show " + kind;
           if (kind === "pending") {
@@ -4353,6 +4688,123 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
           });
         }
 
+        function doRegisterReferral() {
+          var p = provider();
+          if (!p || !account || refBusy || !REF_LIVE) return;
+          if (!storedReferrer || storedReferrer.toLowerCase() === account.toLowerCase()) return;
+          hideRefTx();
+          refBusy = true; renderReferral();
+          var data = SEL_REF.registerReferral + encodeAddress(storedReferrer);
+          checkChain().then(function () {
+            if (chainOk) return true;
+            // Wrong network: ask the wallet to switch to BSC itself
+            // (see ensureBsc) rather than only reporting the problem.
+            showRefTx("pending", t("txSwitching"), null);
+            return ensureBsc();
+          }).then(function (onBsc) {
+            if (!onBsc) throw new Error("wrong-network");
+            showRefTx("pending", t("txCheckingSession"), null);
+            return ensureSessionAlive().then(function (alive) {
+              if (!alive) throw new Error("session-dead");
+              showRefTx("pending", t("txWaitingApproval"), null);
+              return sendTx(p, { from: account, to: REFERRAL_CONTRACT, data: data, value: "0x0", chainId: CHAIN_ID_HEX }, showRefTx);
+            });
+          }).then(function (hash) {
+            showRefTx("pending", t("refRegisterSent"), hash);
+            return pollReceipt(hash, 40).then(function (receipt) {
+              refBusy = false;
+              if (!receipt) {
+                showRefTx("pending", t("refClaimStillPending"), hash);
+              } else if (receipt.status === "0x1") {
+                refRegistered = storedReferrer.toLowerCase();
+                showRefTx("success", t("refRegisterSuccess"), hash);
+              } else {
+                showRefTx("error", t("refTxFail"), hash);
+              }
+              renderReferral();
+              return refreshStats();
+            });
+          }).catch(function (err) {
+            refBusy = false;
+            refTxError(err, "ref-register");
+            renderReferral();
+          });
+        }
+
+        function doClaimReferral() {
+          var p = provider();
+          if (!p || !account || refBusy || !REF_LIVE) return;
+          var referee = (refClaimAddrInput.value || "").trim();
+          if (!/^0x[0-9a-fA-F]{40}$/.test(referee)) {
+            refClaimHint.textContent = t("refInvalidAddr");
+            return;
+          }
+          referee = referee.toLowerCase();
+          hideRefTx();
+          refBusy = true; renderReferral();
+          refClaimHint.textContent = t("hintChecking");
+          // Check on-chain first: who did the referee register, has the
+          // reward been claimed already, and has the referee free-minted?
+          // (A plain wallet-to-wallet transfer cannot tell the referrer
+          // who their referees are — the referee's address must be
+          // typed in, because only the referee's registration names
+          // the referrer. The contract enforces all of it on-chain.)
+          var refereeParam = encodeAddress(referee);
+          Promise.all([
+            ethCall(SEL_REF.referral + refereeParam, REFERRAL_CONTRACT),
+            ethCall(SEL_REF.claimed + refereeParam, REFERRAL_CONTRACT),
+            ethCall(SEL.hasMinted + refereeParam, MINT_CONTRACT)
+          ]).then(function (results) {
+            var registered = ("0x" + results[0].slice(-40)).toLowerCase();
+            var alreadyClaimed = BigInt(results[1]) !== 0n;
+            var hasMinted = BigInt(results[2]) !== 0n;
+            if (registered !== account.toLowerCase()) throw new Error("not-your-referee");
+            if (alreadyClaimed) throw new Error("already-claimed");
+            if (!hasMinted) throw new Error("not-minted-yet");
+            return checkChain().then(function () {
+              if (chainOk) return true;
+              showRefTx("pending", t("txSwitching"), null);
+              return ensureBsc();
+            }).then(function (onBsc) {
+              if (!onBsc) throw new Error("wrong-network");
+              showRefTx("pending", t("txCheckingSession"), null);
+              return ensureSessionAlive().then(function (alive) {
+                if (!alive) throw new Error("session-dead");
+                showRefTx("pending", t("txWaitingApproval"), null);
+                return sendTx(p, { from: account, to: REFERRAL_CONTRACT, data: SEL_REF.claimReferral + refereeParam, value: "0x0", chainId: CHAIN_ID_HEX }, showRefTx);
+              });
+            });
+          }).then(function (hash) {
+            showRefTx("pending", t("refClaimSent"), hash);
+            refClaimHint.textContent = "";
+            return pollReceipt(hash, 40).then(function (receipt) {
+              refBusy = false;
+              if (!receipt) {
+                showRefTx("pending", t("refClaimStillPending"), hash);
+              } else if (receipt.status === "0x1") {
+                showRefTx("success", t("refClaimSuccess"), hash);
+                refClaimAddrInput.value = "";
+              } else {
+                showRefTx("error", t("refTxFail"), hash);
+              }
+              renderReferral();
+              return refreshStats();
+            });
+          }).catch(function (err) {
+            refBusy = false;
+            if (err && err.message === "not-your-referee") {
+              refClaimHint.textContent = t("refNotYourReferee");
+            } else if (err && err.message === "already-claimed") {
+              refClaimHint.textContent = t("refAlreadyClaimed");
+            } else if (err && err.message === "not-minted-yet") {
+              refClaimHint.textContent = t("refNotMintedYet");
+            } else {
+              refTxError(err, "ref-claim");
+            }
+            renderReferral();
+          });
+        }
+
         /* ================= Copy address ================= */
         function copyText(text, btn) {
           var labelEl = btn.querySelector(".copy-label");
@@ -4470,6 +4922,13 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
         if (btnPaidMintWfish) btnPaidMintWfish.addEventListener("click", doPaidMintWfish);
         btnClaim.addEventListener("click", doClaimBonus);
         btnAgentClaim.addEventListener("click", doClaimAgentBonus);
+        btnRefRegister.addEventListener("click", doRegisterReferral);
+        btnRefClaim.addEventListener("click", doClaimReferral);
+        btnRefCopy.addEventListener("click", function () {
+          if (!account) return;
+          copyText(refLinkFor(account), btnRefCopy);
+        });
+        refClaimAddrInput.addEventListener("input", renderReferral);
         btnWatch.addEventListener("click", watchAsset);
         btnRefresh.addEventListener("click", function () { refreshStats(); });
         if (btnRefreshBalance) btnRefreshBalance.addEventListener("click", function () { refreshBalances(); });
