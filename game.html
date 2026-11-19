@@ -360,16 +360,24 @@
         position: absolute; left: 2px; z-index: 2;
         border: none; background: transparent; padding: 16px; margin: 0;
         min-height: 0; cursor: pointer;
-        animation-name: pond-swim; animation-timing-function: linear;
-        animation-iteration-count: infinite; animation-direction: alternate;
+        /* Swim: ease-in-out so the fish slows into each turn like a
+           real fish; bob: gentle vertical undulation + tilt. */
+        animation-name: pond-swim, pond-bob;
+        animation-timing-function: ease-in-out, ease-in-out;
+        animation-iteration-count: infinite, infinite;
+        animation-direction: alternate, alternate;
         -webkit-tap-highlight-color: transparent;
       }
       .gfish img { display: block; width: 100%; height: auto; filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.45)); animation-name: pond-flip; animation-timing-function: linear; animation-iteration-count: infinite; }
-      .gfish.rtl { animation-direction: alternate-reverse; }
+      .gfish.rtl { animation-direction: alternate-reverse, alternate; }
       .gfish.rtl img { animation-name: pond-flip-rtl; }
-      @keyframes pond-flip { 0%, 49.9% { transform: scaleX(1); } 50%, 99.9% { transform: scaleX(-1); } 100% { transform: scaleX(1); } }
-      @keyframes pond-flip-rtl { 0%, 49.9% { transform: scaleX(-1); } 50%, 99.9% { transform: scaleX(1); } 100% { transform: scaleX(-1); } }
-      .gfish.gone { animation-play-state: paused; transition: transform 0.35s ease, opacity 0.35s ease; transform: scale(1.22) rotate(-14deg); opacity: 0; }
+      @keyframes pond-bob { from { transform: translateY(-3px) rotate(-1.2deg); } to { transform: translateY(4px) rotate(1.6deg); } }
+      /* Smooth turn: the fish narrows to edge-on (scaleX 0) around each
+         turnaround instead of snapping mirrored in one frame. The 0%
+         and 100% stops match so the loop has no pop. */
+      @keyframes pond-flip { 0% { transform: scaleX(0); } 4%, 46% { transform: scaleX(1); } 50% { transform: scaleX(0); } 54%, 96% { transform: scaleX(-1); } 100% { transform: scaleX(0); } }
+      @keyframes pond-flip-rtl { 0% { transform: scaleX(0); } 4%, 46% { transform: scaleX(-1); } 50% { transform: scaleX(0); } 54%, 96% { transform: scaleX(1); } 100% { transform: scaleX(0); } }
+      .gfish.gone { animation-name: pond-swim; animation-play-state: paused; transition: transform 0.35s ease, opacity 0.35s ease; transform: scale(1.22) rotate(-14deg); opacity: 0; }
       @keyframes pond-swim { from { left: 2px; } to { left: calc(100% - var(--fw, 76px)); } }
       .floater {
         position: absolute; z-index: 3; pointer-events: none;
@@ -6370,19 +6378,22 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
             // other and the fat 16px padding around each fish stays tappable.
             b.style.top = (2 + fish.lane * 16 + Math.random() * 4) + "%";
             var dur = 7 + Math.random() * 7;
-            b.style.animationDuration = dur + "s";
-            b.style.animationDelay = (-Math.random() * dur * 0.9) + "s";
+            var bobDur = 2.6 + Math.random() * 1.6;
+            var swimDelay = -Math.random() * dur * 0.9;
+            b.style.animationDuration = dur + "s, " + bobDur.toFixed(2) + "s";
+            b.style.animationDelay = swimDelay.toFixed(2) + "s, " + (-Math.random() * bobDur).toFixed(2) + "s";
             b._fishId = fish.id;
             // Realistic fish photo (transparent PNG, per rarity). The flip
             // cycle runs at twice the swim duration so the fish turns
-            // around exactly when its swim direction reverses.
+            // around exactly when its swim direction reverses; the flip
+            // itself eases through edge-on (scaleX 0) instead of snapping.
             var img = document.createElement("img");
             img.src = "assets/fish-" + rar.id + ".png";
             img.alt = "";
             img.setAttribute("aria-hidden", "true");
             img.draggable = false;
             img.style.animationDuration = (dur * 2) + "s";
-            img.style.animationDelay = b.style.animationDelay;
+            img.style.animationDelay = swimDelay.toFixed(2) + "s";
             b.appendChild(img);
             b.addEventListener("click", function () { feedFish(this._fishId, this); });
             gamePond.appendChild(b);
