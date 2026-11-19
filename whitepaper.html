@@ -4,16 +4,16 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="color-scheme" content="dark" />
-    <meta name="description" content="Woldfish (WFISH) whitepaper: a community token on BNB Smart Chain with a free mint, a paid mint, an NFT collection and a fishing game with automatic withdrawals." />
+    <meta name="description" content="Woldfish (WFISH) whitepaper: a community token on BNB Smart Chain with a free mint, a paid mint, an NFT collection and a fish pond game with automatic withdrawals." />
     <link rel="icon" type="image/png" href="favicon.png" />
     <meta property="og:type" content="website" />
     <meta property="og:title" content="Woldfish (WFISH) — Whitepaper" />
-    <meta property="og:description" content="Woldfish (WFISH) whitepaper: a community token on BNB Smart Chain with a free mint, a paid mint, an NFT collection and a fishing game with automatic withdrawals." />
+    <meta property="og:description" content="Woldfish (WFISH) whitepaper: a community token on BNB Smart Chain with a free mint, a paid mint, an NFT collection and a fish pond game with automatic withdrawals." />
     <meta property="og:image" content="https://woldfish.dpdns.org/cover.jpg" />
     <meta property="og:url" content="https://woldfish.dpdns.org/whitepaper.html" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Woldfish (WFISH) — Whitepaper" />
-    <meta name="twitter:description" content="Woldfish (WFISH) whitepaper: a community token on BNB Smart Chain with a free mint, a paid mint, an NFT collection and a fishing game with automatic withdrawals." />
+    <meta name="twitter:description" content="Woldfish (WFISH) whitepaper: a community token on BNB Smart Chain with a free mint, a paid mint, an NFT collection and a fish pond game with automatic withdrawals." />
     <meta name="twitter:image" content="https://woldfish.dpdns.org/cover.jpg" />
     <title>Woldfish (WFISH) — Whitepaper</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -73,10 +73,10 @@
     <main>
       <a class="back" href="index.html">&larr; Back to the Mint Site</a>
       <h1>Woldfish <span class="gold">(WFISH)</span> — Whitepaper</h1>
-      <p class="sub">A community token on BNB Smart Chain. Launched 15 November 2026. Version 1.0 — 17 November 2026.</p>
+      <p class="sub">A community token on BNB Smart Chain. Launched 15 November 2026. Version 1.1 — 19 November 2026.</p>
 
       <h2>1. What is Woldfish</h2>
-      <p>Woldfish (WFISH) is a community token on BNB Smart Chain with a fixed supply of 1,000,000,000 tokens. It is distributed through a free mint and a paid mint, it powers the Woldfish Fishing Game, and it already trades on PancakeSwap. There was no presale and no private sale: every token in circulation comes from the public mints, the game, or the liquidity pool.</p>
+      <p>Woldfish (WFISH) is a community token on BNB Smart Chain with a fixed supply of 1,000,000,000 tokens. It is distributed through a free mint and a paid mint, it powers the Woldfish Fish Pond game, and it already trades on PancakeSwap. There was no presale and no private sale: every token in circulation comes from the public mints, the game, or the liquidity pool.</p>
       <p>The project is built and run by its founder, Dimas Mohamad Julius, as a community project. The official channels are this website (<a href="https://woldfish.dpdns.org/">woldfish.dpdns.org</a>), the game (<a href="https://woldfish.dpdns.org/game.html">woldfish.dpdns.org/game.html</a>), the public code on GitHub (<a href="https://github.com/woldfish">github.com/woldfish</a>), X (<a href="https://x.com/woldfishcoins">x.com/woldfishcoins</a>), Telegram (<a href="https://t.me/WorldFishmint">t.me/WorldFishmint</a>), and email <a href="mailto:woldfishcoin26@gmail.com">woldfishcoin26@gmail.com</a>.</p>
 
       <h2>2. Token facts</h2>
@@ -104,19 +104,19 @@
       <h3>Trading</h3>
       <p>WFISH trades on PancakeSwap through its official WFISH/BNB pair. The price follows the pool and can go up or down at any time. A free mint is not a guarantee of profit.</p>
 
-      <h2>4. The Fishing Game</h2>
-      <p>The Woldfish Fishing Game (<a href="https://woldfish.dpdns.org/game.html">game.html</a>) is a free browser game. Players tap swimming fish to catch them; each catch earns WFISH, with rarer fish worth more — the same rarities as the NFT collection:</p>
+      <h2>4. The Fish Pond Game</h2>
+      <p>The Woldfish Fish Pond (<a href="https://woldfish.dpdns.org/game.html">game.html</a>) is a free browser game. Players adopt fish, feed them, and harvest the WFISH they produce — rarer fish earn more per hour, using the same rarities as the NFT collection:</p>
       <ul>
-        <li>Blue / Common — 100 WFISH per catch</li>
-        <li>Green / Rare — 250 WFISH per catch</li>
-        <li>Purple / Epic — 500 WFISH per catch</li>
-        <li>Red / Legendary — 1,000 WFISH per catch</li>
-        <li>Yellow / Mythic — 2,000 WFISH per catch</li>
+        <li>Blue / Common — 10 WFISH per hour</li>
+        <li>Green / Rare — 25 WFISH per hour</li>
+        <li>Purple / Epic — 60 WFISH per hour</li>
+        <li>Red / Legendary — 120 WFISH per hour</li>
+        <li>Yellow / Mythic — 250 WFISH per hour</li>
       </ul>
-      <p>Each cast costs 1 energy (20 energy, regenerating over time). Earnings are capped at 10,000 WFISH per wallet per day. Game scores are stored only in the player&rsquo;s own browser; withdrawals are on-chain and automatic through the Game Withdraw contract: <code>withdraw(amount)</code> pays out in multiples of 10,000 WFISH, with a fee of exactly 0.00001 BNB per 10,000 WFISH and a daily cap of 10,000 WFISH per wallet. There is no manual payout queue and no one to ask for a withdrawal.</p>
+      <p>The first fish is free (1 Common). Each fish costs WFISH from the game balance to adopt (up to 5 fish per wallet), and feeding a fish costs 1 energy — a fed fish produces WFISH for 8 hours, a hungry fish produces nothing, and fish never die. Production grows with the fish&rsquo;s level (+10% per level, up to level 5), and the Golden Hour (19:00–20:00 WIB) doubles production. Energy is capped at 20 and regenerates over time. Earnings are capped at 10,000 WFISH per wallet per day. Game scores are stored only in the player&rsquo;s own browser; withdrawals are on-chain and automatic through the Game Withdraw contract: <code>withdraw(amount)</code> pays out in multiples of 10,000 WFISH, with a fee of exactly 0.00001 BNB per 10,000 WFISH and a daily cap of 10,000 WFISH per wallet. There is no manual payout queue and no one to ask for a withdrawal.</p>
 
       <h2>5. Woldfish NFTs</h2>
-      <p>Every paid mint also sends 1 Woldfish NFT. The collection is capped at 1,000 NFTs, one per paid mint, with five rarities: Blue / Common (500), Green / Rare (250), Purple / Epic (150), Red / Legendary (70), Yellow / Mythic (30, the rarest). NFT metadata is stored on IPFS. Paid mints can also be made with WFISH in the game&rsquo;s shop (a planned option).</p>
+      <p>Every paid mint also sends 1 Woldfish NFT. The collection is capped at 1,000 NFTs, one per paid mint, with five rarities: Blue / Common (500), Green / Rare (250), Purple / Epic (150), Red / Legendary (70), Yellow / Mythic (30, the rarest). NFT metadata is stored on IPFS. Paid mints can also be made with WFISH in the game&rsquo;s shop: 100,000 WFISH + 0.00003 BNB for 1 NFT only — no WFISH payout and no daily bonus.</p>
 
       <h2>6. Smart contracts</h2>
       <p>All core contracts are verified on Sourcify (Perfect Match). Verify them yourself on BscScan:</p>
@@ -127,6 +127,8 @@
           <tr><th>Paid mint (v3)</th><td><code>0x732C78243e60364Cf06AaA39AaaCec9f92B9Dc97</code></td></tr>
           <tr><th>Woldfish NFT</th><td><code>0x29c52529a7956b9ca939f085df63d15cbc4395f0</code></td></tr>
           <tr><th>Game Withdraw</th><td><code>0xac6e14b818eec3a6f265441e196492891949dcc8</code></td></tr>
+          <tr><th>Agent ID Bonus</th><td><code>0x5e21957337484F8AF66cA9BCDC6490de2CCb536D</code></td></tr>
+          <tr><th>Referral</th><td><code>0x872eC03DB9A5C37d393383C7e25f645e3E0A0468</code></td></tr>
           <tr><th>PancakeSwap pair</th><td><code>0x38C36a2Ea9B80c984f8ec51Bc71a1019E53C92b5</code></td></tr>
         </table>
       </div>
@@ -136,8 +138,8 @@
 
       <h2>8. Status and roadmap</h2>
       <ul>
-        <li><strong>Live now (15–17 Nov 2026):</strong> free mint and paid mint open; fishing game live; automatic withdrawals proven on-chain; token trading on PancakeSwap.</li>
-        <li><strong>In progress:</strong> paid mint payable with WFISH (mintWithWFISH); more additions to the fishing game.</li>
+        <li><strong>Live now (15–19 Nov 2026):</strong> free mint and paid mint open; fish pond game live; automatic withdrawals proven on-chain; token trading on PancakeSwap; paid mint payable with WFISH; Agent ID bonus and referral program live.</li>
+        <li><strong>In progress:</strong> more additions to the fish pond game.</li>
         <li><strong>Planned:</strong> more game features and community growth around the mint and the game.</li>
       </ul>
 
@@ -149,7 +151,7 @@
       </ul>
 
       <footer>
-        <p>Woldfish (WFISH) — Whitepaper v1.0, 17 November 2026. Contact: <a href="mailto:woldfishcoin26@gmail.com">woldfishcoin26@gmail.com</a> · Code: <a href="https://github.com/woldfish">github.com/woldfish</a> · X: <a href="https://x.com/woldfishcoins">x.com/woldfishcoins</a> · Telegram: <a href="https://t.me/WorldFishmint">t.me/WorldFishmint</a> · Mint site: <a href="https://woldfish.dpdns.org/">woldfish.dpdns.org</a></p>
+        <p>Woldfish (WFISH) — Whitepaper v1.1, 19 November 2026. Contact: <a href="mailto:woldfishcoin26@gmail.com">woldfishcoin26@gmail.com</a> · Code: <a href="https://github.com/woldfish">github.com/woldfish</a> · X: <a href="https://x.com/woldfishcoins">x.com/woldfishcoins</a> · Telegram: <a href="https://t.me/WorldFishmint">t.me/WorldFishmint</a> · Mint site: <a href="https://woldfish.dpdns.org/">woldfish.dpdns.org</a></p>
         <p class="warn">This document describes the project as it exists today. Features marked planned may change. Nothing here is financial advice.</p>
       </footer>
     </main>
