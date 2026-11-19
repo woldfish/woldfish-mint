@@ -591,7 +591,7 @@
           <span class="wallet-addr" id="game-wallet">—</span>
         </div>
         <div id="game-manual-wrap">
-          <p class="sub" style="margin-top:12px;" data-i18n="gameManualLbl">No wallet connected? Enter your BSC wallet address to play and record your score under that wallet:</p>
+          <p class="sub" style="margin-top:12px;" data-i18n="gameManualLbl">No wallet needed to play — your progress is saved on this device. Enter your BSC wallet address only when you want to withdraw (WD).</p>
           <div class="game-row">
             <input type="text" class="game-input mono" id="game-manual-input" data-i18n-ph="gameManualPh" placeholder="0x… your BSC wallet address" autocomplete="off" spellcheck="false" />
             <button type="button" class="btn-action" id="btn-game-manual" data-i18n="gameUseAddr">Use This Address</button>
@@ -1494,7 +1494,8 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
             gameBadge: "Play & Earn WFISH",
             gamePlayingAs: "Playing as",
             gameNoWalletYet: "No wallet yet",
-            gameManualLbl: "No wallet connected? Enter your BSC wallet address to play and record your score under that wallet:",
+            gameGuest: "Guest",
+            gameManualLbl: "No wallet needed to play — your progress is saved on this device. Enter your BSC wallet address only when you want to withdraw (WD).",
             gameManualPh: "0x… your BSC wallet address",
             gameUseAddr: "Use This Address",
             gameInvalidAddr: "That doesn't look like a valid BSC address (0x + 40 hex characters).",
@@ -1504,7 +1505,7 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
             gameTodayLbl: "Earned Today (UTC) / 10,000 Cap",
             gameEnergyFull: "Energy is full. Each cast costs 1 energy; it refills by 1 every 60 seconds.",
             gameEnergyNext: "Next energy point in {sec}s · refills 1 per 60 seconds (max 20).",
-            gameNeedWallet: "Connect your wallet above, or enter your BSC address, to open your pond.",
+            gameNeedWallet: "Enter your BSC wallet address above first — your game balance will move to it — then tap WD again.",
             gamePondHint: "Tap a fish to cast at it — 1 cast costs 1 energy. Energy refills by 1 every 60 seconds (max 20).",
             gameRCommon: "Blue · Common",
             gameRRare: "Green · Rare",
@@ -1777,7 +1778,8 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
             gameBadge: "Main & Dapat WFISH",
             gamePlayingAs: "Bermain sebagai",
             gameNoWalletYet: "Belum ada dompet",
-            gameManualLbl: "Dompet belum terhubung? Masukkan alamat dompet BSC kamu untuk bermain dan mencatat skor atas dompet itu:",
+            gameGuest: "Tamu",
+            gameManualLbl: "Tidak perlu dompet untuk bermain — progresmu tersimpan di perangkat ini. Masukkan alamat dompet BSC hanya saat kamu mau WD.",
             gameManualPh: "0x… alamat dompet BSC kamu",
             gameUseAddr: "Pakai Alamat Ini",
             gameInvalidAddr: "Alamat itu sepertinya bukan alamat BSC yang valid (0x + 40 karakter heksadesimal).",
@@ -1787,7 +1789,7 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
             gameTodayLbl: "Hasil Hari Ini (UTC) / Batas 10.000",
             gameEnergyFull: "Energi penuh. Setiap lemparan memakai 1 energi; pulih 1 setiap 60 detik.",
             gameEnergyNext: "Energi berikutnya dalam {sec} detik · pulih 1 per 60 detik (maks 20).",
-            gameNeedWallet: "Sambungkan dompetmu di atas, atau masukkan alamat BSC kamu, untuk membuka kolammu.",
+            gameNeedWallet: "Masukkan dulu alamat dompet BSC kamu di atas — saldo gamemu akan pindah ke alamat itu — lalu tap WD lagi.",
             gamePondHint: "Ketuk ikan untuk melempar kail ke arahnya — 1 lemparan memakai 1 energi. Energi pulih 1 setiap 60 detik (maks 20).",
             gameRCommon: "Biru · Common",
             gameRRare: "Hijau · Rare",
@@ -2051,7 +2053,7 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
             gameInvalidAddr: "这看起来不是有效的 BSC 地址（0x + 40 个十六进制字符）。",
             gameLbEmpty: "还没有玩家记录。",
             gameLbTitle: "排行榜（本浏览器）",
-            gameManualLbl: "没有连接钱包？输入你的 BSC 钱包地址来游玩，分数会记录在该钱包下：",
+            gameManualLbl: "无需钱包即可开始游玩——进度保存在此设备上。仅在提现（WD）时输入你的 BSC 钱包地址。",
             gameManualPh: "0x… 你的 BSC 钱包地址",
             gameMissed: "它跑掉了！",
             gameMissionCap: "已达每日上限 — 明天再领取此任务奖励。",
@@ -2067,9 +2069,10 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
             gameMissionsNeedWallet: "请在上方连接钱包，或输入你的 BSC 地址，以领取任务奖励。",
             gameMissionsSub: "每个钱包完成一次这些社交任务，即可在游戏余额中获得 WFISH — 可在下方用 WD 提现。基于信任领取：本页面无法核查你的 X 或 Telegram 账号。",
             gameMissionsTitle: "任务",
-            gameNeedWallet: "请在上方连接钱包，或输入你的 BSC 地址，开始钓鱼。",
+            gameNeedWallet: "请先在上方输入你的 BSC 钱包地址——游戏余额将转移到该地址——然后再点 WD。",
             gameNoEnergy: "能量耗尽 — 等待恢复（每 60 秒恢复 1 点）。",
             gameNoWalletYet: "还没有钱包",
+            gameGuest: "访客",
             gameNote: "你的游戏余额是保存在本浏览器的每个钱包记录。提现是自动的：支付费用后，WFISH 会直接从 WD 合约进入你的钱包 — 无需人工发放。",
             gamePlayingAs: "当前身份",
             gamePondHint: "点击一条鱼向它抛竿 — 每次抛竿消耗 1 点能量，能量每 60 秒恢复 1 点（上限 20）。",
@@ -2334,7 +2337,7 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
             gameInvalidAddr: "यह मान्य BSC पता नहीं लगता (0x + 40 हेक्स अक्षर)।",
             gameLbEmpty: "अभी कोई खिलाड़ी दर्ज नहीं है।",
             gameLbTitle: "लीडरबोर्ड (इस ब्राउज़र में)",
-            gameManualLbl: "कोई वॉलेट कनेक्ट नहीं है? खेलने और अपना स्कोर उस वॉलेट के नीचे दर्ज करने के लिए अपना BSC वॉलेट पता डालें:",
+            gameManualLbl: "खेलने के लिए वॉलेट की ज़रूरत नहीं — आपकी प्रगति इस डिवाइस पर सहेजी जाती है। BSC वॉलेट पता सिर्फ WD (निकासी) के समय डालें।",
             gameManualPh: "0x… आपका BSC वॉलेट पता",
             gameMissed: "वह भाग गई!",
             gameMissionCap: "दैनिक सीमा पूरी — यह मिशन इनाम कल लें।",
@@ -2350,9 +2353,10 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
             gameMissionsNeedWallet: "मिशन इनाम लेने के लिए ऊपर अपना वॉलेट कनेक्ट करें, या अपना BSC पता डालें।",
             gameMissionsSub: "ये सोशल मिशन प्रति वॉलेट एक बार पूरे करें और अपने गेम बैलेंस में WFISH कमाएँ — नीचे WD से निकालें। भरोसे पर दावा: यह पेज आपका X या Telegram खाता नहीं जाँच सकता।",
             gameMissionsTitle: "मिशन",
-            gameNeedWallet: "मछली पकड़ना शुरू करने के लिए ऊपर अपना वॉलेट कनेक्ट करें, या अपना BSC पता डालें।",
+            gameNeedWallet: "पहले ऊपर अपना BSC वॉलेट पता डालें — आपका गेम बैलेंस उस पर चला जाएगा — फिर दोबारा WD दबाएँ।",
             gameNoEnergy: "एनर्जी खत्म — भरने का इंतज़ार करें (हर 60 सेकंड में 1)।",
             gameNoWalletYet: "अभी कोई वॉलेट नहीं",
+            gameGuest: "अतिथि",
             gameNote: "आपका गेम बैलेंस इस ब्राउज़र में रखा गया प्रति-वॉलेट रिकॉर्ड है। निकासी स्वचालित है: शुल्क दें और WFISH सीधे WD कॉन्ट्रैक्ट से आपके वॉलेट में आ जाता है — कोई मैनुअल भुगतान कतार नहीं।",
             gamePlayingAs: "इस रूप में खेल रहे हैं",
             gamePondHint: "मछली पर टैप करके कास्ट करें — हर कास्ट में 1 एनर्जी लगती है। एनर्जी हर 60 सेकंड में 1 भरती है (अधिकतम 20)।",
@@ -2617,7 +2621,7 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
             gameInvalidAddr: "এটি বৈধ BSC ঠিকানা মনে হচ্ছে না (0x + 40 হেক্স অক্ষর)।",
             gameLbEmpty: "এখনো কোনো খেলোয়াড় রেকর্ড হয়নি।",
             gameLbTitle: "লিডারবোর্ড (এই ব্রাউজারে)",
-            gameManualLbl: "কোনো ওয়ালেট সংযুক্ত নেই? খেলতে ও আপনার স্কোর সেই ওয়ালেটের অধীনে রেকর্ড করতে আপনার BSC ওয়ালেট ঠিকানা দিন:",
+            gameManualLbl: "খেলতে ওয়ালেট লাগবে না — আপনার অগ্রগতি এই ডিভাইসে সংরক্ষিত থাকে। শুধু WD (তোলার) সময় আপনার BSC ওয়ালেট ঠিকানা দিন।",
             gameManualPh: "0x… আপনার BSC ওয়ালেট ঠিকানা",
             gameMissed: "ও পালিয়ে গেল!",
             gameMissionCap: "দৈনিক সীমা পূর্ণ — এই মিশনের পুরস্কার আগামীকাল নিন।",
@@ -2633,9 +2637,10 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
             gameMissionsNeedWallet: "মিশনের পুরস্কার নিতে উপরে আপনার ওয়ালেট সংযুক্ত করুন, অথবা আপনার BSC ঠিকানা দিন।",
             gameMissionsSub: "প্রতি ওয়ালেটে একবার এই সোশ্যাল মিশনগুলো সম্পন্ন করুন ও আপনার গেম ব্যালেন্সে WFISH আয় করুন — নিচে WD দিয়ে তুলুন। বিশ্বাসের ভিত্তিতে দাবি: এই পেজ আপনার X বা Telegram অ্যাকাউন্ট যাচাই করতে পারে না।",
             gameMissionsTitle: "মিশন",
-            gameNeedWallet: "মাছ ধরা শুরু করতে উপরে আপনার ওয়ালেট সংযুক্ত করুন, অথবা আপনার BSC ঠিকানা দিন।",
+            gameNeedWallet: "প্রথমে উপরে আপনার BSC ওয়ালেট ঠিকানা দিন — আপনার গেম ব্যালেন্স সেটিতে চলে যাবে — তারপর আবার WD চাপুন।",
             gameNoEnergy: "এনার্জি শেষ — ভরার জন্য অপেক্ষা করুন (প্রতি 60 সেকেন্ডে 1)।",
             gameNoWalletYet: "এখনো কোনো ওয়ালেট নেই",
+            gameGuest: "অতিথি",
             gameNote: "আপনার গেম ব্যালেন্স এই ব্রাউজারে রাখা প্রতি-ওয়ালেট রেকর্ড। উত্তোলন স্বয়ংক্রিয়: ফি দিন আর WFISH সরাসরি WD কন্ট্রাক্ট থেকে আপনার ওয়ালেটে চলে আসে — কোনো ম্যানুয়াল পেমেন্ট লাইন নেই।",
             gamePlayingAs: "হিসেবে খেলছেন",
             gamePondHint: "মাছে ট্যাপ করে কাস্ট করুন — প্রতিটি কাস্টে 1 এনার্জি লাগে। এনার্জি প্রতি 60 সেকেন্ডে 1 ভরে (সর্বোচ্চ 20)।",
@@ -2900,7 +2905,7 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
             gameInvalidAddr: "یہ درست BSC پتہ نہیں لگتا (0x + 40 ہیکس حروف)۔",
             gameLbEmpty: "ابھی کوئی کھلاڑی درج نہیں۔",
             gameLbTitle: "لیڈر بورڈ (اس براؤزر میں)",
-            gameManualLbl: "کوئی والیٹ منسلک نہیں؟ کھیلنے اور اپنا اسکور اس والیٹ کے تحت درج کرنے کے لیے اپنا BSC والیٹ پتہ درج کریں:",
+            gameManualLbl: "کھیلنے کے لیے والیٹ کی ضرورت نہیں — آپ کی پیش رفت اس ڈیوائس پر محفوظ ہوتی ہے۔ BSC والیٹ پتہ صرف WD (نکاسی) کے وقت درج کریں۔",
             gameManualPh: "0x… آپ کا BSC والیٹ پتہ",
             gameMissed: "وہ بھاگ گئی!",
             gameMissionCap: "یومیہ حد پوری — یہ مشن انعام کل لیں۔",
@@ -2916,9 +2921,10 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
             gameMissionsNeedWallet: "مشن انعام لینے کے لیے اوپر اپنا والیٹ منسلک کریں، یا اپنا BSC پتہ درج کریں۔",
             gameMissionsSub: "یہ سوشل مشن فی والیٹ ایک بار مکمل کریں اور اپنے گیم بیلنس میں WFISH کمائیں — نیچے WD سے نکالیں۔ اعتماد پر دعویٰ: یہ صفحہ آپ کا X یا Telegram اکاؤنٹ جانچ نہیں سکتا۔",
             gameMissionsTitle: "مشن",
-            gameNeedWallet: "مچھلی پکڑنا شروع کرنے کے لیے اوپر اپنا والیٹ منسلک کریں، یا اپنا BSC پتہ درج کریں۔",
+            gameNeedWallet: "پہلے اوپر اپنا BSC والیٹ پتہ درج کریں — آپ کا گیم بیلنس اس پر منتقل ہو جائے گا — پھر دوبارہ WD دبائیں۔",
             gameNoEnergy: "انرجی ختم — بھرنے کا انتظار کریں (ہر 60 سیکنڈ میں 1)۔",
             gameNoWalletYet: "ابھی کوئی والیٹ نہیں",
+            gameGuest: "مہمان",
             gameNote: "آپ کا گیم بیلنس اس براؤزر میں رکھا گیا فی والیٹ ریکارڈ ہے۔ نکاسی خودکار ہے: فیس دیں اور WFISH براہ راست WD کنٹریکٹ سے آپ کے والیٹ میں آ جاتا ہے — کوئی دستی ادائیگی قطار نہیں۔",
             gamePlayingAs: "اس طور پر کھیل رہے ہیں",
             gamePondHint: "مچھلی پر ٹیپ کر کے کاسٹ کریں — ہر کاسٹ میں 1 انرجی لگتی ہے۔ انرجی ہر 60 سیکنڈ میں 1 بھرتی ہے (زیادہ سے زیادہ 20)۔",
@@ -3183,7 +3189,7 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
             gameInvalidAddr: "هذا لا يبدو عنوان BSC صالحًا (0x + 40 حرفًا ست عشريًا).",
             gameLbEmpty: "لا لاعبين مسجلين بعد.",
             gameLbTitle: "لوحة المتصدرين (هذا المتصفح)",
-            gameManualLbl: "لا محفظة متصلة؟ أدخل عنوان محفظة BSC الخاصة بك للعب وتسجيل نتيجتك تحت تلك المحفظة:",
+            gameManualLbl: "لا حاجة إلى محفظة للعب — يتم حفظ تقدمك على هذا الجهاز. أدخل عنوان محفظة BSC فقط عندما تريد السحب (WD).",
             gameManualPh: "0x… عنوان محفظة BSC الخاصة بك",
             gameMissed: "أفلتت منك!",
             gameMissionCap: "تم بلوغ الحد اليومي — اطلب مكافأة هذه المهمة غدًا.",
@@ -3199,9 +3205,10 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
             gameMissionsNeedWallet: "لطلب مكافآت المهام، صِل محفظتك أعلاه أو أدخل عنوان BSC الخاص بك.",
             gameMissionsSub: "أكمل هذه المهام الاجتماعية مرة واحدة لكل محفظة واربح WFISH في رصيد لعبتك — اسحبه عبر WD أدناه. المطالبة على أساس الثقة: لا تستطيع هذه الصفحة التحقق من حسابك على X أو Telegram.",
             gameMissionsTitle: "المهام",
-            gameNeedWallet: "للبدء في الصيد، صِل محفظتك أعلاه أو أدخل عنوان BSC الخاص بك.",
+            gameNeedWallet: "أدخل عنوان محفظة BSC أعلاه أولاً — سينتقل رصيد لعبتك إليه — ثم اضغط WD مرة أخرى.",
             gameNoEnergy: "نفدت الطاقة — انتظر حتى تتجدد (1 كل 60 ثانية).",
             gameNoWalletYet: "لا محفظة بعد",
+            gameGuest: "ضيف",
             gameNote: "رصيد لعبتك هو سجل لكل محفظة محفوظ في هذا المتصفح. السحوبات تلقائية: ادفع الرسوم وسيصل WFISH مباشرة إلى محفظتك من عقد WD — دون قائمة دفع يدوية.",
             gamePlayingAs: "تلعب بصفتك",
             gamePondHint: "انقر على سمكة للرمي نحوها — كل رمية تكلف 1 طاقة. تتجدد الطاقة بمقدار 1 كل 60 ثانية (بحد أقصى 20).",
@@ -3466,7 +3473,7 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
             gameInvalidAddr: "Это не похоже на действительный адрес BSC (0x + 40 шестнадцатеричных символов).",
             gameLbEmpty: "Игроков пока не записано.",
             gameLbTitle: "Таблица лидеров (этот браузер)",
-            gameManualLbl: "Кошелёк не подключён? Введите адрес своего BSC-кошелька, чтобы играть и записывать счёт на этот кошелёк:",
+            gameManualLbl: "Кошелёк для игры не нужен — прогресс сохраняется на этом устройстве. Введите адрес кошелька BSC только когда захотите вывести средства (WD).",
             gameManualPh: "0x… адрес вашего BSC-кошелька",
             gameMissed: "Она уплыла!",
             gameMissionCap: "Дневной лимит исчерпан — заберите награду за это задание завтра.",
@@ -3482,9 +3489,10 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
             gameMissionsNeedWallet: "Чтобы забрать награды за задания, подключите кошелёк выше или введите свой адрес BSC.",
             gameMissionsSub: "Выполните эти социальные задания один раз на кошелёк и заработайте WFISH на игровой баланс — выведите их через WD ниже. Забирается на доверии: страница не может проверить ваш аккаунт X или Telegram.",
             gameMissionsTitle: "Задания",
-            gameNeedWallet: "Чтобы начать рыбачить, подключите кошелёк выше или введите свой адрес BSC.",
+            gameNeedWallet: "Сначала введите выше адрес кошелька BSC — ваш игровой баланс перейдёт на него — затем снова нажмите WD.",
             gameNoEnergy: "Энергия закончилась — подождите восстановления (1 каждые 60 секунд).",
             gameNoWalletYet: "Кошелёк пока не подключён",
+            gameGuest: "Гость",
             gameNote: "Ваш игровой баланс — это запись по каждому кошельку, хранящаяся в этом браузере. Вывод автоматический: оплатите комиссию, и WFISH сразу попадёт в ваш кошелёк из контракта WD — без ручной очереди выплат.",
             gamePlayingAs: "Играете как",
             gamePondHint: "Нажмите на рыбу, чтобы забросить к ней — каждый заброс стоит 1 энергии. Энергия восстанавливается по 1 каждые 60 секунд (макс. 20).",
@@ -3749,7 +3757,7 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
             gameInvalidAddr: "זה לא נראה כמו כתובת BSC תקינה (0x + 40 תווי הקס).",
             gameLbEmpty: "עוד לא נרשמו שחקנים.",
             gameLbTitle: "טבלת המובילים (הדפדפן הזה)",
-            gameManualLbl: "אין ארנק מחובר? הזינו את כתובת ארנק ה־BSC שלכם כדי לשחק ולרשום את הניקוד תחת הארנק הזה:",
+            gameManualLbl: "אין צורך בארנק כדי לשחק — ההתקדמות נשמרת במכשיר הזה. הזינו את כתובת ארנק ה־BSC רק כשתרצו למשוך (WD).",
             gameManualPh: "0x… כתובת ארנק ה־BSC שלכם",
             gameMissed: "הוא ברח!",
             gameMissionCap: "המכסה היומית הושלמה — קבלו את פרס המשימה הזו מחר.",
@@ -3765,9 +3773,10 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
             gameMissionsNeedWallet: "כדי לקבל את פרסי המשימות, חברו את הארנק למעלה או הזינו את כתובת ה־BSC שלכם.",
             gameMissionsSub: "השלימו את המשימות החברתיות האלה פעם אחת לארנק והרוויחו WFISH ליתרת המשחק — משכו אותם עם WD למטה. הקבלה מבוססת אמון: הדף לא יכול לבדוק את חשבון ה־X או הטלגרם שלכם.",
             gameMissionsTitle: "משימות",
-            gameNeedWallet: "כדי להתחיל לדוג, חברו את הארנק למעלה או הזינו את כתובת ה־BSC שלכם.",
+            gameNeedWallet: "הזינו קודם את כתובת ארנק ה־BSC למעלה — יתרת המשחק תעבור אליה — ואז לחצו שוב על WD.",
             gameNoEnergy: "נגמרה האנרגיה — המתינו להתמלאות (1 כל 60 שניות).",
             gameNoWalletYet: "עוד אין ארנק",
+            gameGuest: "אורח",
             gameNote: "יתרת המשחק שלכם היא רשומה לכל ארנק הנשמרת בדפדפן הזה. המשיכות אוטומטיות: שלמו את העמלה וה־WFISH יגיע ישירות לארנק שלכם מחוזה ה־WD — ללא תור תשלומים ידני.",
             gamePlayingAs: "משחקים בתור",
             gamePondHint: "הקישו על דג כדי להטיל לכיוונו — כל הטלה עולה 1 אנרגיה. האנרגיה מתמלאת ב־1 כל 60 שניות (מקס׳ 20).",
@@ -4032,7 +4041,7 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
             gameInvalidAddr: "有効な BSC アドレスではないようです（0x + 40文字の16進数）。",
             gameLbEmpty: "まだプレイヤーの記録がありません。",
             gameLbTitle: "リーダーボード（このブラウザ）",
-            gameManualLbl: "ウォレットが接続されていませんか？BSC ウォレットアドレスを入力してプレイし、そのウォレットにスコアを記録してください：",
+            gameManualLbl: "遊ぶのにウォレットは不要です。進行状況はこのデバイスに保存されます。BSCウォレットアドレスは出金（WD）するときだけ入力してください。",
             gameManualPh: "0x… あなたの BSC ウォレットアドレス",
             gameMissed: "逃げられた！",
             gameMissionCap: "1日の上限に達しました — このミッション報酬は明日受け取ってください。",
@@ -4048,9 +4057,10 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
             gameMissionsNeedWallet: "ミッション報酬を受け取るには、上でウォレットを接続するか、BSC アドレスを入力してください。",
             gameMissionsSub: "これらのソーシャルミッションをウォレットごとに1回完了し、ゲーム残高で WFISH を稼ぎましょう — 下の WD で出金できます。信頼に基づく受け取りです：このページはあなたの X や Telegram アカウントを確認できません。",
             gameMissionsTitle: "ミッション",
-            gameNeedWallet: "釣りを始めるには、上でウォレットを接続するか、BSC アドレスを入力してください。",
+            gameNeedWallet: "まず上でBSCウォレットアドレスを入力してください。ゲーム残高がそのアドレスに移ります。その後、もう一度WDをタップしてください。",
             gameNoEnergy: "エネルギーがありません — 回復を待ってください（60秒ごとに1）。",
             gameNoWalletYet: "まだウォレットがありません",
+            gameGuest: "ゲスト",
             gameNote: "ゲーム残高はこのブラウザに保存されるウォレットごとの記録です。出金は自動です：手数料を支払うと、WFISH は WD コントラクトから直接あなたのウォレットに届きます — 手動の支払い待ち行列はありません。",
             gamePlayingAs: "プレイ中：",
             gamePondHint: "魚をタップしてキャスト — 1回のキャストに1エネルギーが必要です。エネルギーは60秒ごとに1回復します（最大20）。",
@@ -4315,7 +4325,7 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
             gameInvalidAddr: "유효한 BSC 주소가 아닌 것 같습니다 (0x + 16진수 40자).",
             gameLbEmpty: "아직 기록된 플레이어가 없습니다.",
             gameLbTitle: "리더보드 (이 브라우저)",
-            gameManualLbl: "지갑이 연결되지 않았나요? BSC 지갑 주소를 입력해 플레이하고 해당 지갑에 점수를 기록하세요:",
+            gameManualLbl: "플레이에는 지갑이 필요 없습니다. 진행 상황은 이 기기에 저장됩니다. BSC 지갑 주소는 출금(WD)할 때만 입력하세요.",
             gameManualPh: "0x… 내 BSC 지갑 주소",
             gameMissed: "놓쳤어요!",
             gameMissionCap: "일일 한도에 도달했습니다 — 이 미션 보상은 내일 받으세요.",
@@ -4331,9 +4341,10 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
             gameMissionsNeedWallet: "미션 보상을 받으려면 위에서 지갑을 연결하거나 BSC 주소를 입력하세요.",
             gameMissionsSub: "지갑당 1회 이 소셜 미션을 완료하고 게임 잔액으로 WFISH를 버세요 — 아래 WD로 출금할 수 있습니다. 신뢰 기반 수령입니다. 이 페이지는 사용자의 X 또는 Telegram 계정을 확인할 수 없습니다.",
             gameMissionsTitle: "미션",
-            gameNeedWallet: "낚시를 시작하려면 위에서 지갑을 연결하거나 BSC 주소를 입력하세요.",
+            gameNeedWallet: "먼저 위에서 BSC 지갑 주소를 입력하세요. 게임 잔액이 해당 주소로 이동합니다. 그런 다음 WD를 다시 누르세요.",
             gameNoEnergy: "에너지가 없습니다 — 회복될 때까지 기다리세요 (60초마다 1).",
             gameNoWalletYet: "아직 지갑이 없습니다",
+            gameGuest: "게스트",
             gameNote: "게임 잔액은 이 브라우저에 저장되는 지갑별 기록입니다. 출금은 자동입니다. 수수료를 내면 WFISH가 WD 컨트랙트에서 바로 지갑으로 들어옵니다 — 수동 지급 대기열이 없습니다.",
             gamePlayingAs: "플레이 중:",
             gamePondHint: "물고기를 탭해 캐스트하세요 — 캐스트 1회당 에너지 1이 필요합니다. 에너지는 60초마다 1씩 회복됩니다 (최대 20).",
@@ -6142,6 +6153,32 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
           if (gameStore.manual && /^0x[0-9a-fA-F]{40}$/.test(gameStore.manual)) return gameStore.manual;
           return null;
         }
+        // Guest mode: anyone can play instantly — no wallet, no address.
+        // The game record lives under the "guest" key on this device.
+        // An address is only asked for at WD time, and then the guest
+        // record migrates onto that wallet (see gameMigrateGuestTo).
+        var GAME_GUEST_ADDR = "guest";
+        function gamePlayAddr() {
+          return gameWalletAddr() || GAME_GUEST_ADDR;
+        }
+        // Move a guest record onto a real wallet address: balance, fish,
+        // missions and history follow the address. Only when the target
+        // wallet has no record yet — an existing record is never
+        // overwritten (clear the address to return to the guest pond).
+        function gameMigrateGuestTo(addr) {
+          if (!addr) return false;
+          var key = addr.toLowerCase();
+          if (gameStore.wallets[key]) return false;
+          var guest = gameStore.wallets[GAME_GUEST_ADDR];
+          if (!guest) return false;
+          var played = (guest.balance > 0 || guest.totalEarned > 0 || (guest.fish && guest.fish.length > 0));
+          if (!played) return false;
+          guest.addr = addr;
+          gameStore.wallets[key] = guest;
+          delete gameStore.wallets[GAME_GUEST_ADDR];
+          saveGameStore();
+          return true;
+        }
         function numField(v, fallback) {
           var n = Number(v);
           return (isFinite(n) && n >= 0) ? n : fallback;
@@ -6563,7 +6600,7 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
         }
         /* ---------- Feed / adopt / release / harvest ---------- */
         function feedFish(fishId, btnEl) {
-          var addr = gameWalletAddr();
+          var addr = gamePlayAddr();
           if (!addr) { renderGame(); return; }
           var rec = gameRec(addr);
           var fish = fishById(rec, fishId);
@@ -6588,7 +6625,7 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
           renderGame();
         }
         function feedAllFish() {
-          var addr = gameWalletAddr();
+          var addr = gamePlayAddr();
           if (!addr) { renderGame(); return; }
           var rec = gameRec(addr);
           var now = Date.now();
@@ -6617,7 +6654,7 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
           renderGame();
         }
         function adoptFish(rarityId) {
-          var addr = gameWalletAddr();
+          var addr = gamePlayAddr();
           if (!addr) { renderGame(); return; }
           var rec = gameRec(addr);
           var rar = gameRarityById(rarityId);
@@ -6637,7 +6674,7 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
           renderGame();
         }
         function releaseFish(fishId) {
-          var addr = gameWalletAddr();
+          var addr = gamePlayAddr();
           if (!addr) return;
           var rec = gameRec(addr);
           var fish = fishById(rec, fishId);
@@ -6655,7 +6692,7 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
           pondFloater(gamePond, t("gameRaiseReleased"), false);
         }
         function harvestAll() {
-          var addr = gameWalletAddr();
+          var addr = gamePlayAddr();
           if (!addr) { renderGame(); return; }
           var rec = gameRec(addr);
           var now = Date.now();
@@ -6683,29 +6720,25 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
         /* ---------- Rendering ---------- */
         function renderGame() {
           if (!gamePond) return;
-          var addr = gameWalletAddr();
-          gameWalletEl.textContent = addr ? shortAddr(addr) : t("gameNoWalletYet");
-          gameWalletEl.title = addr || "";
+          // Guest mode: the pond is always open. gamePlayAddr() is the
+          // connected wallet, the manual address, or the "guest" record
+          // on this device when neither is set.
+          var addr = gamePlayAddr();
+          var waddr = gameWalletAddr();
+          if (waddr) gameMigrateGuestTo(waddr);
+          gameWalletEl.textContent = waddr ? shortAddr(waddr) : t("gameGuest");
+          gameWalletEl.title = waddr || "";
           gameManualWrap.hidden = !!account;
           gameConnectedNote.hidden = !account;
-          gamePondLock.hidden = !!addr;
-          if (!addr) {
-            gameEnergyEl.textContent = "—";
-            gameBalanceEl.textContent = "—";
-            gameTodayEl.textContent = "—";
-            gameCatchesEl.textContent = "—";
-            gameEnergyNote.textContent = "";
-            syncPondFish(null);
-          } else {
-            var rec = gameRec(addr);
-            gameEnergyEl.textContent = rec.energy + " / " + gameMaxEnergy(rec);
-            gameBalanceEl.textContent = fmt.format(rec.balance);
-            gameTodayEl.textContent = fmt.format(rec.earnedToday) + " / " + fmt.format(GAME_DAILY_CAP);
-            gameCatchesEl.textContent = fmt.format(rec.fish.length);
-            renderGameEnergyNote(rec);
-            syncPondFish(rec);
-            for (var ui = 0; ui < rec.fish.length; ui++) updateFishButton(rec.fish[ui]);
-          }
+          gamePondLock.hidden = true;
+          var rec = gameRec(addr);
+          gameEnergyEl.textContent = rec.energy + " / " + gameMaxEnergy(rec);
+          gameBalanceEl.textContent = fmt.format(rec.balance);
+          gameTodayEl.textContent = fmt.format(rec.earnedToday) + " / " + fmt.format(GAME_DAILY_CAP);
+          gameCatchesEl.textContent = fmt.format(rec.fish.length);
+          renderGameEnergyNote(rec);
+          syncPondFish(rec);
+          for (var ui = 0; ui < rec.fish.length; ui++) updateFishButton(rec.fish[ui]);
           renderGameHistory(addr);
           renderGameLeaderboard(addr);
           renderMissions(addr);
@@ -6720,7 +6753,7 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
           renderPondStatus(addr);
           renderSoundBtn();
           renderGoldenLabel();
-          if (addr) refreshWdChain(addr, false);
+          if (waddr) refreshWdChain(waddr, false);
           var shopLoading = (paidStats.remaining === null);
           btnGameBuy.disabled = gameBusy || paidBusy || shopLoading;
           btnGameBuy.textContent = (gameBusy || paidBusy) ? t("gameWdProcessing") : (shopLoading ? t("gameShopLoading") : t("gameShopBtn"));
@@ -6732,7 +6765,7 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
           btnGameWd.textContent = gameBusy ? t("gameWdProcessing") : t("gameWdBtn");
           // C4: quick amounts + Max only make sense when the balance and
           // today's remaining quota cover at least 10,000 WFISH.
-          var wdCanQuick = !!addr && gameRec(addr).balance >= WD_STEP && wdRemainingToday(addr) >= WD_STEP;
+          var wdCanQuick = gameRec(addr).balance >= WD_STEP && wdRemainingToday(addr) >= WD_STEP;
           var wdQuickBtns = document.querySelectorAll("[data-wd-quick]");
           for (var qi2 = 0; qi2 < wdQuickBtns.length; qi2++) wdQuickBtns[qi2].disabled = !wdCanQuick;
           var btnWdMax2 = el("btn-wd-max");
@@ -6775,7 +6808,7 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
             var rar = gameRarityById(spans[i].getAttribute("data-rarity"));
             spans[i].textContent = tpl("gameRaisePerHour", { rate: fmt.format(rar.yieldPerHour) });
           }
-          var addr = gameWalletAddr();
+          var addr = gamePlayAddr();
           var rec = addr ? gameRec(addr) : null;
           var btns = document.querySelectorAll("[data-adopt]");
           for (var j = 0; j < btns.length; j++) {
@@ -6908,7 +6941,7 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
           });
         }
         function claimMission(id) {
-          var addr = gameWalletAddr();
+          var addr = gamePlayAddr();
           if (!addr) { gameMissionsNote.hidden = false; return; }
           var m = gameMissionById(id);
           var rec = gameRec(addr);
@@ -6987,7 +7020,7 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
           });
         }
         function claimDQuest(id) {
-          var addr = gameWalletAddr();
+          var addr = gamePlayAddr();
           if (!addr) { gameDQuestsNote.hidden = false; return; }
           var q = gameDQuestById(id);
           var rec = gameRec(addr);
@@ -7136,7 +7169,7 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
             li.className = "lb-row" + ((addr && rec.addr && rec.addr.toLowerCase() === addr.toLowerCase()) ? " me" : "");
             var who = document.createElement("span");
             who.className = "who";
-            who.textContent = "#" + (i + 1) + "  " + shortAddr(rec.addr);
+            who.textContent = "#" + (i + 1) + "  " + (rec.addr === GAME_GUEST_ADDR ? t("gameGuest") : shortAddr(rec.addr));
             who.title = rec.addr || "";
             var amt = document.createElement("span");
             amt.className = "amt";
@@ -7205,6 +7238,10 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
           return sum;
         }
         function wdClaimedToday(addr) {
+          // The guest record has no on-chain identity: its quota is
+          // always the local history, never another wallet's on-chain
+          // claimed amount.
+          if (addr === GAME_GUEST_ADDR) return wdClaimedTodayLocal(addr);
           if (wdChain.day === utcDayNumber() && wdChain.claimed !== null) return wdChain.claimed;
           return wdClaimedTodayLocal(addr);
         }
@@ -7367,7 +7404,15 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
         /* ---------- Withdraw (WD) ---------- */
         function doGameWithdraw() {
           var addr = gameWalletAddr();
-          if (!addr) { showGameTx("error", t("gameNeedWallet"), null); return; }
+          if (!addr) {
+            // Guest mode: the address is only needed here, at WD time.
+            // Point at the address box — once it is set, the guest
+            // balance migrates to it and WD can proceed.
+            showGameTx("error", t("gameNeedWallet"), null);
+            if (gameManualWrap) gameManualWrap.scrollIntoView({ behavior: "smooth", block: "center" });
+            if (gameManualInput) gameManualInput.focus();
+            return;
+          }
           var rec = gameRec(addr);
           var rawAmt = (gameWdAmount.value || "").trim();
           if (/[. ,]/.test(rawAmt)) { showGameTx("error", t("gameWdInvalid"), null); return; }
@@ -7531,6 +7576,7 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
           }
           gameManualError.classList.remove("show");
           gameStore.manual = v;
+          gameMigrateGuestTo(v);
           saveGameStore();
           renderGame();
         });
@@ -7557,7 +7603,7 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
         btnGameFeedAll.addEventListener("click", feedAllFish);
         el("btn-game-hist-more").addEventListener("click", function () {
           gameHistExpanded = !gameHistExpanded;
-          renderGameHistory(gameWalletAddr());
+          renderGameHistory(gamePlayAddr());
         });
         gameWdAmount.addEventListener("input", renderGameWdFee);
         var quickBtns = document.querySelectorAll("[data-wd-quick]");
@@ -7570,7 +7616,7 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
           })(quickBtns[qi]);
         }
         el("btn-wd-max").addEventListener("click", function () {
-          var addr = gameWalletAddr();
+          var addr = gamePlayAddr();
           if (!addr) return;
           var rec = gameRec(addr);
           // A2: Max is capped by today's remaining WD quota as well as
@@ -7592,19 +7638,15 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
         setInterval(function () {
           // Keep the pond in sync, the energy readout ticking, and the
           // pending harvest amount fresh while fish earn over time.
-          var addr = gameWalletAddr();
-          if (addr) {
-            var rec = gameRec(addr);
-            syncPondFish(rec);
-            gameEnergyEl.textContent = rec.energy + " / " + gameMaxEnergy(rec);
-            renderGameEnergyNote(rec);
-            renderPondStatus(addr);
-            renderHarvestPending(addr);
-            gameTick++;
-            if (gameTick % 5 === 0) renderFishList(addr);
-          } else {
-            syncPondFish(null);
-          }
+          var addr = gamePlayAddr();
+          var rec = gameRec(addr);
+          syncPondFish(rec);
+          gameEnergyEl.textContent = rec.energy + " / " + gameMaxEnergy(rec);
+          renderGameEnergyNote(rec);
+          renderPondStatus(addr);
+          renderHarvestPending(addr);
+          gameTick++;
+          if (gameTick % 5 === 0) renderFishList(addr);
           renderGoldenLabel();
         }, 1000);
 
