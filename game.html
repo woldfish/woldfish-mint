@@ -423,6 +423,11 @@
       .btn-action:disabled { opacity: 0.45; cursor: not-allowed; }
       .btn-action.wide { width: 100%; margin-top: 12px; }
       .quick-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+      .adopt-quick { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+      .adopt-quick .btn-mini { display: inline-flex; align-items: center; gap: 6px; }
+      .game-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin: 14px 0 2px; }
+      .game-tab.active { background: var(--gold-bright); color: #1a1405; border-color: var(--gold-bright); }
+      .game-panel { margin-top: 12px; }
       .fee-line { margin: 10px 0 0; font-size: 0.92rem; color: var(--muted); }
       .fee-line strong { color: var(--gold-bright); font-variant-numeric: tabular-nums; }
       .game-note { margin: 10px 0 0; font-size: 0.88rem; color: #f3e3bb; }
@@ -627,14 +632,39 @@
         <p class="mint-hint" data-i18n="gameRaisePondHint">Tap a fish to feed it — 1 feeding costs 1 energy and keeps it full for 8 hours.</p>
         <p class="fee-line" id="game-pond-status" hidden></p>
         <p class="fee-line" id="game-golden" hidden></p>
+        <!-- Quick adopt, right under the pond: the same Adopt buttons as
+             the list below, so players find them without scrolling. No
+             new page — same game screen. The name span carries the
+             translation key; the button itself has none, so applyLang
+             never wipes the price text. -->
+        <p class="fee-line" style="margin-top:12px;" data-i18n="gameRaiseAdoptTitle">Adopt a Fish</p>
+        <div class="adopt-quick">
+          <button type="button" class="btn-mini" data-adopt="common"><span class="rarity-dot" style="background:#4a90d9"></span><span data-i18n="gameRCommon">Blue · Common</span>&nbsp;· 500 WFISH</button>
+          <button type="button" class="btn-mini" data-adopt="rare"><span class="rarity-dot" style="background:#35c26e"></span><span data-i18n="gameRRare">Green · Rare</span>&nbsp;· 1,500 WFISH</button>
+          <button type="button" class="btn-mini" data-adopt="epic"><span class="rarity-dot" style="background:#9b5de5"></span><span data-i18n="gameREpic">Purple · Epic</span>&nbsp;· 4,000 WFISH</button>
+          <button type="button" class="btn-mini" data-adopt="legendary"><span class="rarity-dot" style="background:#e5484d"></span><span data-i18n="gameRLegendary">Red · Legendary</span>&nbsp;· 10,000 WFISH</button>
+          <button type="button" class="btn-mini" data-adopt="mythic"><span class="rarity-dot" style="background:#e9b949"></span><span data-i18n="gameRMythic">Gold · Mythic</span>&nbsp;· 25,000 WFISH</button>
+        </div>
         <div class="quick-row"><button type="button" class="btn-mini" id="btn-game-sound">Sound: on</button></div>
         <div class="game-row harvest-row">
           <button type="button" class="btn-action" id="btn-game-harvest" data-i18n="gameRaiseHarvestBtn">Harvest</button>
           <button type="button" class="btn-mini" id="btn-game-feedall" data-i18n="gameRaiseFeedAllBtn">Feed All</button>
+          <button type="button" class="btn-mini" id="btn-game-wd-quick" data-i18n="gameWdTitle">Withdraw (WD)</button>
         </div>
         <p class="fee-line" id="game-harvest-pending"></p>
-
-        <!-- Adopt a fish: the rarity list doubles as the adoption shop —
+<div class="game-tabs" role="tablist">
+          <button type="button" class="btn-mini game-tab active" data-gametab="adopt" data-i18n="gameRaiseAdoptTitle" aria-selected="true">Adopt a Fish</button>
+          <button type="button" class="btn-mini game-tab" data-gametab="missions" data-i18n="gameMissionsTitle" aria-selected="false">Missions</button>
+          <button type="button" class="btn-mini game-tab" data-gametab="wd" data-i18n="gameWdTitle" aria-selected="false">Withdraw (WD)</button>
+          <button type="button" class="btn-mini game-tab" data-gametab="fish" data-i18n="gameRaiseYourFish" aria-selected="false">Your Fish</button>
+          <button type="button" class="btn-mini game-tab" data-gametab="shop" data-i18n="gameShopTitle" aria-selected="false">NFT Shop</button>
+        </div>
+        <div class="tx-status" id="game-tx-status" role="status" aria-live="polite">
+          <div class="tx-title" id="game-tx-title"></div>
+          <div class="tx-hash" id="game-tx-hash"></div>
+        </div>
+        <div class="game-panel" id="panel-adopt">
+<!-- Adopt a fish: the rarity list doubles as the adoption shop —
              cost is paid from the game balance, never on-chain. -->
         <h3 class="game-h3" data-i18n="gameRaiseAdoptTitle">Adopt a Fish</h3>
         <p class="sub" data-i18n="gameRaiseAdoptSub">Adopt fish with your game balance. Each fish earns WFISH every hour while it is fed — new fish arrive fed for 8 hours. Max 5 fish in the pond.</p>
@@ -645,27 +675,22 @@
           <li><span class="rarity-dot" style="background:#e5484d"></span><span class="r-name" data-i18n="gameRLegendary">Red · Legendary</span><span class="r-chance" data-rarity="legendary"></span><span class="r-reward">10,000 WFISH</span><button type="button" class="btn-mini" data-adopt="legendary" data-i18n="gameRaiseAdoptBtn">Adopt</button></li>
           <li><span class="rarity-dot" style="background:#e9b949"></span><span class="r-name" data-i18n="gameRMythic">Gold · Mythic</span><span class="r-chance" data-rarity="mythic"></span><span class="r-reward">25,000 WFISH</span><button type="button" class="btn-mini" data-adopt="mythic" data-i18n="gameRaiseAdoptBtn">Adopt</button></li>
         </ul>
-
-        <!-- Your fish: levels, hunger, pending yield, release -->
-        <h3 class="game-h3" data-i18n="gameRaiseYourFish">Your Fish</h3>
-        <ul class="mission-list" id="game-fish-list"></ul>
-        <p class="empty-line" id="game-fish-empty" data-i18n="gameRaiseFishEmpty" hidden>No fish yet — adopt your first fish above.</p>
-
-        <p class="game-note" data-i18n="gameNote">Your game balance is a per-wallet record kept in this browser. Withdrawals are automatic: pay the fee and the WFISH lands straight in your wallet from the WD contract — no manual payout queue.</p>
-
-        <!-- Missions -->
+        </div>
+        <div class="game-panel" id="panel-missions" hidden>
+<!-- Missions -->
         <h3 class="game-h3" data-i18n="gameMissionsTitle">Missions</h3>
         <p class="sub" data-i18n="gameMissionsSub">Complete these social missions once per wallet and earn WFISH in your game balance — withdraw it with WD below. Claimed on trust: this page cannot check your X or Telegram account.</p>
         <ul class="mission-list" id="game-missions"></ul>
         <p class="empty-line" id="game-missions-note" data-i18n="gameMissionsNeedWallet" hidden>Connect your wallet above, or enter your BSC address, to claim mission rewards.</p>
 
-        <!-- Daily gameplay missions (B5) — separate from the social Missions above -->
+<!-- Daily gameplay missions (B5) — separate from the social Missions above -->
         <h3 class="game-h3" data-i18n="gameDQuestTitle">Daily Missions</h3>
         <p class="sub" data-i18n="gameRaiseDQuestSub">Feed your fish and harvest to complete them — each reward is 500 WFISH and counts toward today's 10,000 cap. Resets daily (UTC).</p>
         <ul class="mission-list" id="game-dquests"></ul>
         <p class="empty-line" id="game-dquests-note" data-i18n="gameDQuestNeedWallet" hidden>Connect your wallet above, or enter your BSC address, to do daily missions.</p>
-
-        <!-- Withdraw -->
+        </div>
+        <div class="game-panel" id="panel-wd" hidden>
+<!-- Withdraw -->
         <h3 class="game-h3" data-i18n="gameWdTitle">Withdraw (WD)</h3>
         <p class="sub" data-i18n="gameWdSub">Automatic WD — pay the fee, and the WFISH lands straight in your wallet. Withdraw in multiples of 10,000 WFISH (minimum 10,000); the fee is 0.00001 BNB per 10,000 WFISH, paid to the WD contract together with your withdrawal.</p>
         <div class="game-row">
@@ -682,34 +707,30 @@
         <p class="fee-line" id="game-wd-status" hidden></p>
         <ul class="wd-list" id="game-wd-list"></ul>
         <p class="empty-line" id="game-wd-empty" data-i18n="gameWdEmpty">No withdrawals yet.</p>
-
-        <!-- NFT shop -->
-        <h3 class="game-h3" data-i18n="gameShopTitle">NFT Shop</h3>
-        <p class="sub" data-i18n="gameShopDesc">Buy a Woldfish NFT right here in the game — the same paid mint: 1 NFT + 2,000,000 WFISH instantly + a 1,000 WFISH/day bonus for 7 days.</p>
-        <button type="button" class="btn-mint" id="btn-game-buy" data-i18n="gameShopBtn">Buy NFT — 0.0002 BNB</button>
-        <p class="sub" data-i18n="gameShopDescWfish">Or pay with WFISH: 100,000 WFISH + 0.00003 BNB for 1 NFT only — no WFISH payout, no daily bonus.</p>
-        <button type="button" class="btn-mint" id="btn-game-buy-wfish" data-i18n="gameShopBtnWfish">Buy 1 NFT with 100,000 WFISH + 0.00003 BNB</button>
-
-        <div class="tx-status" id="game-tx-status" role="status" aria-live="polite">
-          <div class="tx-title" id="game-tx-title"></div>
-          <div class="tx-hash" id="game-tx-hash"></div>
         </div>
+        <div class="game-panel" id="panel-fish" hidden>
+<!-- Your fish: levels, hunger, pending yield, release -->
+        <h3 class="game-h3" data-i18n="gameRaiseYourFish">Your Fish</h3>
+        <ul class="mission-list" id="game-fish-list"></ul>
+        <p class="empty-line" id="game-fish-empty" data-i18n="gameRaiseFishEmpty" hidden>No fish yet — adopt your first fish above.</p>
 
-        <!-- History & leaderboard -->
+<p class="game-note" data-i18n="gameNote">Your game balance is a per-wallet record kept in this browser. Withdrawals are automatic: pay the fee and the WFISH lands straight in your wallet from the WD contract — no manual payout queue.</p>
+
+<!-- History & leaderboard -->
         <h3 class="game-h3" data-i18n="gameRaiseHistTitle">Recent Activity</h3>
         <ul class="hist-list" id="game-history"></ul>
         <button type="button" class="btn-mini" id="btn-game-hist-more" data-i18n="gameHistMore" hidden>Show all</button>
         <p class="empty-line" id="game-history-empty" data-i18n="gameRaiseHistEmpty">No activity yet — feed your fish or harvest.</p>
 
-        <h3 class="game-h3" data-i18n="gameLbTitle">Leaderboard (this browser)</h3>
+<h3 class="game-h3" data-i18n="gameLbTitle">Leaderboard (this browser)</h3>
         <ul class="lb-list" id="game-leaderboard"></ul>
         <p class="empty-line" id="game-lb-empty" data-i18n="gameLbEmpty">No players recorded yet.</p>
 
-        <!-- My stats (B6) -->
+<!-- My stats (B6) -->
         <h3 class="game-h3" data-i18n="gameMyStatsTitle">My Stats</h3>
         <dl class="my-stats" id="game-mystats"></dl>
 
-        <!-- Export -->
+<!-- Export -->
         <h3 class="game-h3" data-i18n="gameExportTitle">Export Data</h3>
         <p class="sub" data-i18n="gameExportSub">Download the per-wallet game balances and the completed withdrawal history for your records.</p>
         <div class="export-row">
@@ -722,6 +743,16 @@
           <button type="button" class="btn-mini" id="btn-exp-wd-csv">CSV</button>
           <button type="button" class="btn-mini" id="btn-exp-wd-json">JSON</button>
         </div>
+        </div>
+        <div class="game-panel" id="panel-shop" hidden>
+<!-- NFT shop -->
+        <h3 class="game-h3" data-i18n="gameShopTitle">NFT Shop</h3>
+        <p class="sub" data-i18n="gameShopDesc">Buy a Woldfish NFT right here in the game — the same paid mint: 1 NFT + 2,000,000 WFISH instantly + a 1,000 WFISH/day bonus for 7 days.</p>
+        <button type="button" class="btn-mint" id="btn-game-buy" data-i18n="gameShopBtn">Buy NFT — 0.0002 BNB</button>
+        <p class="sub" data-i18n="gameShopDescWfish">Or pay with WFISH: 100,000 WFISH + 0.00003 BNB for 1 NFT only — no WFISH payout, no daily bonus.</p>
+        <button type="button" class="btn-mint" id="btn-game-buy-wfish" data-i18n="gameShopBtnWfish">Buy 1 NFT with 100,000 WFISH + 0.00003 BNB</button>
+        </div>
+
       </section>
 
       <!-- ================= HERO ================= -->
@@ -6770,6 +6801,8 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
           for (var qi2 = 0; qi2 < wdQuickBtns.length; qi2++) wdQuickBtns[qi2].disabled = !wdCanQuick;
           var btnWdMax2 = el("btn-wd-max");
           if (btnWdMax2) btnWdMax2.disabled = !wdCanQuick;
+          var btnWdQuick2 = el("btn-game-wd-quick");
+          if (btnWdQuick2) btnWdQuick2.disabled = gameBusy || !wdCanQuick;
         }
         function gameEnergyNextSec(rec) {
           if (rec.energy >= gameMaxEnergy(rec)) return 0;
@@ -7614,6 +7647,38 @@ const XA=1;class tE{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,r)
               renderGameWdFee();
             });
           })(quickBtns[qi]);
+        }
+        // Quick WD on the game screen: withdraw the max allowed amount
+        // (balance + today's remaining quota, rounded to 10,000) through
+        // the normal WD flow — confirm dialog, address/connect checks
+        // and pre-flight all still apply.
+        el("btn-game-wd-quick").addEventListener("click", function () {
+          var addr = gamePlayAddr();
+          var rec = gameRec(addr);
+          var cap = Math.min(wdRemainingToday(addr), Math.floor(rec.balance / WD_STEP) * WD_STEP);
+          if (cap < WD_STEP) { showGameTx("error", t("gameWdInsufficient"), null); return; }
+          gameWdAmount.value = String(cap);
+          renderGameWdFee();
+          setGameTab("wd");
+          doGameWithdraw();
+        });
+        // Game tabs: one game screen — Adopt, Missions, WD, My Fish, Shop
+        // all live inside the game section, switched by the tab bar above.
+        function setGameTab(name) {
+          var tabs = document.querySelectorAll("[data-gametab]");
+          for (var ti = 0; ti < tabs.length; ti++) {
+            var on = tabs[ti].getAttribute("data-gametab") === name;
+            tabs[ti].classList.toggle("active", on);
+            tabs[ti].setAttribute("aria-selected", on ? "true" : "false");
+            var panel = el("panel-" + tabs[ti].getAttribute("data-gametab"));
+            if (panel) panel.hidden = !on;
+          }
+        }
+        var gameTabBtns = document.querySelectorAll("[data-gametab]");
+        for (var gti = 0; gti < gameTabBtns.length; gti++) {
+          gameTabBtns[gti].addEventListener("click", function () {
+            setGameTab(this.getAttribute("data-gametab"));
+          });
         }
         el("btn-wd-max").addEventListener("click", function () {
           var addr = gamePlayAddr();
